@@ -1,0 +1,19 @@
+#!/usr/bin/env python3
+
+import argparse
+from fastaq import tasks
+
+parser = argparse.ArgumentParser(
+    description = 'Filters a fasta/q file by sequence length and/or by name matching a regular expression',
+    usage = '%(prog)s [options] <infile> <outfile>')
+parser.add_argument('--min_length', type=int, help='Minimum length of sequence to keep [%(default)s]', default=0, metavar='INT')
+parser.add_argument('--max_length', type=float, help='Maximum length of sequence to keep [%(default)s]', default=float('inf'), metavar='INT')
+parser.add_argument('--regex', help='If given, only reads with a name matching the regular expression will be kept')
+parser.add_argument('infile', help='Name of fasta/q file to be filtered')
+parser.add_argument('outfile', help='Name of output fasta/q file')
+options = parser.parse_args()
+tasks.filter(options.infile,
+             options.outfile,
+             minlength=options.min_length,
+             maxlength=options.max_length,
+             regex=options.regex)

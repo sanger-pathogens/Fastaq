@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<trace_volume>
+    <trace>
+        <trace_name>ID</trace_name>
+        <clip_quality_right>5</clip_quality_right>
+        <clip_vector_left>1</clip_vector_left>
+    </trace>
+    <trace>
+        <trace_name>ID</trace_name>
+        <clip_quality_right>5</clip_quality_right>
+        <clip_vector_left>1</clip_vector_left>
+    </trace>
+</trace_volume>

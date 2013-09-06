@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+
+import argparse
+from fastaq import tasks
+
+parser = argparse.ArgumentParser(
+    description = 'Gets IDs from each sequence in a fasta or fastq file',
+    usage = '%(prog)s <infile> <outfile>')
+parser.add_argument('infile', help='Name of input fasta/q file')
+parser.add_argument('outfile', help='Name of output file')
+options = parser.parse_args()
+tasks.get_ids(options.infile, options.outfile)
