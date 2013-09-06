@@ -1,0 +1,36 @@
+#!/usr/bin/env python3
+
+import sys
+import argparse
+import random
+from fastaq import sequences, utils
+
+parser = argparse.ArgumentParser(
+    description = 'Takes a random subset of reads from a fasta/q file and optionally the corresponding read ' +
+                  'from a mates file.  Ouptut is interleaved if mates file given',
+    usage = '%(prog)s [options] <fasta/q in> <outfile> <probablilty of keeping read (pair) in [0,100]>')
+parser.add_argument('--mate_file', help='Name of fasta/q mates file')
+parser.add_argument('infile', help='Name of input fasta/q file')
+parser.add_argument('outfile', help='Name of fasta/q output file')
+parser.add_argument('probability', type=int, help='Probability of keeping any given read (pair) in [0,100]', metavar='INT')
+options = parser.parse_args()
+
+seq_reader = sequences.file_reader(options.infile)
+fout = utils.open_file_write(options.outfile)
+
+if options.mate_file:
+    mate_seq_reader = sequences.file_reader(options.mate_file)
+
+for seq in seq_reader:
+    if options.mate_file:
+        try:
+            mate_seq = next(mate_seq_reader)
+        except StopIteration:
+            print('Error! Didn\'t get mate for read', seq.id, file=sys.stderr)
+            sys.exit(1)
+    if random.randint(0, 100) <= options.probability:
+        print(seq, file=fout)
+        if options.mate_file:
+            print(mate_seq, file=fout)
+
+utils.close(fout)

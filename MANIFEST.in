@@ -1,0 +1,1 @@
+recursive-include fastaq/tests *.txt *.sh *.py *_test_*
