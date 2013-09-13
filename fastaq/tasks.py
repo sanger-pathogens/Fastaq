@@ -409,7 +409,6 @@ def split_by_fixed_size(infile, outfiles_prefix, chunk_size, tolerance):
         file_count += 1
         base_count = 0
         for seq in small_sequences:
-            print(seq.id, base_count, len(seq), chunk_size)
             if base_count > 0 and base_count + len(seq) > chunk_size + tolerance:
                 print('close', seq.id, base_count, len(seq), chunk_size)
                 utils.close(f)
