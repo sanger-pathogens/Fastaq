@@ -161,6 +161,43 @@ class TestFasta(unittest.TestCase):
         fa.replace_bases('U', 'T')
         self.assertEqual(fa, sequences.Fasta('X', 'ATCGTTTACT'))
 
+    def test_replace_interval(self):
+        '''Test replace_interval()'''
+        fa = sequences.Fasta('ID', 'ACGTA')
+        fa.replace_interval(0, 0, 'NEW')
+        self.assertEqual(fa, sequences.Fasta('ID', 'NEWCGTA'))
+
+        fa = sequences.Fasta('ID', 'ACGTA')
+        fa.replace_interval(4, 4, 'NEW')
+        self.assertEqual(fa, sequences.Fasta('ID', 'ACGTNEW'))
+
+        fa = sequences.Fasta('ID', 'ACGTA')
+        fa.replace_interval(2, 3, 'NEW')
+        self.assertEqual(fa, sequences.Fasta('ID', 'ACNEWA'))
+
+        fa = sequences.Fasta('ID', 'ACGTA')
+        with self.assertRaises(sequences.Error):
+            fa.replace_interval(3,2,'x')
+        with self.assertRaises(sequences.Error):
+            fa.replace_interval(1,5,'x')
+        with self.assertRaises(sequences.Error):
+            fa.replace_interval(5,10,'x')
+
+        fq = sequences.Fastq('ID', 'ACGTA', 'ABCDE')
+        fq.replace_interval(0, 0, 'NEW', 'III')
+        self.assertEqual(fq, sequences.Fastq('ID', 'NEWCGTA', 'IIIBCDE'))
+
+        fq = sequences.Fastq('ID', 'ACGTA', 'ABCDE')
+        fq.replace_interval(4, 4, 'NEW', 'III')
+        self.assertEqual(fq, sequences.Fastq('ID', 'ACGTNEW', 'ABCDIII'))
+
+        fq = sequences.Fastq('ID', 'ACGTA', 'ABCDE')
+        fq.replace_interval(2, 3, 'NEW', 'III')
+        self.assertEqual(fq, sequences.Fastq('ID', 'ACNEWA', 'ABIIIE'))
+
+        with self.assertRaises(sequences.Error):
+            fq.replace_interval(1,1,'x', 'xx')
+
     def test_search_string(self):
         '''Check that search_string() finds all the hits'''
         fa = sequences.Fasta('X', 'AAA')
