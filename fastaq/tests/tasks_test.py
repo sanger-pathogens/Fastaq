@@ -125,6 +125,7 @@ class TestGetSeqsFlankingGaps(unittest.TestCase):
         self.assertTrue(filecmp.cmp(outfile, os.path.join(data_dir, 'sequences_test_get_seqs_flanking_gaps.fa.out')))
         os.unlink(outfile)
 
+
 class TestInterleave(unittest.TestCase):
     def test_interleave(self):
         '''Check that interleave works as expected'''
@@ -143,6 +144,41 @@ class TestInterleave(unittest.TestCase):
             tasks.interleave(os.path.join(data_dir, 'sequences_test_deinterleaved_bad2_1.fa'),
                              os.path.join(data_dir, 'sequences_test_deinterleaved_bad2_2.fa'),
                              tmp)
+        os.unlink(tmp)
+
+
+class TestMakeRandomContigs(unittest.TestCase):
+    def test_make_random_contigs(self):
+        '''Test make_random_contigs()'''
+        # Can't guarantee same results from random (even using same seed), so
+        # just check sequence names and lengths
+        def files_are_equal(file1, file2):
+            seqs1 = {}
+            seqs2 = {}
+            tasks.file_to_dict(file1, seqs1)
+            tasks.file_to_dict(file2, seqs2)
+            if len(seqs1) != len(seqs2):
+                return False
+
+            for name in seqs1:
+                seq1 = seqs1[name]
+                seq2 = seqs2[name]
+                if seq1.id != seq2.id:
+                    return False
+                if len(seq1) != len(seq2):
+                    return False
+
+            return True
+
+        tmp = 'tmp.random_contigs.fa'
+        tasks.make_random_contigs(2, 3, tmp)
+        self.assertTrue(files_are_equal(os.path.join(data_dir, 'sequences_test_make_random_contigs.default.fa'), tmp))
+        tasks.make_random_contigs(2, 3, tmp, prefix='p')
+        self.assertTrue(files_are_equal(os.path.join(data_dir, 'sequences_test_make_random_contigs.prefix-p.fa'), tmp))
+        tasks.make_random_contigs(2, 3, tmp, first_number=42)
+        self.assertTrue(files_are_equal(os.path.join(data_dir, 'sequences_test_make_random_contigs.first-42.fa'), tmp))
+        tasks.make_random_contigs(28, 3, tmp, name_by_letters=True)
+        self.assertTrue(files_are_equal(os.path.join(data_dir, 'sequences_test_make_random_contigs.name-by-letters.fa'), tmp))
         os.unlink(tmp)
 
 
