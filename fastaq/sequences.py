@@ -159,6 +159,13 @@ class Fasta:
         '''Replaces all occurences of 'old' with 'new' '''
         self.seq = self.seq.replace(old, new)
 
+    def replace_interval(self, start, end, new):
+        '''Replaces the sequence from start to end with the sequence "new"'''
+        if start > end or start > len(self) - 1 or end > len(self) - 1:
+            raise Error('Error replacing bases ' + str(start) + '-' + str(end) + ' in sequence ' + self.id)
+
+        self.seq = self.seq[0:start] + new + self.seq[end + 1:]
+
     def gaps(self, min_length = 1):
         '''Finds the positions of all gaps in the sequence that are at least min_length long. Returns a list of Intervals. Coords are zero-based'''
         gaps = []
@@ -355,6 +362,13 @@ class Fastq(Fasta):
         # strip the ends
         self.seq = self.seq.rstrip('Nn')
         self.qual = self.qual[:len(self.seq)]
+
+    def replace_interval(self, start, end, new, qual_string):
+        '''Replaces the sequence from start to end with the sequence "new"'''
+        if len(new) != len(qual_string):
+            raise Error('Length of new seq and qual string in replace_interval() must be equal. Cannot continue')
+        super().replace_interval(start, end, new)
+        self.qual = self.qual[0:start] + qual_string + self.qual[end + 1:]
 
     def translate(self):
         '''Returns a Fasta sequence, translated into amino acids. Starts translating from 'frame', where frame expected to be 0,1 or 2'''
