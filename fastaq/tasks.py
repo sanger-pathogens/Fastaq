@@ -266,6 +266,7 @@ def interleave(infile_1, infile_2, outfile):
 
 
 def make_random_contigs(contigs, length, outfile, name_by_letters=False, prefix='', seed=None, first_number=1):
+    '''Makes a multi fasta file of random sequences, all the same length'''
     random.seed(a=seed)
     fout = utils.open_file_write(outfile)
     letters = list('ABCDEFGHIJKLMNOPQRSTUVWXYZ')
