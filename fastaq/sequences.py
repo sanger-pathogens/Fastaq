@@ -103,6 +103,9 @@ def file_reader(fname, read_quals=False):
         
         seq = Fasta()
         previous_lines[f] = line
+    elif line.startswith('ID   ') and line[5] != ' ':
+        seq = Embl()
+        previous_lines[f] = line
     elif line.startswith('@'):
         seq = Fastq()
         previous_lines[f] = line
@@ -303,6 +306,63 @@ class Fasta:
         return Fasta(self.id, ''.join([codon2aa.get(self.seq[x:x+3].upper(), 'X') for x in range(frame, len(self)-1-frame, 3)]))
 
 
+class Embl(Fasta):
+    '''Exactly the same as Fasta, but reading seqs from a file works differently'''
+    def __eq__(self, other):
+        return type(other) in [Fasta, Embl] and  type(self) in [Fasta, Embl] and self.__dict__ == other.__dict__
+
+    def _get_id_from_header_line(self, line):
+        if line.startswith('ID   ') and line[5] != ' ':
+            return line.split()[1].rstrip(';')
+        else:
+            raise Error('Error! expected line starting with "ID", but got this:\n', line)
+
+    def get_next_from_file(self, f, read_quals=False):
+        if f in previous_lines:
+            line = ''
+            if previous_lines[f] == None:
+                self.id = self.seq = None
+                return False
+            else:
+                self.id = self._get_id_from_header_line(previous_lines[f])
+        else:
+            line = '\n'
+            while line == '\n':
+                line = f.readline()
+            self.id = self._get_id_from_header_line(line)
+
+        self.seq = ''
+        seq_lines = []
+ 
+        while not line.startswith('SQ'):
+            line = f.readline()
+            if line == '':
+                raise Error('Error! No SQ line found for sequence ' + self.id)
+        
+        line = f.readline()
+
+        while not line.startswith('//'):
+            if line == '' or line[0] != ' ':
+                raise Error('Error! Did not find end of sequence ' + self.id)
+            seq_lines.append(''.join(line.strip().split()[:-1]))
+            line = f.readline()
+            
+
+        while 1:
+            if line.startswith('ID'):
+                previous_lines[f] = line.rstrip()
+                break
+            elif line == '':
+                previous_lines[f] = None
+                break
+
+            line = f.readline()
+
+        self.seq = ''.join(seq_lines)
+        print(self.id)
+        print(self.seq)
+        return True
+
 class Fastq(Fasta):
     '''Class to store and manipulate FASTQ sequences. They have three things: a name, sequence and string of quality scores'''
     def __init__(self, id_in=None, seq_in=None, qual_in=None):
@@ -313,6 +373,9 @@ class Fastq(Fasta):
 
     def __str__(self):
         return '@' + self.id + '\n' + self.seq + '\n+\n' + self.qual
+
+    def __eq__(self, other):
+        return type(other) is type(self) and self.__dict__ == other.__dict__
 
     def get_next_from_file(self, f, read_quals=False):
         if f in previous_lines:

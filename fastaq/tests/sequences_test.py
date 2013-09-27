@@ -11,6 +11,10 @@ data_dir = os.path.join(modules_dir, 'tests', 'data')
 
 class Error (Exception): pass
 
+expected_embl = [
+    'aaacaaaccaaatatggattttattgtagccatatttgctctgtttgttattagctcattcacaattacttccacaaatgcagttgaagcttctactcttcttgacataggtaacctgagtcggagcagttttcctcgtggcttcatctttggtgctggatcttcagcataccaatttgaaggtgcagtaaacgaaggcggtagaggaccaagtatttgggataccttcacccataaatatccagaaaaaataagggatggaagcaatgcagacatcacggttgaccaatatcaccgctacaaggaagatgttgggattatgaaggatcaaaatatggattcgtatagattctcaatctcttggccaagaatactcccaaagggaaagttgagcggaggcataaatcacgaaggaatcaaatattacaacaaccttatcaacgaactattggctaacggtatacaaccatttgtaactctttttcattgggatcttccccaagtcttagaagatgagtatggtggtttcttaaactccggtgtaataaatgattttcgagactatacggatctttgcttcaaggaatttggagatagagtgaggtattggagtactctaaatgagccatgggtgtttagcaattctggatatgcactaggaacaaatgcaccaggtcgatgttcggcctccaacgtggccaagcctggtgattctggaacaggaccttatatagttacacacaatcaaattcttgctcatgcagaagctgtacatgtgtataagactaaataccaggcatatcaaaagggaaagataggcataacgttggtatctaactggttaatgccacttgatgataatagcataccagatataaaggctgccgagagatcacttgacttccaatttggattgtttatggaacaattaacaacaggagattattctaagagcatgcggcgtatagttaaaaaccgattacctaagttctcaaaattcgaatcaagcctagtgaatggttcatttgattttattggtataaactattactcttctagttatattagcaatgccccttcacatggcaatgccaaacccagttactcaacaaatcctatgaccaatatttcatttgaaaaacatgggatacccttaggtccaagggctgcttcaatttggatatatgtttatccatatatgtttatccaagaggacttcgagatcttttgttacatattaaaaataaatataacaatcctgcaattttcaatcactgaaaatggtatgaatgaattcaacgatgcaacacttccagtagaagaagctcttttgaatacttacagaattgattactattaccgtcacttatactacattcgttctgcaatcagggctggctcaaatgtgaagggtttttacgcatggtcatttttggactgtaatgaatggtttgcaggctttactgttcgttttggattaaactttgtagattagaaagatggattaaaaaggtaccctaagctttctgcccaatggtacaagaactttctcaaaagaaactagctagtattattaaaagaactttgtagtagattacagtacatcgtttgaagttgagttggtgcacctaattaaataaaagaggttactcttaacatatttttaggccattcgttgtgaagttgttaggctgttatttctattatactatgttgtagtaataagtgcattgttgtaccagaagctatgatcataactataggttgatccttcatgtatcagtttgatgttgagaatactttgaattaaaagtctttttttatttttttaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    'aaacaaaccaaatatggattttattgtagccatatttgctctgtttgttattagctcattcacaattacttccacaaatgcagttgaagcttctactcttcttgacataggtaacctgagtcggagcagttttcctcgtggcttcatctttggtgctggatcttcagcataccaatttgaaggtgcagtaaacgaaggcggtagaggaccaagtatttgggataccttcacccataaatatccagaaaaaataagggatggaagcaatgcagacatcacggttgaccaatatcaccgctacaaggaagatgttgggattatgaaggatcaaaatatggattcgtatagattctcaatctcttggccaagaatactcccaaagggaaagttgagcggaggcataaatcacgaaggaatcaaatattacaacaaccttatcaacgaactattggctaacggtatacaaccatttgtaactctttttcattgggatcttccccaagtcttagaagatgagtatggtggtttcttaaactccggtgtaataaatgattttcgagactatacggatctttgcttcaaggaatttggagatagagtgaggtattggagtactctaaatgagccatgggtgtttagcaattctggatatgcactaggaacaaatgcaccaggtcgatgttcggcctccaacgtggccaagcctggtgattctggaacaggaccttatatagttacacacaatcaaattcttgctcatgcagaagctgtacatgtgtataagactaaataccaggcatatcaaaagggaaagataggcataacgttggtatctaactggttaatgccacttgatgataatagcataccagatataaaggctgccgagagatcacttgacttccaatttggattgtttatggaacaattaacaacaggagattattctaagagcatgcggcgtatagttaaaaaccgattacctaagttctcaaaattcgaatcaagcctagtgaatggttcatttgattttattggtataaactattactcttctagttatattagcaatgccccttcacatggcaatgccaaacccagttactcaacaaatcctatgaccaatatttcatttgaaaaacatgggatacccttaggtccaagggctgcttcaatttggatatatgtttatccatatatgtttatccaagaggacttcgagatcttttgttacatattaaaaataaatataacaatcctgcaattttcaatcactgaaaatggtatgaatgaattcaacgatgcaacacttccagtagaagaagctcttttgaatacttacagaattgattactattaccgtcacttatactacattcgttctgcaatcagggctggctcaaatgtgaagggtttttacgcatggtcatttttggactgtaatgaatggtttgcaggctttactgttcgttttggattaaactttgtagattagaaagatggattaaaaaggtaccctaagctttctgcccaatggtacaagaactttctcaaaagaaactagctagtattattaaaagaactttgtagtagattacagtacatcgtttgaagttgagttggtgcacctaattaaataaaagaggttactcttaacatatttttaggccattcgttgtgaagttgttaggctgttatttctattatactatgttgtagtaataagtgcattgttgtaccagaagctatgatcataactataggttgatccttcatgtatcagtttgatgttgagaatactttgaattaaaagtctttttttatttttttaaaaaaaaaaaaaaaaaaaaccccccccc',
+]
 class TestFasta(unittest.TestCase):
     def setUp(self):
         self.fasta = sequences.Fasta('ID', 'ACGTA')
@@ -244,6 +248,29 @@ class TestFasta(unittest.TestCase):
             fa = sequences.Fasta('name', 'A')
             fa.split_capillary_id()
 
+
+class TestEmbl(unittest.TestCase):
+    def test_get_id_from_header_line(self):
+        '''Test get id from header line of EMBL'''
+        embl = sequences.Embl('ID', 'ACGT')
+        self.assertEqual(embl._get_id_from_header_line('ID   X; blah'), 'X')
+        with self.assertRaises(sequences.Error):
+            self.assertEqual(embl._get_id_from_header_line('ID X;'), 'X')
+        with self.assertRaises(sequences.Error):
+            self.assertEqual(embl._get_id_from_header_line('XX   X;'), 'X')
+
+    def test_get_next_from_file(self):
+        f_in = utils.open_file_read(os.path.join(data_dir, 'sequences_test.embl'))
+        embl = sequences.Embl()
+        counter = 1
+
+        while embl.get_next_from_file(f_in):
+            self.assertEqual(embl, sequences.Fasta('seq' + str(counter), expected_embl[counter-1]))
+            counter += 1
+
+        utils.close(f_in)
+
+
 class TestFastq(unittest.TestCase):
     def setUp(self):
         self.fastq = sequences.Fastq('ID', 'ACGTA', 'IIIII')
@@ -374,6 +401,27 @@ class TestFileReader(unittest.TestCase):
         bad_files = [
             'sequences_test_gffv3.no_seq.gff',
             'sequences_test_gffv3.no_seq.2.gff'
+        ]
+        bad_files = [os.path.join(data_dir, x) for x in bad_files]
+
+        for filename in bad_files:
+            with self.assertRaises(sequences.Error):
+                reader = sequences.file_reader(filename)
+                for seq in reader:
+                    pass
+
+    def test_file_reader_embl(self):
+        '''Test read embl file'''
+        reader = sequences.file_reader(os.path.join(data_dir, 'sequences_test.embl'))
+
+        counter = 1
+        for seq in reader:
+            self.assertEqual(seq, sequences.Fasta('seq' + str(counter), expected_embl[counter-1]))
+            counter += 1
+        
+        bad_files = [
+            'sequences_test.embl.bad',
+            'sequences_test.embl.bad2',
         ]
         bad_files = [os.path.join(data_dir, x) for x in bad_files]
 
