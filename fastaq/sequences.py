@@ -87,6 +87,22 @@ def file_reader(fname, read_quals=False):
     if line.startswith('>'):
         seq = Fasta()
         previous_lines[f] = line
+    elif line.startswith('##gff-version 3'):
+        seq = Fasta()
+        # if a GFF file, need to skip past all the annotation
+        # and get to the fasta sequences at the end of the file
+        while not line.startswith('##FASTA'):
+            line = f.readline()
+            if not line:
+                utils.close(f)
+                raise Error('No sequences found in GFF file "' + fname + '"')
+            
+        line = f.readline()
+        if not line.startswith('>'):
+            raise Error('Error getting first sequence from GFF file "' + fname + '"')
+        
+        seq = Fasta()
+        previous_lines[f] = line
     elif line.startswith('@'):
         seq = Fastq()
         previous_lines[f] = line

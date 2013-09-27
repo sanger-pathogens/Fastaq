@@ -28,7 +28,6 @@ class TestFasta(unittest.TestCase):
         self.assertEqual(self.fasta.id, 'ID')
         self.assertEqual(self.fasta.seq, 'ACGTA')
 
-
     def test_get_next_from_file(self):
         '''get_next_from_file() should read seqs from OK, including weirdness in file'''
         f_in = utils.open_file_read(os.path.join(data_dir, 'sequences_test.fa'))
@@ -364,6 +363,25 @@ class TestFileReader(unittest.TestCase):
             for seq in reader:
                 pass
 
+    def test_file_reader_gff(self):
+        '''Test read gff file'''
+        reader = sequences.file_reader(os.path.join(data_dir, 'sequences_test_gffv3.gff'))
+        counter = 1
+        for seq in reader:
+            self.assertEqual(seq, sequences.Fasta('seq' + str(counter), 'ACGTACGTAC'))
+            counter += 1
+        
+        bad_files = [
+            'sequences_test_gffv3.no_seq.gff',
+            'sequences_test_gffv3.no_seq.2.gff'
+        ]
+        bad_files = [os.path.join(data_dir, x) for x in bad_files]
+
+        for filename in bad_files:
+            with self.assertRaises(sequences.Error):
+                reader = sequences.file_reader(filename)
+                for seq in reader:
+                    pass
 
 if __name__ == '__main__':
     unittest.main()
