@@ -362,6 +362,29 @@ class TestToQuasrPrimers(unittest.TestCase):
         os.unlink(tmpfile)
 
 
+class TestToFasta(unittest.TestCase):
+    def test_to_fasta(self):
+        '''Test to_fasta'''
+        tmpfile = 'tmp.to_fasta'
+        infiles = [
+            'sequences_test_good_file.fq',
+            'sequences_test.embl',
+            'sequences_test_phylip.interleaved',
+            'sequences_test_phylip.interleaved2',
+            'sequences_test_phylip.sequential'
+        ]
+        infiles = [os.path.join(data_dir, x) for x in infiles]
+        expected_outfiles = [x + '.to_fasta' for x in infiles]
+
+        for i in range(len(infiles)):
+            tasks.to_fasta(infiles[i], tmpfile)
+            self.assertTrue(filecmp.cmp(expected_outfiles[i], tmpfile))
+
+        tasks.to_fasta(os.path.join(data_dir, 'sequences_test.fa'), tmpfile, line_length=3)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test.line_length3.fa'), tmpfile))
+        os.unlink(tmpfile)
+
+
 class TestToUniqueByID(unittest.TestCase):
     def test_to_unique_by_id(self):
         '''Test to_unique_by_id()'''
