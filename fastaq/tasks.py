@@ -466,6 +466,25 @@ def strip_illumina_suffix(infile, outfile):
     utils.close(f_out)
 
 
+def to_fasta(infile, outfile, line_length=60, strip_after_first_whitespace=False):
+    seq_reader = sequences.file_reader(infile)
+    f_out = utils.open_file_write(outfile)
+    original_line_length = sequences.Fasta.line_length
+    sequences.Fasta.line_length = line_length
+
+    for seq in seq_reader:
+        if strip_after_first_whitespace:
+            seq.strip_after_first_whitespace()
+
+        if type(seq) == sequences.Fastq:
+            print(sequences.Fasta(seq.id, seq.seq), file=f_out)
+        else:
+            print(seq, file=f_out)
+
+    utils.close(f_out)
+    sequences.Fasta.line_length = original_line_length
+
+
 def to_quasr_primers(infile, outfile):
     seq_reader = sequences.file_reader(infile)
     f_out = utils.open_file_write(outfile)
