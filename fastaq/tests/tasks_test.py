@@ -382,6 +382,8 @@ class TestToFasta(unittest.TestCase):
 
         tasks.to_fasta(os.path.join(data_dir, 'sequences_test.fa'), tmpfile, line_length=3)
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test.line_length3.fa'), tmpfile))
+        tasks.to_fasta(os.path.join(data_dir, 'sequences_test_strip_after_whitespace.fa'), tmpfile, strip_after_first_whitespace=True)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_strip_after_whitespace.fa.to_fasta'), tmpfile))
         os.unlink(tmpfile)
 
 
