@@ -80,9 +80,11 @@ codon2aa = {
 'TGA': '*'}
 
 def file_reader(fname, read_quals=False):
+    print(fname)
     '''Iterates over a FASTA or FASTQ file, yielding the next sequence in the file until there are no more sequences'''
     f = utils.open_file_read(fname)
     line = f.readline()
+    phylip_regex = re.compile('^\s+[0-9]+\s+[0-9]+$')
 
     if line.startswith('>'):
         seq = Fasta()
@@ -109,6 +111,55 @@ def file_reader(fname, read_quals=False):
     elif line.startswith('@'):
         seq = Fastq()
         previous_lines[f] = line
+    elif phylip_regex.search(line):
+        number_of_seqs = int(line.strip().split()[0])
+        first_line = line
+        seq_lines = []
+        while 1:
+            line = f.readline()
+            if line == '':
+                break
+            elif line != '\n':
+                seq_lines.append(line.rstrip())
+        utils.close(f)
+
+        # phylip format could be interleaved or not, need to look at next
+        # couple of lines to figure that out. Don't expect these files to
+        # be too huge, so just store all the sequences in memory
+        name, bases = first_line.rstrip().split(maxsplit=1)
+        bases = int(bases)
+        # if the 11th char of second sequence line is a space,  then the file is sequential, e.g.:
+        # GAGCCCGGGC AATACAGGGT AT
+        # as opposed to:
+        # Salmo gairAAGCCTTGGC AGTGCAGGGT
+        if seq_lines[1][10] == ' ':
+            current_id = None
+            current_seq = ''
+            for line in seq_lines:
+                if len(current_seq) == bases or len(current_seq) == 0:
+                    if current_id is not None:
+                        yield Fasta(current_id, current_seq)
+                    current_seq = ''
+                    current_id, new_bases = line[0:10].rstrip(), line.rstrip()[10:]
+                else:
+                    new_bases = line.rstrip()
+                       
+                current_seq += new_bases.replace(' ','').replace('-','')
+            yield Fasta(current_id, current_seq)
+        else:
+            seqs = []
+            for i in range(number_of_seqs):
+                name, bases = seq_lines[i][0:10].rstrip(), seq_lines[i][10:]
+                seqs.append(Fasta(name, bases))
+            
+            for i in range(number_of_seqs, len(seq_lines)):
+                seqs[i%number_of_seqs].seq += seq_lines[i]
+
+            for fa in seqs:
+                fa.seq = fa.seq.replace(' ','').replace('-','')
+                yield fa
+                
+        return
     elif line == '':
         utils.close(f)
         return

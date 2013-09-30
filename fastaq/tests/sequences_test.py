@@ -431,6 +431,32 @@ class TestFileReader(unittest.TestCase):
                 for seq in reader:
                     pass
 
+    def test_file_reader_phylip(self):
+        '''Test read phylip file'''
+        test_files = [
+            'sequences_test_phylip.interleaved',
+            'sequences_test_phylip.interleaved2',
+            'sequences_test_phylip.sequential'
+        ]
+
+        test_files = [os.path.join(data_dir, f) for f in test_files]
+
+        expected_seqs = [
+            sequences.Fasta('Turkey', 'AAGCTNGGGCATTTCAGGGTGAGCCCGGGCAATACAGGGTAT'),
+            sequences.Fasta('Salmo gair', 'AAGCCTTGGCAGTGCAGGGTGAGCCGTGGCCGGGCACGGTAT'),
+            sequences.Fasta('H. Sapiens', 'ACCGGTTGGCCGTTCAGGGTACAGGTTGGCCGTTCAGGGTAA')
+        ]
+
+        for fname in test_files:
+            reader = sequences.file_reader(fname)
+            i = 0
+            for seq in reader:
+                self.assertEqual(expected_seqs[i].seq, seq.seq)
+                self.assertEqual(expected_seqs[i].id, seq.id)
+                #self.assertEqual(expected_seqs[i], seq)
+                i += 1
+        
+
 if __name__ == '__main__':
     unittest.main()
 
