@@ -83,13 +83,82 @@ def file_reader(fname, read_quals=False):
     '''Iterates over a FASTA or FASTQ file, yielding the next sequence in the file until there are no more sequences'''
     f = utils.open_file_read(fname)
     line = f.readline()
+    phylip_regex = re.compile('^\s+[0-9]+\s+[0-9]+$')
 
     if line.startswith('>'):
         seq = Fasta()
         previous_lines[f] = line
+    elif line.startswith('##gff-version 3'):
+        seq = Fasta()
+        # if a GFF file, need to skip past all the annotation
+        # and get to the fasta sequences at the end of the file
+        while not line.startswith('##FASTA'):
+            line = f.readline()
+            if not line:
+                utils.close(f)
+                raise Error('No sequences found in GFF file "' + fname + '"')
+            
+        line = f.readline()
+        if not line.startswith('>'):
+            raise Error('Error getting first sequence from GFF file "' + fname + '"')
+        
+        seq = Fasta()
+        previous_lines[f] = line
+    elif line.startswith('ID   ') and line[5] != ' ':
+        seq = Embl()
+        previous_lines[f] = line
     elif line.startswith('@'):
         seq = Fastq()
         previous_lines[f] = line
+    elif phylip_regex.search(line):
+        number_of_seqs = int(line.strip().split()[0])
+        first_line = line
+        seq_lines = []
+        while 1:
+            line = f.readline()
+            if line == '':
+                break
+            elif line != '\n':
+                seq_lines.append(line.rstrip())
+        utils.close(f)
+
+        # phylip format could be interleaved or not, need to look at next
+        # couple of lines to figure that out. Don't expect these files to
+        # be too huge, so just store all the sequences in memory
+        name, bases = first_line.rstrip().split(maxsplit=1)
+        bases = int(bases)
+        # if the 11th char of second sequence line is a space,  then the file is sequential, e.g.:
+        # GAGCCCGGGC AATACAGGGT AT
+        # as opposed to:
+        # Salmo gairAAGCCTTGGC AGTGCAGGGT
+        if seq_lines[1][10] == ' ':
+            current_id = None
+            current_seq = ''
+            for line in seq_lines:
+                if len(current_seq) == bases or len(current_seq) == 0:
+                    if current_id is not None:
+                        yield Fasta(current_id, current_seq)
+                    current_seq = ''
+                    current_id, new_bases = line[0:10].rstrip(), line.rstrip()[10:]
+                else:
+                    new_bases = line.rstrip()
+                       
+                current_seq += new_bases.replace(' ','').replace('-','')
+            yield Fasta(current_id, current_seq)
+        else:
+            seqs = []
+            for i in range(number_of_seqs):
+                name, bases = seq_lines[i][0:10].rstrip(), seq_lines[i][10:]
+                seqs.append(Fasta(name, bases))
+            
+            for i in range(number_of_seqs, len(seq_lines)):
+                seqs[i%number_of_seqs].seq += seq_lines[i]
+
+            for fa in seqs:
+                fa.seq = fa.seq.replace(' ','').replace('-','')
+                yield fa
+                
+        return
     elif line == '':
         utils.close(f)
         return
@@ -141,6 +210,10 @@ class Fasta:
             return {'prefix': a[0], 'dir': dir, 'suffix':a[1]}
         except:
             raise Error('Error in split_capillary_id() on ID', self.id)
+
+    def strip_after_first_whitespace(self):
+        '''Removes everything in the name after the first whitespace character'''
+        self.id = self.id.split()[0]
 
     def strip_illumina_suffix(self):
         '''Removes any trailing /1 or /2 off the end of the name'''
@@ -287,6 +360,61 @@ class Fasta:
         return Fasta(self.id, ''.join([codon2aa.get(self.seq[x:x+3].upper(), 'X') for x in range(frame, len(self)-1-frame, 3)]))
 
 
+class Embl(Fasta):
+    '''Exactly the same as Fasta, but reading seqs from a file works differently'''
+    def __eq__(self, other):
+        return type(other) in [Fasta, Embl] and  type(self) in [Fasta, Embl] and self.__dict__ == other.__dict__
+
+    def _get_id_from_header_line(self, line):
+        if line.startswith('ID   ') and line[5] != ' ':
+            return line.split()[1].rstrip(';')
+        else:
+            raise Error('Error! expected line starting with "ID", but got this:\n', line)
+
+    def get_next_from_file(self, f, read_quals=False):
+        if f in previous_lines:
+            line = ''
+            if previous_lines[f] == None:
+                self.id = self.seq = None
+                return False
+            else:
+                self.id = self._get_id_from_header_line(previous_lines[f])
+        else:
+            line = '\n'
+            while line == '\n':
+                line = f.readline()
+            self.id = self._get_id_from_header_line(line)
+
+        self.seq = ''
+        seq_lines = []
+ 
+        while not line.startswith('SQ'):
+            line = f.readline()
+            if line == '':
+                raise Error('Error! No SQ line found for sequence ' + self.id)
+        
+        line = f.readline()
+
+        while not line.startswith('//'):
+            if line == '' or line[0] != ' ':
+                raise Error('Error! Did not find end of sequence ' + self.id)
+            seq_lines.append(''.join(line.strip().split()[:-1]))
+            line = f.readline()
+            
+
+        while 1:
+            if line.startswith('ID'):
+                previous_lines[f] = line.rstrip()
+                break
+            elif line == '':
+                previous_lines[f] = None
+                break
+
+            line = f.readline()
+
+        self.seq = ''.join(seq_lines)
+        return True
+
 class Fastq(Fasta):
     '''Class to store and manipulate FASTQ sequences. They have three things: a name, sequence and string of quality scores'''
     def __init__(self, id_in=None, seq_in=None, qual_in=None):
@@ -297,6 +425,9 @@ class Fastq(Fasta):
 
     def __str__(self):
         return '@' + self.id + '\n' + self.seq + '\n+\n' + self.qual
+
+    def __eq__(self, other):
+        return type(other) is type(self) and self.__dict__ == other.__dict__
 
     def get_next_from_file(self, f, read_quals=False):
         if f in previous_lines:

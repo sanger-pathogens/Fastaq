@@ -1,0 +1,6 @@
+>seq 1
+ACGT
+>seq 1 2
+ACGT
+>seq
+ACGT
