@@ -80,7 +80,6 @@ codon2aa = {
 'TGA': '*'}
 
 def file_reader(fname, read_quals=False):
-    print(fname)
     '''Iterates over a FASTA or FASTQ file, yielding the next sequence in the file until there are no more sequences'''
     f = utils.open_file_read(fname)
     line = f.readline()
@@ -410,8 +409,6 @@ class Embl(Fasta):
             line = f.readline()
 
         self.seq = ''.join(seq_lines)
-        print(self.id)
-        print(self.seq)
         return True
 
 class Fastq(Fasta):
