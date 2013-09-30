@@ -211,6 +211,10 @@ class Fasta:
         except:
             raise Error('Error in split_capillary_id() on ID', self.id)
 
+    def strip_after_first_whitespace(self):
+        '''Removes everything in the name after the first whitespace character'''
+        self.id = self.id.split()[0]
+
     def strip_illumina_suffix(self):
         '''Removes any trailing /1 or /2 off the end of the name'''
         if self.id.endswith('/1') or self.id.endswith('/2'):

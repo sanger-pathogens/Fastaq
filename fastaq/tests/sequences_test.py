@@ -80,6 +80,21 @@ class TestFasta(unittest.TestCase):
 
         sequences.Fasta.line_length = 60
 
+    def test_strip_after_first_whitespace(self):
+        '''Test strip_after_first_whitespace()'''
+        seqs = [
+            sequences.Fasta('name', 'A'),
+            sequences.Fasta('name foo', 'A'),
+            sequences.Fasta('name foo bar', 'A'),
+            sequences.Fasta('name\tfoo', 'A'),
+        ]
+
+        for seq in seqs:
+            seq.strip_after_first_whitespace()
+
+        for seq in seqs:
+            self.assertEqual(seq.id, 'name')
+
     def test_strip_illumina_suffix(self):
         '''Check that /1 and /2 removed correctly from IDs'''
         seqs = [sequences.Fasta('name/1', 'A'),
