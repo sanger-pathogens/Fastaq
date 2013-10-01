@@ -302,7 +302,20 @@ class TestSplit(unittest.TestCase):
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_split_fixed_size.fa.split.coords'), test_coords))
         os.unlink(test_coords)
 
-
+    def test_split_by_fixed_size_exclude_Ns(self):
+        infile = os.path.join(data_dir, 'sequences_test_split_fixed_size.fa')
+        outprefix = 'tmp.sequences_test_split'
+        tasks.split_by_fixed_size(infile, outprefix, 4, 1, skip_if_all_Ns=True)
+  
+        for i in range(1,5,1):
+            correct = os.path.join(data_dir, 'sequences_test_split_fixed_size.fa.split.skip_if_all_Ns.' + str(i))
+            test = outprefix + '.' + str(i)
+            self.assertTrue(filecmp.cmp(test, correct))
+            os.unlink(test)
+ 
+        test_coords = outprefix + '.coords'
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_split_fixed_size.fa.split.skip_if_all_Ns.coords'), test_coords))
+        os.unlink(test_coords)
 
 class TestCountSequences(unittest.TestCase):
     def test_count_sequences(self):

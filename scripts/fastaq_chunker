@@ -10,5 +10,12 @@ parser.add_argument('infile', help='Name of input fasta/q file to be split')
 parser.add_argument('outprefix', help='Name of output fasta/q file')
 parser.add_argument('chunk_size', type=int, help='Size of each chunk')
 parser.add_argument('tolerance', type=int, help='Tolerance allowed in chunk size')
+parser.add_argument('--skip_all_Ns', action='store_true', help='Do not output any sequence that consists of all Ns')
 options = parser.parse_args()
-tasks.split_by_fixed_size(options.infile, options.outprefix, options.chunk_size, options.tolerance)
+tasks.split_by_fixed_size(
+    options.infile,
+    options.outprefix,
+    options.chunk_size,
+    options.tolerance,
+    skip_if_all_Ns=options.skip_all_Ns
+)
