@@ -224,6 +224,20 @@ class Fasta:
         '''Reverse complements the sequence'''
         self.seq = self.seq.translate(str.maketrans("ATCGatcg", "TAGCtagc"))[::-1]
 
+    def is_all_Ns(self, start=0, end=None):
+        '''Returns true if the sequence is all Ns (upper or lower case)'''
+        if end is not None:
+            if start > end:
+                raise Error('Error in is_all_Ns. Start coord must be <= end coord')
+            end += 1
+        else:
+            end = len(self)
+
+        if len(self) == 0:
+            return False
+        else:
+            return re.search('[^Nn]', self.seq[start:end]) is None
+
     def trim_Ns(self):
         '''Removes any leading or trailing N or n characters from the sequence'''
         self.seq = self.seq.strip('Nn')
