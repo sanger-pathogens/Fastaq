@@ -158,6 +158,26 @@ class TestFasta(unittest.TestCase):
             gaps = test_seqs[i].contig_coords()
             self.assertListEqual(correct_coords[i], gaps)
 
+    def test_is_all_Ns(self):
+        '''Test is_all_Ns()'''
+        self.assertTrue(sequences.Fasta('ID', 'n').is_all_Ns())
+        self.assertTrue(sequences.Fasta('ID', 'N').is_all_Ns())
+        self.assertTrue(sequences.Fasta('ID', 'nNn').is_all_Ns())
+        self.assertFalse(sequences.Fasta('ID', 'a').is_all_Ns())
+        self.assertFalse(sequences.Fasta('ID', '').is_all_Ns())
+        self.assertFalse(sequences.Fasta('ID', 'anNg').is_all_Ns())
+        self.assertFalse(sequences.Fasta('ID', 'naN').is_all_Ns())
+        self.assertFalse(sequences.Fasta('ID', 'anNg').is_all_Ns(start=0, end=0))
+        self.assertFalse(sequences.Fasta('ID', 'anNg').is_all_Ns(start=0, end=1))
+        self.assertTrue(sequences.Fasta('ID', 'anNg').is_all_Ns(start=1, end=1))
+        self.assertTrue(sequences.Fasta('ID', 'anNg').is_all_Ns(start=1, end=2))
+        self.assertFalse(sequences.Fasta('ID', 'anNg').is_all_Ns(start=1))
+        self.assertTrue(sequences.Fasta('ID', 'anN').is_all_Ns(start=1))
+        self.assertFalse(sequences.Fasta('ID', 'anNg').is_all_Ns(end=1))
+        self.assertTrue(sequences.Fasta('ID', 'nNA').is_all_Ns(end=1))
+
+        with self.assertRaises(sequences.Error):
+            sequences.Fasta('ID', 'anNg').is_all_Ns(start=1, end=0)
 
     def test_trim_Ns(self):
         '''trim_Ns() should do the right trimming of a sequence'''
