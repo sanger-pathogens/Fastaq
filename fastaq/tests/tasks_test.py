@@ -369,6 +369,7 @@ class TestToFasta(unittest.TestCase):
         infiles = [
             'sequences_test_good_file.fq',
             'sequences_test.embl',
+            'sequences_test.gbk',
             'sequences_test_phylip.interleaved',
             'sequences_test_phylip.interleaved2',
             'sequences_test_phylip.sequential'

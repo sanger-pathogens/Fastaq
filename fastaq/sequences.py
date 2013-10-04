@@ -84,6 +84,7 @@ def file_reader(fname, read_quals=False):
     f = utils.open_file_read(fname)
     line = f.readline()
     phylip_regex = re.compile('^\s+[0-9]+\s+[0-9]+$')
+    gbk_regex = re.compile('^LOCUS\s+\S')
 
     if line.startswith('>'):
         seq = Fasta()
@@ -105,6 +106,9 @@ def file_reader(fname, read_quals=False):
         seq = Fasta()
         previous_lines[f] = line
     elif line.startswith('ID   ') and line[5] != ' ':
+        seq = Embl()
+        previous_lines[f] = line
+    elif gbk_regex.search(line):
         seq = Embl()
         previous_lines[f] = line
     elif line.startswith('@'):
@@ -368,8 +372,10 @@ class Embl(Fasta):
     def _get_id_from_header_line(self, line):
         if line.startswith('ID   ') and line[5] != ' ':
             return line.split()[1].rstrip(';')
+        elif line.startswith('LOCUS'):
+            return line.split()[1]
         else:
-            raise Error('Error! expected line starting with "ID", but got this:\n', line)
+            raise Error('Error! expected line starting with "ID" or "LOCUS", but got this:\n', line)
 
     def get_next_from_file(self, f, read_quals=False):
         if f in previous_lines:
@@ -388,22 +394,22 @@ class Embl(Fasta):
         self.seq = ''
         seq_lines = []
  
-        while not line.startswith('SQ'):
+        while not (line.startswith('SQ') or line.rstrip() == 'ORIGIN'):
             line = f.readline()
             if line == '':
-                raise Error('Error! No SQ line found for sequence ' + self.id)
+                raise Error('Error! No SQ or ORIGIN line found for sequence ' + self.id)
         
         line = f.readline()
 
         while not line.startswith('//'):
             if line == '' or line[0] != ' ':
                 raise Error('Error! Did not find end of sequence ' + self.id)
-            seq_lines.append(''.join(line.strip().split()[:-1]))
+            seq_lines.append(''.join(line.rstrip().strip(' 0123456789').split()))
             line = f.readline()
             
 
         while 1:
-            if line.startswith('ID'):
+            if line.startswith('ID') or line.startswith('LOCUS'):
                 previous_lines[f] = line.rstrip()
                 break
             elif line == '':

@@ -269,12 +269,14 @@ class TestEmbl(unittest.TestCase):
         '''Test get id from header line of EMBL'''
         embl = sequences.Embl('ID', 'ACGT')
         self.assertEqual(embl._get_id_from_header_line('ID   X; blah'), 'X')
+        self.assertEqual(embl._get_id_from_header_line('LOCUS   X foo'), 'X')
         with self.assertRaises(sequences.Error):
             self.assertEqual(embl._get_id_from_header_line('ID X;'), 'X')
         with self.assertRaises(sequences.Error):
             self.assertEqual(embl._get_id_from_header_line('XX   X;'), 'X')
 
-    def test_get_next_from_file(self):
+
+    def test_get_next_from_embl_file(self):
         f_in = utils.open_file_read(os.path.join(data_dir, 'sequences_test.embl'))
         embl = sequences.Embl()
         counter = 1
@@ -285,6 +287,21 @@ class TestEmbl(unittest.TestCase):
 
         utils.close(f_in)
 
+
+    def test_get_next_from_gbk_file(self):
+        f_in = utils.open_file_read(os.path.join(data_dir, 'sequences_test.gbk'))
+        embl = sequences.Embl()
+        counter = 1
+        expected = [
+            'gatcctccatatacaacggtatctccacctcaggtttagatctcaacaacggaaccattgccgacatgagacagttaggtatcgtcgagagttacaagctaaaacgagcagtagtcagctctgcatctgaagccgctgaagttctactaagggtggataacatcatccgtgcaagaccaatgccatgactcagattctaattttaagctattcaatttctctttgatc',
+            'gatcctccatatacaacggtatctccacctcaggtttagatctcaacaacggaaccattgccgacatgagacagttaggtatcgtcgagagttacaagctaaaacgagcagtagtcagctctgcatctgaagccgctgaagttctactaagggtggataacatcatccgtgcaagaccaatgccatgactcagattctaattttaagctattcaatttctctttgaaa']
+
+        while embl.get_next_from_file(f_in):
+            self.assertEqual(embl, sequences.Fasta('NAME' + str(counter), expected[counter-1]))
+            counter += 1
+
+        utils.close(f_in)
+ 
 
 class TestFastq(unittest.TestCase):
     def setUp(self):
