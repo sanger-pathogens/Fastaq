@@ -424,11 +424,18 @@ class TestFileReader(unittest.TestCase):
 
     def test_file_reader_gff(self):
         '''Test read gff file'''
-        reader = sequences.file_reader(os.path.join(data_dir, 'sequences_test_gffv3.gff'))
-        counter = 1
-        for seq in reader:
-            self.assertEqual(seq, sequences.Fasta('seq' + str(counter), 'ACGTACGTAC'))
-            counter += 1
+        good_files = [
+            'sequences_test_gffv3.gff',
+            'sequences_test_gffv3.no_FASTA_line.gff'
+        ]
+        good_files = [os.path.join(data_dir, x) for x in good_files]
+
+        for f in good_files:
+            reader = sequences.file_reader(f)
+            counter = 1
+            for seq in reader:
+                self.assertEqual(seq, sequences.Fasta('seq' + str(counter), 'ACGTACGTAC'))
+                counter += 1
         
         bad_files = [
             'sequences_test_gffv3.no_seq.gff',
