@@ -381,6 +381,8 @@ class TestToFasta(unittest.TestCase):
         tmpfile = 'tmp.to_fasta'
         infiles = [
             'sequences_test_good_file.fq',
+            'sequences_test_gffv3.gff',
+            'sequences_test_gffv3.no_FASTA_line.gff',
             'sequences_test.embl',
             'sequences_test.gbk',
             'sequences_test_phylip.interleaved',

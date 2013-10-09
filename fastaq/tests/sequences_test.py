@@ -444,11 +444,18 @@ class TestFileReader(unittest.TestCase):
 
     def test_file_reader_gff(self):
         '''Test read gff file'''
-        reader = sequences.file_reader(os.path.join(data_dir, 'sequences_test_gffv3.gff'))
-        counter = 1
-        for seq in reader:
-            self.assertEqual(seq, sequences.Fasta('seq' + str(counter), 'ACGTACGTAC'))
-            counter += 1
+        good_files = [
+            'sequences_test_gffv3.gff',
+            'sequences_test_gffv3.no_FASTA_line.gff'
+        ]
+        good_files = [os.path.join(data_dir, x) for x in good_files]
+
+        for f in good_files:
+            reader = sequences.file_reader(f)
+            counter = 1
+            for seq in reader:
+                self.assertEqual(seq, sequences.Fasta('seq' + str(counter), 'ACGTACGTAC'))
+                counter += 1
         
         bad_files = [
             'sequences_test_gffv3.no_seq.gff',
@@ -494,8 +501,8 @@ class TestFileReader(unittest.TestCase):
         test_files = [os.path.join(data_dir, f) for f in test_files]
 
         expected_seqs = [
-            sequences.Fasta('Turkey', 'AAGCTNGGGCATTTCAGGGTGAGCCCGGGCAATACAGGGTAT'),
-            sequences.Fasta('Salmo gair', 'AAGCCTTGGCAGTGCAGGGTGAGCCGTGGCCGGGCACGGTAT'),
+            sequences.Fasta('Turkey', 'AACTNGGGCATTTCAGGGTGAGCCCGGGCAATACAGGGTAT'),
+            sequences.Fasta('Salmo_gair', 'AAGCCTTGGCAGTGCAGGGTGAGCCGTGGCCGGGCACGGTAT'),
             sequences.Fasta('H. Sapiens', 'ACCGGTTGGCCGTTCAGGGTACAGGTTGGCCGTTCAGGGTAA')
         ]
 
@@ -503,11 +510,23 @@ class TestFileReader(unittest.TestCase):
             reader = sequences.file_reader(fname)
             i = 0
             for seq in reader:
-                self.assertEqual(expected_seqs[i].seq, seq.seq)
-                self.assertEqual(expected_seqs[i].id, seq.id)
-                #self.assertEqual(expected_seqs[i], seq)
+                self.assertEqual(expected_seqs[i], seq)
                 i += 1
         
+        # files made by seaview are a little different in the first line.
+        # Test one of these
+        expected_seqs = [
+            sequences.Fasta('seq1', 96 * 'G' + 'T'),
+            sequences.Fasta('seq2', 94 * 'A' + 'G')
+        ]
+        
+        reader = sequences.file_reader(os.path.join(data_dir, 'sequences_test_phylip.made_by_seaview'))
+        i = 0
+        for seq in reader:
+            print(seq)
+            self.assertEqual(expected_seqs[i], seq)
+            i += 1
+
 
 if __name__ == '__main__':
     unittest.main()

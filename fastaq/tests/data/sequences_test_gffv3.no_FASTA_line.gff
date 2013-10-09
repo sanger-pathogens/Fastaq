@@ -1,0 +1,8 @@
+##gff-version 3
+# comment
+##sequence-region seq1 1 10
+seq1	. 	gene	3	7	.	+	.	ID=gene1;name=name1
+>seq1
+ACGTACGTAC
+>seq2
+ACGTACGTAC
