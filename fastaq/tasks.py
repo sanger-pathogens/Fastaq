@@ -298,6 +298,19 @@ def reverse_complement(infile, outfile):
     utils.close(fout)
 
 
+def scaffolds_to_contigs(infile, outfile):
+    seq_reader = sequences.file_reader(infile)
+    fout = utils.open_file_write(outfile)
+
+    for seq in seq_reader:
+        contigs = seq.contig_coords()
+        for contig in contigs:
+            name = '.'.join([seq.id, str(contig.start + 1), str(contig.end + 1)])
+            print(sequences.Fasta(name, seq[contig.start:contig.end+1]), file=fout)
+
+    utils.close(fout)
+
+
 def search_for_seq(infile, outfile, search_string):
     seq_reader = sequences.file_reader(infile)
     fout = utils.open_file_write(outfile)
