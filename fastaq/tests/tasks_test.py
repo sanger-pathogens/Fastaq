@@ -191,6 +191,15 @@ class TestReverseComplement(unittest.TestCase):
         os.unlink(tmp)
 
 
+class TestScaffoldsToContigs(unittest.TestCase):
+    def test_scaffolds_to_contigs(self):
+        '''Test scaffolds_to_contigs'''
+        tmp = 'tmp.contigs.fa'
+        tasks.scaffolds_to_contigs(os.path.join(data_dir, 'utils_test_scaffolds.fa'), tmp)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'utils_test_scaffolds.fa.to_contigs.fa'), tmp))
+        os.unlink(tmp)
+
+
 class TestSearchForSeq(unittest.TestCase):
     def test_search_for_seq(self):
         '''Test that sequence search finds all hits'''

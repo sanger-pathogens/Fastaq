@@ -300,7 +300,7 @@ class Fasta:
             else:
                 coords += [g.start - 1, g.end + 1]
 
-        if coords[-1] + 1 < len(self):
+        if coords[-1] < len(self):
             coords.append(len(self) - 1)
 
         return [intervals.Interval(coords[i], coords[i+1]) for i in range(0, len(coords)-1,2)]
