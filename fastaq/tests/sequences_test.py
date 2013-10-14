@@ -144,6 +144,7 @@ class TestFasta(unittest.TestCase):
                      sequences.Fasta('ID', 'ACGTN'),
                      sequences.Fasta('ID', 'ACGTNN'),
                      sequences.Fasta('ID', 'NANNCGT'),
+                     sequences.Fasta('ID', 'ACNNNGTNA'),
                      sequences.Fasta('ID', 'ANNCGTNNAAAAA')]
 
         correct_coords = [[intervals.Interval(0,3)],
@@ -152,6 +153,7 @@ class TestFasta(unittest.TestCase):
                          [intervals.Interval(0, 3)],
                          [intervals.Interval(0, 3)],
                          [intervals.Interval(1, 1), intervals.Interval(4,6)],
+                         [intervals.Interval(0, 1), intervals.Interval(5, 6), intervals.Interval(8, 8)],
                          [intervals.Interval(0, 0), intervals.Interval(3, 5), intervals.Interval(8, 12)]]
 
         for i in range(len(test_seqs)):
