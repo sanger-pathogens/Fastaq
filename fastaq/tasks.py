@@ -196,14 +196,21 @@ def file_to_dict(infile, d):
         d[seq.id] = copy.copy(seq)
 
 
-def filter(infile, outfile, minlength=0, maxlength=float('inf'), regex=None):
+def filter(infile, outfile, minlength=0, maxlength=float('inf'), regex=None, ids_file=None):
+    ids_from_file = set()
+    if ids_file is not None:
+        f = utils.open_file_read(ids_file)
+        for line in f:
+            ids_from_file.add(line.rstrip())
+        utils.close(f)
+
     seq_reader = sequences.file_reader(infile)
     f_out = utils.open_file_write(outfile)
     if regex is not None:
         r = re.compile(regex)
 
     for seq in seq_reader:
-        if minlength <= len(seq) <= maxlength and (regex is None or r.search(seq.id)):
+        if minlength <= len(seq) <= maxlength and (regex is None or r.search(seq.id)) and (ids_file is None or seq.id in ids_from_file):
             print(seq, file=f_out)
     utils.close(f_out)
     
