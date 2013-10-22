@@ -117,6 +117,13 @@ class TestFilter(unittest.TestCase):
             self.assertTrue(filecmp.cmp(correct_files[i], outfile))
             os.unlink(outfile)
 
+    def test_ids_from_file_filter(self):
+        '''Test that can extract reads from a file of read names'''
+        infile = os.path.join(data_dir, 'sequences_test_filter_by_ids_file.fa')
+        outfile = 'tmp.ids_file_filter.fa'
+        tasks.filter(infile, outfile, ids_file=infile + '.ids')
+        self.assertTrue(filecmp.cmp(infile + '.filtered', outfile))
+        os.unlink(outfile)
 
 class TestGetSeqsFlankingGaps(unittest.TestCase):
     def test_get_seqs_flanking_gaps(self):
