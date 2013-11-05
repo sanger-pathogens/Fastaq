@@ -206,6 +206,13 @@ class TestScaffoldsToContigs(unittest.TestCase):
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'utils_test_scaffolds.fa.to_contigs.fa'), tmp))
         os.unlink(tmp)
 
+    def test_scaffolds_to_contigs_number_contigs(self):
+        '''Test scaffolds_to_contigs with contig numbering'''
+        tmp = 'tmp.contigs.fa'
+        tasks.scaffolds_to_contigs(os.path.join(data_dir, 'utils_test_scaffolds.fa'), tmp, number_contigs=True)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'utils_test_scaffolds.fa.to_contigs.number_contigs.fa'), tmp))
+        os.unlink(tmp)
+
 
 class TestSearchForSeq(unittest.TestCase):
     def test_search_for_seq(self):
