@@ -15,6 +15,7 @@ parser.add_argument('mean_insert', type=int, help='Mean insert size of read pair
 parser.add_argument('insert_std', type=float, help='Standard devation of insert size', metavar='insert std deviation')
 parser.add_argument('coverage', type=float, help='Mean coverage of the reads', metavar='mean coverage')
 parser.add_argument('readlength', type=int, help='Length of each read', metavar='read length')
+parser.add_argument('--fragments', help='Write FASTA sequences of fragments (i.e. read pairs plus sequences in between them) to the given filename', metavar='FILENAME')
 parser.add_argument('--no_n', action='store_true', help='Don\'t allow any N or n characters in the reads')
 parser.add_argument('--seed', type=int, help='Seed for random number generator. Default is to use python\'s default', default=None, metavar='INT')
 options = parser.parse_args()
@@ -24,6 +25,9 @@ random.seed(a=options.seed)
 seq_reader = sequences.file_reader(options.infile)
 fout = utils.open_file_write(options.outfile)
 pair_counter = 1
+
+if options.fragments:
+    fout_frags = utils.open_file_write(options.fragments)
 
 for ref in seq_reader:
     # check if current seq is long enough
@@ -61,6 +65,7 @@ for ref in seq_reader:
         read1 = sequences.Fastq(readname + '/1', ref.seq[read_start1:read_start1 + options.readlength], 'I' * options.readlength)
         read2 = sequences.Fastq(readname + '/2', ref.seq[read_start2:read_start2 + options.readlength], 'I' * options.readlength)
 
+
         if options.no_n and ('n' in read1.seq or 'N' in read1.seq or 'n' in read2.seq or 'N' in read2.seq):
             continue
 
@@ -69,7 +74,13 @@ for ref in seq_reader:
         print(read1, file=fout)
         print(read2, file=fout)
 
+        if options.fragments:
+            frag = sequences.Fasta(readname, ref.seq[read_start1:read_start2 + options.readlength])
+            print(frag, file=fout_frags)
+
         pair_counter += 1
         x += 1
 
 utils.close(fout)
+if options.fragments:
+    utils.close(fout_frags)
