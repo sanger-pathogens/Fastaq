@@ -47,7 +47,7 @@ for ref in seq_reader:
     x = 0
     while x < read_pairs:
         isize = int(random.normalvariate(options.mean_insert, options.insert_std))
-        while isize > len(ref) and isize > options.readlength:
+        while isize > len(ref) or isize < options.readlength:
             isize = int(random.normalvariate(options.mean_insert, options.insert_std))
         middle_pos = random.randint(ceil(0.5 *isize), floor(len(ref) - 0.5 * isize))
         read_start1 = int(middle_pos - ceil(0.5 * isize))
