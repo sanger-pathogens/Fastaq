@@ -196,7 +196,7 @@ def file_to_dict(infile, d):
         d[seq.id] = copy.copy(seq)
 
 
-def filter(infile, outfile, minlength=0, maxlength=float('inf'), regex=None, ids_file=None):
+def filter(infile, outfile, minlength=0, maxlength=float('inf'), regex=None, ids_file=None, invert=False):
     ids_from_file = set()
     if ids_file is not None:
         f = utils.open_file_read(ids_file)
@@ -210,7 +210,11 @@ def filter(infile, outfile, minlength=0, maxlength=float('inf'), regex=None, ids
         r = re.compile(regex)
 
     for seq in seq_reader:
-        if minlength <= len(seq) <= maxlength and (regex is None or r.search(seq.id)) and (ids_file is None or seq.id in ids_from_file):
+        hit = minlength <= len(seq) <= maxlength \
+              and (regex is None or r.search(seq.id) is not None) \
+              and (ids_file is None or seq.id in ids_from_file)
+
+        if hit != invert:
             print(seq, file=f_out)
     utils.close(f_out)
     
