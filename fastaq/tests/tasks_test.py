@@ -125,6 +125,15 @@ class TestFilter(unittest.TestCase):
         self.assertTrue(filecmp.cmp(infile + '.filtered', outfile))
         os.unlink(outfile)
 
+    def test_invert_filter(self):
+        '''Test that inverting filtering works'''
+        infile = os.path.join(data_dir, 'sequences_test_filter_by_ids_file.fa')
+        outfile = 'tmp.ids_file_filter.fa'
+        tasks.filter(infile, outfile, ids_file=infile + '.ids', invert=True)
+        self.assertTrue(filecmp.cmp(infile + '.filtered.invert', outfile))
+        os.unlink(outfile)
+
+
 class TestGetSeqsFlankingGaps(unittest.TestCase):
     def test_get_seqs_flanking_gaps(self):
         outfile = 'tmp.seqs_flanking_gaps'
