@@ -189,10 +189,12 @@ def file_reader(fname, read_quals=False):
         utils.close(f)
         raise Error('Error determining file type from file "' + fname + '". First line is:\n' + line.rstrip())
 
-    while seq.get_next_from_file(f, read_quals):
-        yield seq
+    try:
+        while seq.get_next_from_file(f, read_quals):
+            yield seq
+    finally:
+        utils.close(f)
 
-    utils.close(f)
 
 class Fasta:
     '''Class to store and manipulate FASTA sequences. They have two things: a name and a sequence'''
