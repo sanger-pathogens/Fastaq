@@ -79,6 +79,7 @@ codon2aa = {
 'TAG': '*',
 'TGA': '*'}
 
+
 def file_reader(fname, read_quals=False):
     '''Iterates over a FASTA or FASTQ file, yielding the next sequence in the file until there are no more sequences'''
     f = utils.open_file_read(fname)
@@ -308,6 +309,38 @@ class Fasta:
         return [intervals.Interval(coords[i], coords[i+1]) for i in range(0, len(coords)-1,2)]
 
 
+        
+
+    def orfs(self, frame=0, revcomp=False):
+        assert frame in [0,1,2]
+        if revcomp:
+            self.revcomp()
+
+        aa_seq = self.translate(frame=frame).seq.rstrip('X')
+        if revcomp:
+            self.revcomp()
+            
+        orfs = _orfs_from_aa_seq(aa_seq)
+        for i in range(len(orfs)):
+            if revcomp:
+                start = len(self) - (orfs[i].end * 3 + 3) - frame
+                end = len(self) - (orfs[i].start * 3) - 1 - frame
+            else:
+                start = orfs[i].start * 3 + frame
+                end = orfs[i].end * 3 + 2 + frame
+                
+            orfs[i] = intervals.Interval(start, end)
+                
+        return orfs
+
+
+    def all_orfs(self, min_length=300):
+        orfs = []
+        for frame in [0,1,2]:
+            for revcomp in [False, True]:
+                orfs.extend([(t, revcomp) for t in self.orfs(frame=frame, revcomp=revcomp) if len(t)>=min_length])
+                
+        return sorted(orfs, key=lambda t:t[0])
 
     # Fills the object with the next sequence in the file. Returns
     # True if this was successful, False if no more sequences in the file.
@@ -547,3 +580,16 @@ class Fastq(Fasta):
         fa = super().translate()
         return Fastq(fa.id, fa.seq, 'I'*len(fa.seq))
 
+
+def _orfs_from_aa_seq(seq):
+    orfs = []
+    pos = 0
+    while pos < len(seq):
+        next_stop = seq.find('*', pos)
+        if next_stop == -1:
+            orfs.append(intervals.Interval(pos, len(seq)-1))
+            break
+        elif next_stop > pos:
+            orfs.append(intervals.Interval(pos, next_stop))
+        pos = next_stop + 1
+    return orfs
