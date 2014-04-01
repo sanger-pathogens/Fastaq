@@ -4,7 +4,7 @@ import sys
 import filecmp
 import os
 import unittest
-from fastaq import sequences, utils, intervals
+from fastaq import sequences, utils, intervals, tasks
 
 modules_dir = os.path.dirname(os.path.abspath(sequences.__file__))
 data_dir = os.path.join(modules_dir, 'tests', 'data')
@@ -159,6 +159,70 @@ class TestFasta(unittest.TestCase):
         for i in range(len(test_seqs)):
             gaps = test_seqs[i].contig_coords()
             self.assertListEqual(correct_coords[i], gaps)
+
+
+
+
+    def test_orfs(self):
+        '''Test orfs()'''
+        test_seqs = [(sequences.Fasta('ID', 'AAACCCGG'), 0, False, [intervals.Interval(0,5)]),
+                     (sequences.Fasta('ID', 'AAAACCCGG'), 1, False, [intervals.Interval(1,6)]),
+                     (sequences.Fasta('ID', 'AAAAACCCGG'), 2, False, [intervals.Interval(2,7)]),
+                     (sequences.Fasta('ID', 'CCGGGTTT'), 0, True, [intervals.Interval(2,7)]),
+                     (sequences.Fasta('ID', 'CCGGGTTTT'), 1, True, [intervals.Interval(2,7)]),
+                     (sequences.Fasta('ID', 'CCGGGTTTTT'), 2, True, [intervals.Interval(2,7)]),
+                     (sequences.Fasta('ID', 'AAACCCTGA'), 0, False, [intervals.Interval(0,8)]),
+                     (sequences.Fasta('ID', 'AAACCCTGATAG'), 0, False, [intervals.Interval(0,8)]),
+                     (sequences.Fasta('ID', 'AAACCCTGA'), 1, False, [intervals.Interval(1,6)]),
+                     (sequences.Fasta('ID', ''), 0, False, []),
+                     (sequences.Fasta('ID', 'A'), 0, False, []),
+                     (sequences.Fasta('ID', 'AA'), 0, False, []),
+                     (sequences.Fasta('ID', 'AAA'), 0, False, [intervals.Interval(0,2)]),
+                     (sequences.Fasta('ID', 'AAAAAA'), 0, False, [intervals.Interval(0,5)]),
+                     (sequences.Fasta('ID', 'AAA'), 1, False, []),
+                     (sequences.Fasta('ID', 'AAA'), 2, False, []),
+                     (sequences.Fasta('ID', 'AAA'), 0, True, [intervals.Interval(0,2)]),
+                     (sequences.Fasta('ID', 'AAA'), 1, True, []),
+                     (sequences.Fasta('ID', 'AAA'), 2, True, []),
+                     (sequences.Fasta('ID', 'TAA'), 0, False, []),
+                     (sequences.Fasta('ID', 'CTA'), 0, True, [])]
+
+
+        for t in test_seqs:
+            orfs = t[0].orfs(frame=t[1], revcomp=t[2])
+            self.assertListEqual(orfs, t[3])
+ 
+    def test_all_orfs(self):
+        '''Test all_orfs()'''
+        d = {}
+        tasks.file_to_dict(os.path.join(data_dir, 'sequences_test_orfs.fa'), d)
+        seq = d['1']
+        orfs = seq.all_orfs(min_length=120)
+        expected = [
+            (intervals.Interval(27, 221), False),
+            (intervals.Interval(44, 226), False),
+            (intervals.Interval(48, 170), True),
+            (intervals.Interval(109, 240), False),
+            (intervals.Interval(143, 265), True),
+            (intervals.Interval(227, 421), False),
+            (intervals.Interval(277, 432), True),
+            (intervals.Interval(286, 477), False),
+            (intervals.Interval(288, 518), True),
+            (intervals.Interval(562, 702), False),
+            (intervals.Interval(600, 758), False),
+            (intervals.Interval(605, 817), False),
+            (intervals.Interval(818, 937), False),
+            (intervals.Interval(835, 987), False),
+            (intervals.Interval(864, 998), False)
+        ]
+
+        self.assertEqual(len(orfs), len(expected))
+
+        for i in range(len(orfs)):
+            print(orfs[i][0], expected[i][0])
+            self.assertEqual(orfs[i][0], expected[i][0])
+            self.assertEqual(orfs[i][1], expected[i][1])
+
 
     def test_is_all_Ns(self):
         '''Test is_all_Ns()'''
@@ -530,6 +594,31 @@ class TestFileReader(unittest.TestCase):
             i += 1
 
 
+class TestOther(unittest.TestCase):
+    def test_orfs_from_aa_seq(self):
+        '''Test _orfs_from_aa_seq()'''
+        test_seqs = ['',
+                     '*',
+                     '**',
+                     'A',
+                     'A*A*A',
+                     'AB**CDE*AB',
+                     '*ABCDE*',
+                     '**ABCDE**']
+
+        correct_coords = [[],
+                          [],
+                          [],
+                          [intervals.Interval(0, 0)],
+                          [intervals.Interval(0, 1), intervals.Interval(2, 3),intervals.Interval(4, 4)],
+                          [intervals.Interval(0, 2), intervals.Interval(4, 7), intervals.Interval(8, 9)],
+                          [intervals.Interval(1, 6)],
+                          [intervals.Interval(2, 7)]]
+
+        for i in range(len(test_seqs)):
+            orfs = sequences._orfs_from_aa_seq(test_seqs[i])
+            self.assertListEqual(correct_coords[i], orfs)
+
+
 if __name__ == '__main__':
     unittest.main()
-
