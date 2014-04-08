@@ -190,6 +190,22 @@ def fastaq_to_mira_xml(infile, outfile):
     utils.close(fout)
 
 
+def fastaq_to_orfs_gff(infile, outfile, min_length=300):
+    seq_reader = sequences.file_reader(infile)
+    fout = utils.open_file_write(outfile)
+    for seq in seq_reader:
+        orfs = seq.all_orfs(min_length=min_length)
+        for coords, revcomp in orfs:
+            if revcomp:
+                strand = '-'
+            else:
+                strand = '+'
+
+            print(seq.id, 'fastaq', 'CDS', coords.start+1, coords.end+1, '.', strand, '.', sep='\t', file=fout)
+
+    utils.close(fout)
+
+
 def file_to_dict(infile, d):
     seq_reader = sequences.file_reader(infile)
     for seq in seq_reader:
