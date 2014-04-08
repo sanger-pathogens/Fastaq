@@ -190,7 +190,7 @@ def fastaq_to_mira_xml(infile, outfile):
     utils.close(fout)
 
 
-def fastaq_to_orfs_gff(infile, outfile, min_length=300):
+def fastaq_to_orfs_gff(infile, outfile, min_length=300, tool_name='fastaq'):
     seq_reader = sequences.file_reader(infile)
     fout = utils.open_file_write(outfile)
     for seq in seq_reader:
@@ -201,7 +201,7 @@ def fastaq_to_orfs_gff(infile, outfile, min_length=300):
             else:
                 strand = '+'
 
-            print(seq.id, 'fastaq', 'CDS', coords.start+1, coords.end+1, '.', strand, '.', sep='\t', file=fout)
+            print(seq.id, tool_name, 'CDS', coords.start+1, coords.end+1, '.', strand, '.', sep='\t', file=fout)
 
     utils.close(fout)
 
