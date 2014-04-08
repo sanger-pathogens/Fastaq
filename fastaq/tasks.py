@@ -194,7 +194,6 @@ def fastaq_to_orfs_gff(infile, outfile, min_length=300):
     seq_reader = sequences.file_reader(infile)
     fout = utils.open_file_write(outfile)
     for seq in seq_reader:
-        print(seq.id)
         orfs = seq.all_orfs(min_length=min_length)
         for coords, revcomp in orfs:
             if revcomp:
