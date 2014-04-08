@@ -88,6 +88,15 @@ class TestFastqToMiraXml(unittest.TestCase):
         os.unlink(tmp)
 
 
+class TestFastaqToOrfsGFF(unittest.TestCase):
+    def test_fastaq_to_orfs_gff(self):
+        '''Test fastaq_to_orfs_gff'''
+        outfile = 'tmp.orfs.gff'
+        tasks.fastaq_to_orfs_gff(os.path.join(data_dir, 'sequences_test_orfs.fa'), outfile, min_length=120)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_orfs.gff'), outfile, shallow=False))
+        os.unlink(outfile)
+
+
 class TestFilter(unittest.TestCase):
     def test_length_filter(self):
         '''Check that filtering by length works as expected'''
