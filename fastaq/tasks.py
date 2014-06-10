@@ -549,6 +549,19 @@ def to_quasr_primers(infile, outfile):
     utils.close(f_out)
 
     
+def to_fasta_union(infile, outfile, seqname='union'):
+    seq_reader = sequences.file_reader(infile)
+    new_seq = []
+
+    for seq in seq_reader:
+        new_seq.append(seq.seq)
+
+    f_out = utils.open_file_write(outfile)
+    print(sequences.Fasta(seqname, ''.join(new_seq)), file=f_out)
+    utils.close(f_out)
+    
+
+
 def to_unique_by_id(infile, outfile):
     seq_reader = sequences.file_reader(infile)
     seqs = {}

@@ -453,6 +453,15 @@ class TestToUniqueByID(unittest.TestCase):
         os.unlink(tmpfile)
 
 
+class TestToFastaUnion(unittest.TestCase):
+    def test_to_fasta_union(self):
+        '''Test to_fasta_union'''
+        tmpfile = 'tmp.to_fasta_union'
+        tasks.to_fasta_union(os.path.join(data_dir, 'sequences_test_to_fasta_union.in.fa'), tmpfile, seqname='testname')
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_to_fasta_union.out.fa'), tmpfile, shallow=False))
+        os.unlink(tmpfile)
+
+
 if __name__ == '__main__':
     unittest.main()
 
