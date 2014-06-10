@@ -7,7 +7,7 @@ def read(fname):
 
 setup(
     name='Fastaq',
-    version='1.0.0',
+    version='1.1.0',
     description='Scripts to manipulate FASTA and FASTQ files, plus API for developers',
     long_description=read('README.md'),
     packages = find_packages(),
