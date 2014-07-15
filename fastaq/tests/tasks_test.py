@@ -207,6 +207,21 @@ class TestMakeRandomContigs(unittest.TestCase):
         os.unlink(tmp)
 
 
+class TestMergeToOneSeq(unittest.TestCase):
+    def test_merge_to_one_seq_fa(self):
+        '''Test merge_to_one_seq with fasta'''
+        tmp = 'tmp.merged.fa'
+        tasks.merge_to_one_seq(os.path.join(data_dir, 'sequences_test_merge_to_one_seq.fa'), tmp)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_merge_to_one_seq.merged.fa'), tmp, shallow=False))
+        os.unlink(tmp)
+
+    def test_merge_to_one_seq_fq(self):
+        '''Test merge_to_one_seq with fastq'''
+        tmp = 'tmp.merged.fq'
+        tasks.merge_to_one_seq(os.path.join(data_dir, 'sequences_test_merge_to_one_seq.fq'), tmp)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_merge_to_one_seq.merged.fq'), tmp, shallow=False))
+        os.unlink(tmp)
+
 class TestReverseComplement(unittest.TestCase):
     def test_reverse_complement(self):
         '''reverse_complement should correctly reverse complement each seq in a file'''
@@ -332,13 +347,13 @@ class TestSplit(unittest.TestCase):
         infile = os.path.join(data_dir, 'sequences_test_split_fixed_size.fa')
         outprefix = 'tmp.sequences_test_split'
         tasks.split_by_fixed_size(infile, outprefix, 4, 1)
-  
+
         for i in range(1,7,1):
             correct = os.path.join(data_dir, 'sequences_test_split_fixed_size.fa.split.' + str(i))
             test = outprefix + '.' + str(i)
             self.assertTrue(filecmp.cmp(test, correct))
             os.unlink(test)
- 
+
         test_coords = outprefix + '.coords'
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_split_fixed_size.fa.split.coords'), test_coords))
         os.unlink(test_coords)
@@ -347,13 +362,13 @@ class TestSplit(unittest.TestCase):
         infile = os.path.join(data_dir, 'sequences_test_split_fixed_size.fa')
         outprefix = 'tmp.sequences_test_split'
         tasks.split_by_fixed_size(infile, outprefix, 4, 1, skip_if_all_Ns=True)
-  
+
         for i in range(1,5,1):
             correct = os.path.join(data_dir, 'sequences_test_split_fixed_size.fa.split.skip_if_all_Ns.' + str(i))
             test = outprefix + '.' + str(i)
             self.assertTrue(filecmp.cmp(test, correct))
             os.unlink(test)
- 
+
         test_coords = outprefix + '.coords'
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_split_fixed_size.fa.split.skip_if_all_Ns.coords'), test_coords))
         os.unlink(test_coords)
@@ -405,7 +420,7 @@ class TestStripIlluminaSuffix(unittest.TestCase):
         tasks.strip_illumina_suffix(os.path.join(data_dir, 'sequences_test_strip_illumina_suffix.fq'), tmpfile)
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_strip_illumina_suffix.fq.stripped'), tmpfile))
         os.unlink(tmpfile)
-      
+
 
 class TestToQuasrPrimers(unittest.TestCase):
     def test_to_quasr_primers(self):

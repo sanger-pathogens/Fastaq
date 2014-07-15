@@ -233,7 +233,7 @@ def filter(infile, outfile, minlength=0, maxlength=float('inf'), regex=None, ids
         if hit != invert:
             print(seq, file=f_out)
     utils.close(f_out)
-    
+
 
 def get_ids(infile, outfile):
     seq_reader = sequences.file_reader(infile)
@@ -241,7 +241,7 @@ def get_ids(infile, outfile):
     for seq in seq_reader:
         print(seq.id, file=f_out)
     utils.close(f_out)
-    
+
 
 def get_seqs_flanking_gaps(infile, outfile, left, right):
     seq_reader = sequences.file_reader(infile)
@@ -314,6 +314,29 @@ def make_random_contigs(contigs, length, outfile, name_by_letters=False, prefix=
     utils.close(fout)
 
 
+def merge_to_one_seq(infile, outfile, seqname='union'):
+    '''Takes a multi fasta or fastq file and writes a new file that contains just one sequence, with the original sequences catted together, preserving their order'''
+    seq_reader = sequences.file_reader(infile)
+    seqs = []
+
+    for seq in seq_reader:
+        seqs.append(copy.copy(seq))
+
+    new_seq = ''.join([seq.seq for seq in seqs])
+
+    if type(seqs[0]) == sequences.Fastq:
+        new_qual = ''.join([seq.qual for seq in seqs])
+        seqs[:] = []
+        merged = sequences.Fastq(seqname, new_seq, new_qual)
+    else:
+        merged = sequences.Fasta(seqname, new_seq)
+        seqs[:] = []
+
+    f = utils.open_file_write(outfile)
+    print(merged, file=f)
+    utils.close(f)
+
+
 def reverse_complement(infile, outfile):
     seq_reader = sequences.file_reader(infile)
     fout = utils.open_file_write(outfile)
@@ -366,7 +389,7 @@ def translate(infile, outfile, frame=0):
         print(seq.translate(frame=frame), file=fout)
 
     utils.close(fout)
-    
+
 
 def trim(infile, outfile, start, end):
     seq_reader = sequences.file_reader(infile)
@@ -489,7 +512,7 @@ def split_by_fixed_size(infile, outfiles_prefix, chunk_size, tolerance, skip_if_
                 f = utils.open_file_write(outfiles_prefix + '.' + str(file_count))
                 file_count += 1
                 base_count = 0
-              
+
             print(seq, file=f)
             base_count += len(seq)
 
@@ -548,7 +571,7 @@ def to_quasr_primers(infile, outfile):
 
     utils.close(f_out)
 
-    
+
 def to_fasta_union(infile, outfile, seqname='union'):
     seq_reader = sequences.file_reader(infile)
     new_seq = []
@@ -559,7 +582,7 @@ def to_fasta_union(infile, outfile, seqname='union'):
     f_out = utils.open_file_write(outfile)
     print(sequences.Fasta(seqname, ''.join(new_seq)), file=f_out)
     utils.close(f_out)
-    
+
 
 
 def to_unique_by_id(infile, outfile):
