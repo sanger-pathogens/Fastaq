@@ -99,7 +99,7 @@ def file_reader(fname, read_quals=False):
             if not line:
                 utils.close(f)
                 raise Error('No sequences found in GFF file "' + fname + '"')
-            
+
         seq = Fasta()
         previous_lines[f] = line
     elif line.startswith('ID   ') and line[5] != ' ':
@@ -138,7 +138,7 @@ def file_reader(fname, read_quals=False):
             sequential = True
         else:
             sequential = False
-            
+
         # if the 11th char of second sequence line is a space,  then the file is sequential, e.g.:
         # GAGCCCGGGC AATACAGGGT AT
         # as opposed to:
@@ -154,9 +154,9 @@ def file_reader(fname, read_quals=False):
                     current_id, new_bases = line[0:10].rstrip(), line.rstrip()[10:]
                 else:
                     new_bases = line.rstrip()
-                       
+
                 current_seq += new_bases.replace(' ','')
-            
+
             yield Fasta(current_id, current_seq.replace('-', ''))
         else:
             # seaview files start all seqs at pos >=12. Other files start
@@ -174,14 +174,14 @@ def file_reader(fname, read_quals=False):
             for i in range(number_of_seqs):
                 name, bases = seq_lines[i][0:first_seq_base].rstrip(), seq_lines[i][first_seq_base:]
                 seqs.append(Fasta(name, bases))
-            
+
             for i in range(number_of_seqs, len(seq_lines)):
                 seqs[i%number_of_seqs].seq += seq_lines[i]
 
             for fa in seqs:
                 fa.seq = fa.seq.replace(' ','').replace('-','')
                 yield fa
-                
+
         return
     elif line == '':
         utils.close(f)
@@ -309,7 +309,7 @@ class Fasta:
         return [intervals.Interval(coords[i], coords[i+1]) for i in range(0, len(coords)-1,2)]
 
 
-        
+
 
     def orfs(self, frame=0, revcomp=False):
         assert frame in [0,1,2]
@@ -319,7 +319,7 @@ class Fasta:
         aa_seq = self.translate(frame=frame).seq.rstrip('X')
         if revcomp:
             self.revcomp()
-            
+
         orfs = _orfs_from_aa_seq(aa_seq)
         for i in range(len(orfs)):
             if revcomp:
@@ -328,9 +328,9 @@ class Fasta:
             else:
                 start = orfs[i].start * 3 + frame
                 end = orfs[i].end * 3 + 2 + frame
-                
+
             orfs[i] = intervals.Interval(start, end)
-                
+
         return orfs
 
 
@@ -339,7 +339,7 @@ class Fasta:
         for frame in [0,1,2]:
             for revcomp in [False, True]:
                 orfs.extend([(t, revcomp) for t in self.orfs(frame=frame, revcomp=revcomp) if len(t)>=min_length])
-                
+
         return sorted(orfs, key=lambda t:t[0])
 
     # Fills the object with the next sequence in the file. Returns
@@ -461,12 +461,12 @@ class Embl(Fasta):
 
         self.seq = ''
         seq_lines = []
- 
+
         while not (line.startswith('SQ') or line.rstrip() == 'ORIGIN'):
             line = f.readline()
             if line == '':
                 raise Error('Error! No SQ or ORIGIN line found for sequence ' + self.id)
-        
+
         line = f.readline()
 
         while not line.startswith('//'):
@@ -474,7 +474,7 @@ class Embl(Fasta):
                 raise Error('Error! Did not find end of sequence ' + self.id)
             seq_lines.append(''.join(line.rstrip().strip(' 0123456789').split()))
             line = f.readline()
-            
+
 
         while 1:
             if line.startswith('ID') or line.startswith('LOCUS'):
