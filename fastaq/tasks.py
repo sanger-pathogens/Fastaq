@@ -315,8 +315,10 @@ def make_random_contigs(contigs, length, outfile, name_by_letters=False, prefix=
     utils.close(fout)
 
 
-def make_long_reads(infile, outfile, method='tiling', read_length=20000, tile_step=10000, gamma_shape=1.2,  gamma_scale=6000, gamma_cov=10):
+def make_long_reads(infile, outfile, method='tiling', read_length=20000, tile_step=10000, gamma_shape=1.2,  gamma_scale=6000, gamma_cov=10, gamma_min_length=20000, seed=None):
     assert method in ['tiling', 'gamma']
+    if seed is not None:
+        random.seed(a=seed)
     seq_reader = sequences.file_reader(infile)
     f = utils.open_file_write(outfile)
 
@@ -328,8 +330,17 @@ def make_long_reads(infile, outfile, method='tiling', read_length=20000, tile_st
                 print(fa, file=f)
                 if end >= len(seq):
                     break
+        elif method == 'gamma':
+            total_read_length = 0
+            while total_read_length < len(seq) * gamma_cov:
+                read_length = numpy.random.gamma(gamma_shape, scale=gamma_scale)
+                while read_length < gamma_min_length:
+                    read_length = numpy.random.gamma(gamma_shape, scale=gamma_scale)
 
-    # numpy.random.gamma(gamma_shape, scale=gamma_scale)
+                start = random.randint(0, len(seq) - read_length)
+                end = start + read_length - 1
+                fa = sequences.Fasta('_'.join([seq.id, str(start + 1), str(end + 1)]), seq[start:end+1])
+                print(fa, file=f)
 
     utils.close(f)
 
