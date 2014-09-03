@@ -4,7 +4,7 @@ import argparse
 from fastaq import tasks
 
 parser = argparse.ArgumentParser(
-    description = 'Simulates long reads from a fasta/q file',
+    description = 'Simulates long reads from a fasta/q file. Can optionally make insertions into the reads, like pacbio does. If insertions made, coverage calculation is done before the insertions (so total read length may appear longer then expected).',
     usage = '%(prog)s [options] <infile> <outfile>')
 
 parser.add_argument('infile', help='Name of input fasta/q file')
