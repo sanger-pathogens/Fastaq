@@ -12,6 +12,7 @@ parser.add_argument('outfile', help='Name of output fasta file')
 
 parser.add_argument('--method', help='How to sample the read positions and lengths. Choose from 1) "tiling", where reads of fixed length are taken at equal intervals from the reference. 2) "gamma", where reads lengths are taken from a gamma distribution, and positions sampled uniformly. [%(default)s]', default='tiling', metavar='tiling|gamma')
 parser.add_argument('--seed', type=int, help='Seed for random number generator [default: use python\'s default]', metavar='INT')
+parser.add_argument('--qual', help='Write a file of fake quality scores called outfile.qual, all bases same quality [%(default)s]', metavar='INT')
 
 
 tiling_group = parser.add_argument_group('tiling options')
@@ -38,3 +39,6 @@ tasks.make_long_reads(
     gamma_min_length=options.gamma_min_length,
     seed=options.seed,
 )
+
+if options.qual:
+    tasks.fastaq_to_fake_qual(options.outfile, options.outfile + '.qual', q=options.qual)
