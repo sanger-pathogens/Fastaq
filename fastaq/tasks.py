@@ -340,6 +340,9 @@ def make_long_reads(infile, outfile, method='tiling', tile_read_length=20000, ti
 
     for seq in seq_reader:
         if method == 'tiling':
+            if len(seq) < tile_read_length:
+                print('Skipping sequence', seq.id, 'because it is too short at', len(seq), 'bases', file=sys.stderr)
+                continue
             for i in range(0, len(seq), tile_step):
                 end = min(len(seq), i + tile_read_length)
                 fa = sequences.Fasta('_'.join([seq.id, str(i + 1), str(end)]), seq[i:end])
@@ -349,18 +352,23 @@ def make_long_reads(infile, outfile, method='tiling', tile_read_length=20000, ti
                 if end >= len(seq):
                     break
         elif method == 'gamma':
+            if len(seq) < gamma_min_length:
+                print('Skipping sequence', seq.id, 'because it is too short at', len(seq), 'bases', file=sys.stderr)
+                continue
             total_read_length = 0
-            while total_read_length < len(seq) * gamma_cov:
-                read_length = numpy.random.gamma(gamma_shape, scale=gamma_scale)
-                while read_length < gamma_min_length:
-                    read_length = numpy.random.gamma(gamma_shape, scale=gamma_scale)
+            while total_read_length < gamma_cov * len(seq) - 0.5 * gamma_min_length:
+                read_length = int(numpy.random.gamma(gamma_shape, scale=gamma_scale))
+                while read_length < gamma_min_length and read_length > len(seq):
+                    read_length = int(numpy.random.gamma(gamma_shape, scale=gamma_scale))
 
                 start = random.randint(0, len(seq) - read_length)
                 end = start + read_length - 1
                 fa = sequences.Fasta('_'.join([seq.id, str(start + 1), str(end + 1)]), seq[start:end+1])
+                total_read_length += len(fa)
                 if ins_skip:
                     fa.add_insertions(skip=ins_skip, window=ins_window)
                 print(fa, file=f)
+
 
     utils.close(f)
 
