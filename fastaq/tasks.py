@@ -157,6 +157,21 @@ def extend_gaps(infile, outfile, trim):
     utils.close(fout)
 
 
+def fastaq_to_fake_qual(infile, outfile, q=40):
+    seq_reader = sequences.file_reader(infile)
+    fout = utils.open_file_write(outfile)
+
+    for seq in seq_reader:
+        print('>' + seq.id, file=fout)
+        if sequences.Fasta.line_length == 0:
+            print(' '.join([str(q)] * len(seq)), file=fout)
+        else:
+            for i in range(0, len(seq), sequences.Fasta.line_length):
+                print(' '.join([str(q)] * min(sequences.Fasta.line_length, len(seq) - i)), file=fout)
+
+    utils.close(fout)
+
+
 def fasta_to_fastq(fasta_in, qual_in, outfile):
     fa_reader = sequences.file_reader(fasta_in)
     qual_reader = sequences.file_reader(qual_in, read_quals=True)

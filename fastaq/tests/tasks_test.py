@@ -397,6 +397,20 @@ class TestGetIds(unittest.TestCase):
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test.fa.ids'), tmpfile))
         os.unlink(tmpfile)
 
+
+class TestFastaToFakeQual(unittest.TestCase):
+    def test_fasta_to_fake_qual(self):
+        '''Test fasta_to_fake_qual'''
+        tmpfile = 'tmp.qual'
+        infile = os.path.join(data_dir, 'tasks_test_fasta_to_fake_qual.in.fa')
+        tasks.fastaq_to_fake_qual(infile, tmpfile)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'tasks_test_fasta_to_fake_qual.out.default.qual'), tmpfile, shallow=False))
+        os.unlink(tmpfile)
+        tasks.fastaq_to_fake_qual(infile, tmpfile, q=42)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'tasks_test_fasta_to_fake_qual.out.q42.qual'), tmpfile, shallow=False))
+        os.unlink(tmpfile)
+
+
 class TestFastaToFastq(unittest.TestCase):
     def test_fasta_to_fastq(self):
         '''Check fasta_to_fastq converts files as expected'''
