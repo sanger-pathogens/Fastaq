@@ -191,7 +191,7 @@ class TestFasta(unittest.TestCase):
         for t in test_seqs:
             orfs = t[0].orfs(frame=t[1], revcomp=t[2])
             self.assertListEqual(orfs, t[3])
- 
+
     def test_all_orfs(self):
         '''Test all_orfs()'''
         d = {}
@@ -258,6 +258,12 @@ class TestFasta(unittest.TestCase):
         for s in test_seqs:
             s.trim_Ns()
             self.assertEqual(fa, s)
+
+    def test_add_insertions(self):
+        '''Test add_insertions'''
+        fa = sequences.Fasta('X', 'acgtacgtacgt')
+        fa.add_insertions(skip=4, window=0, test=True)
+        self.assertEqual(fa, sequences.Fasta('X', 'acgtNacgtNacgt'))
 
     def test_replace_bases(self):
         '''Check that bases get replaced correctly'''
@@ -387,7 +393,7 @@ class TestEmbl(unittest.TestCase):
             counter += 1
 
         utils.close(f_in)
- 
+
 
 class TestFastq(unittest.TestCase):
     def setUp(self):
@@ -522,7 +528,7 @@ class TestFileReader(unittest.TestCase):
             for seq in reader:
                 self.assertEqual(seq, sequences.Fasta('seq' + str(counter), 'ACGTACGTAC'))
                 counter += 1
-        
+
         bad_files = [
             'sequences_test_gffv3.no_seq.gff',
             'sequences_test_gffv3.no_seq.2.gff'
@@ -543,7 +549,7 @@ class TestFileReader(unittest.TestCase):
         for seq in reader:
             self.assertEqual(seq, sequences.Fasta('seq' + str(counter), expected_embl[counter-1]))
             counter += 1
-        
+
         bad_files = [
             'sequences_test.embl.bad',
             'sequences_test.embl.bad2',
@@ -578,14 +584,14 @@ class TestFileReader(unittest.TestCase):
             for seq in reader:
                 self.assertEqual(expected_seqs[i], seq)
                 i += 1
-        
+
         # files made by seaview are a little different in the first line.
         # Test one of these
         expected_seqs = [
             sequences.Fasta('seq1', 96 * 'G' + 'T'),
             sequences.Fasta('seq2', 94 * 'A' + 'G')
         ]
-        
+
         reader = sequences.file_reader(os.path.join(data_dir, 'sequences_test_phylip.made_by_seaview'))
         i = 0
         for seq in reader:

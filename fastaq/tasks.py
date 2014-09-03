@@ -1,6 +1,7 @@
 import re
 import copy
 import random
+import numpy
 from fastaq import sequences, utils
 
 class Error (Exception): pass
@@ -152,6 +153,21 @@ def extend_gaps(infile, outfile, trim):
         regex = re.compile('[^nN]')
         if regex.search(seq.seq) is not None:
             print(seq, file=fout)
+
+    utils.close(fout)
+
+
+def fastaq_to_fake_qual(infile, outfile, q=40):
+    seq_reader = sequences.file_reader(infile)
+    fout = utils.open_file_write(outfile)
+
+    for seq in seq_reader:
+        print('>' + seq.id, file=fout)
+        if sequences.Fasta.line_length == 0:
+            print(' '.join([str(q)] * len(seq)), file=fout)
+        else:
+            for i in range(0, len(seq), sequences.Fasta.line_length):
+                print(' '.join([str(q)] * min(sequences.Fasta.line_length, len(seq) - i)), file=fout)
 
     utils.close(fout)
 
@@ -312,6 +328,62 @@ def make_random_contigs(contigs, length, outfile, name_by_letters=False, prefix=
         print(fa, file=fout)
 
     utils.close(fout)
+
+
+def make_long_reads(infile, outfile, method='tiling', fixed_read_length=20000, tile_step=10000, gamma_shape=1.2,  gamma_scale=6000, coverage=10, gamma_min_length=20000, seed=None, ins_skip=None, ins_window=None,):
+    assert method in ['tiling', 'gamma', 'uniform']
+    assert ins_skip == ins_window == None or None not in [ins_skip, ins_window]
+    if seed is not None:
+        random.seed(a=seed)
+    seq_reader = sequences.file_reader(infile)
+    f = utils.open_file_write(outfile)
+
+    for seq in seq_reader:
+        if method == 'tiling':
+            if len(seq) < fixed_read_length:
+                print('Skipping sequence', seq.id, 'because it is too short at', len(seq), 'bases', file=sys.stderr)
+                continue
+            for i in range(0, len(seq), tile_step):
+                end = min(len(seq), i + fixed_read_length)
+                fa = sequences.Fasta('_'.join([seq.id, str(i + 1), str(end)]), seq[i:end])
+                if ins_skip:
+                    fa.add_insertions(skip=ins_skip, window=ins_window)
+                print(fa, file=f)
+                if end >= len(seq):
+                    break
+        elif method == 'gamma':
+            if len(seq) < gamma_min_length:
+                print('Skipping sequence', seq.id, 'because it is too short at', len(seq), 'bases', file=sys.stderr)
+                continue
+            total_read_length = 0
+            while total_read_length < coverage * len(seq) - 0.5 * gamma_min_length:
+                read_length = int(numpy.random.gamma(gamma_shape, scale=gamma_scale))
+                while read_length < gamma_min_length or read_length > len(seq):
+                    read_length = int(numpy.random.gamma(gamma_shape, scale=gamma_scale))
+
+                start = random.randint(0, len(seq) - read_length)
+                end = start + read_length - 1
+                fa = sequences.Fasta('_'.join([seq.id, str(start + 1), str(end + 1)]), seq[start:end+1])
+                total_read_length += len(fa)
+                if ins_skip:
+                    fa.add_insertions(skip=ins_skip, window=ins_window)
+                print(fa, file=f)
+        elif method == 'uniform':
+            if len(seq) < fixed_read_length:
+                print('Skipping sequence', seq.id, 'because it is too short at', len(seq), 'bases', file=sys.stderr)
+                continue
+            total_read_length = 0
+            while total_read_length < coverage * len(seq) - 0.5 * fixed_read_length:
+                start = random.randint(0, len(seq) - fixed_read_length)
+                end = start + fixed_read_length - 1
+                fa = sequences.Fasta('_'.join([seq.id, str(start + 1), str(end + 1)]), seq[start:end+1])
+                total_read_length += len(fa)
+                if ins_skip:
+                    fa.add_insertions(skip=ins_skip, window=ins_window)
+                print(fa, file=f)
+
+
+    utils.close(f)
 
 
 def merge_to_one_seq(infile, outfile, seqname='union'):

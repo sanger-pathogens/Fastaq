@@ -207,6 +207,15 @@ class TestMakeRandomContigs(unittest.TestCase):
         os.unlink(tmp)
 
 
+class TestMakeLongReads(unittest.TestCase):
+    def test_tiling_reads(self):
+        tmp = 'tmp.out.fa'
+        fa_in = os.path.join(data_dir, 'tasks_test_make_long_reads.input.fa')
+        tasks.make_long_reads(fa_in, tmp, method='tiling', fixed_read_length=10, tile_step=5)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'tasks_test_make_long_reads.output.fa'), tmp, shallow=False))
+        os.unlink(tmp)
+
+
 class TestMergeToOneSeq(unittest.TestCase):
     def test_merge_to_one_seq_fa(self):
         '''Test merge_to_one_seq with fasta'''
@@ -387,6 +396,20 @@ class TestGetIds(unittest.TestCase):
         tasks.get_ids(os.path.join(data_dir, 'sequences_test.fa'), tmpfile)
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test.fa.ids'), tmpfile))
         os.unlink(tmpfile)
+
+
+class TestFastaToFakeQual(unittest.TestCase):
+    def test_fasta_to_fake_qual(self):
+        '''Test fasta_to_fake_qual'''
+        tmpfile = 'tmp.qual'
+        infile = os.path.join(data_dir, 'tasks_test_fasta_to_fake_qual.in.fa')
+        tasks.fastaq_to_fake_qual(infile, tmpfile)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'tasks_test_fasta_to_fake_qual.out.default.qual'), tmpfile, shallow=False))
+        os.unlink(tmpfile)
+        tasks.fastaq_to_fake_qual(infile, tmpfile, q=42)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'tasks_test_fasta_to_fake_qual.out.q42.qual'), tmpfile, shallow=False))
+        os.unlink(tmpfile)
+
 
 class TestFastaToFastq(unittest.TestCase):
     def test_fasta_to_fastq(self):
