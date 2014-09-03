@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+
+import argparse
+from fastaq import tasks
+
+parser = argparse.ArgumentParser(
+    description = 'Simulates long reads from a fasta/q file',
+    usage = '%(prog)s [options] <infile> <outfile>')
+
+parser.add_argument('infile', help='Name of input fasta/q file')
+parser.add_argument('outfile', help='Name of output fasta file')
+
+parser.add_argument('--method', help='How to sample the read positions and lengths. Choose from 1) "tiling", where reads of fixed length are taken at equal intervals from the reference. 2) "gamma", where reads lengths are taken from a gamma distribution, and positions sampled uniformly. [%(default)s]', default='tiling', metavar='tiling|gamma')
+parser.add_argument('--seed', type=int, help='Seed for random number generator [default: use python\'s default]', metavar='INT')
+
+
+tiling_group = parser.add_argument_group('tiling options')
+tiling_group.add_argument('--tile_read_length', type=int, help='Length of each read [%(default)s]', default=20000, metavar='INT')
+tiling_group.add_argument('--tile_step', type=int, help='Distance between start of each read [%(default)s]', default=10000, metavar='INT')
+
+gamma_group = parser.add_argument_group('gamma options')
+gamma_group.add_argument('--gamma_shape', type=float, help='Shape parameter of gamma distribution [%(default)s]', default=1.2, metavar='FLOAT')
+gamma_group.add_argument('--gamma_scale', type=float, help='Scale parameter of gamma distribution [%(default)s]', default=6000, metavar='FLOAT')
+gamma_group.add_argument('--gamma_cov', type=float, help='Read coverage [%(default)s]', default=2, metavar='FLOAT')
+gamma_group.add_argument('--gamma_min_length', type=int, help='Minimum read length [%(default)s]', default=20000, metavar='INT')
+
+
+options = parser.parse_args()
+tasks.make_long_reads(
+    options.infile,
+    options.outfile,
+    method=options.method,
+    tile_read_length=options.tile_read_length,
+    tile_step=options.tile_step,
+    gamma_shape=options.gamma_shape,
+    gamma_scale=options.gamma_scale,
+    gamma_cov=options.gamma_cov,
+    gamma_min_length=options.gamma_min_length,
+    seed=options.seed,
+)

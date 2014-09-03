@@ -315,7 +315,7 @@ def make_random_contigs(contigs, length, outfile, name_by_letters=False, prefix=
     utils.close(fout)
 
 
-def make_long_reads(infile, outfile, method='tiling', read_length=20000, tile_step=10000, gamma_shape=1.2,  gamma_scale=6000, gamma_cov=10, gamma_min_length=20000, seed=None):
+def make_long_reads(infile, outfile, method='tiling', tile_read_length=20000, tile_step=10000, gamma_shape=1.2,  gamma_scale=6000, gamma_cov=10, gamma_min_length=20000, seed=None):
     assert method in ['tiling', 'gamma']
     if seed is not None:
         random.seed(a=seed)
@@ -325,7 +325,7 @@ def make_long_reads(infile, outfile, method='tiling', read_length=20000, tile_st
     for seq in seq_reader:
         if method == 'tiling':
             for i in range(0, len(seq), tile_step):
-                end = min(len(seq), i + read_length)
+                end = min(len(seq), i + tile_read_length)
                 fa = sequences.Fasta('_'.join([seq.id, str(i + 1), str(end)]), seq[i:end])
                 print(fa, file=f)
                 if end >= len(seq):
