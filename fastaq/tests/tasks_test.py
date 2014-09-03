@@ -211,7 +211,7 @@ class TestMakeLongReads(unittest.TestCase):
     def test_tiling_reads(self):
         tmp = 'tmp.out.fa'
         fa_in = os.path.join(data_dir, 'tasks_test_make_long_reads.input.fa')
-        tasks.make_long_reads(fa_in, tmp, method='tiling', tile_read_length=10, tile_step=5)
+        tasks.make_long_reads(fa_in, tmp, method='tiling', fixed_read_length=10, tile_step=5)
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'tasks_test_make_long_reads.output.fa'), tmp, shallow=False))
         os.unlink(tmp)
 
