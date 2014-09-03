@@ -330,8 +330,9 @@ def make_random_contigs(contigs, length, outfile, name_by_letters=False, prefix=
     utils.close(fout)
 
 
-def make_long_reads(infile, outfile, method='tiling', tile_read_length=20000, tile_step=10000, gamma_shape=1.2,  gamma_scale=6000, gamma_cov=10, gamma_min_length=20000, seed=None):
+def make_long_reads(infile, outfile, method='tiling', tile_read_length=20000, tile_step=10000, gamma_shape=1.2,  gamma_scale=6000, gamma_cov=10, gamma_min_length=20000, seed=None, ins_skip=None, ins_window=None,):
     assert method in ['tiling', 'gamma']
+    assert ins_skip == ins_window == None or None not in [ins_skip, ins_window]
     if seed is not None:
         random.seed(a=seed)
     seq_reader = sequences.file_reader(infile)
@@ -342,6 +343,8 @@ def make_long_reads(infile, outfile, method='tiling', tile_read_length=20000, ti
             for i in range(0, len(seq), tile_step):
                 end = min(len(seq), i + tile_read_length)
                 fa = sequences.Fasta('_'.join([seq.id, str(i + 1), str(end)]), seq[i:end])
+                if ins_skip:
+                    fa.add_insertions(skip=ins_skip, window=ins_window)
                 print(fa, file=f)
                 if end >= len(seq):
                     break
@@ -355,6 +358,8 @@ def make_long_reads(infile, outfile, method='tiling', tile_read_length=20000, ti
                 start = random.randint(0, len(seq) - read_length)
                 end = start + read_length - 1
                 fa = sequences.Fasta('_'.join([seq.id, str(start + 1), str(end + 1)]), seq[start:end+1])
+                if ins_skip:
+                    fa.add_insertions(skip=ins_skip, window=ins_window)
                 print(fa, file=f)
 
     utils.close(f)

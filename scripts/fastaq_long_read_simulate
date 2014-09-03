@@ -25,6 +25,10 @@ gamma_group.add_argument('--gamma_scale', type=float, help='Scale parameter of g
 gamma_group.add_argument('--gamma_cov', type=float, help='Read coverage [%(default)s]', default=2, metavar='FLOAT')
 gamma_group.add_argument('--gamma_min_length', type=int, help='Minimum read length [%(default)s]', default=20000, metavar='INT')
 
+ins_group = parser.add_argument_group('options to add insertions to reads')
+ins_group.add_argument('--ins_skip', type=int, help='Insert a random base every --skip bases plus or minus --ins_window. If this option is used, must also use --ins_window.', metavar='INT')
+ins_group.add_argument('--ins_window', type=int, help='See --ins_skip. If this option is used, must also use --ins_skip.', metavar='INT')
+
 
 options = parser.parse_args()
 tasks.make_long_reads(
@@ -38,6 +42,8 @@ tasks.make_long_reads(
     gamma_cov=options.gamma_cov,
     gamma_min_length=options.gamma_min_length,
     seed=options.seed,
+    ins_skip=options.ins_skip,
+    ins_window=options.ins_window
 )
 
 if options.qual:
