@@ -472,7 +472,6 @@ def sequence_trim(infile_1, infile_2, outfile_1, outfile_2, to_trim_file, min_le
             raise Error('Error getting mate for sequence', seq_1.id, ' ... cannot continue')
 
         for seq in seq_1, seq_2:
-            print(seq)
             for trim_seq in trim_seqs:
                 if seq.seq.startswith(trim_seq):
                     seq.seq = seq.seq[len(trim_seq):]
