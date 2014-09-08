@@ -474,7 +474,7 @@ def sequence_trim(infile_1, infile_2, outfile_1, outfile_2, to_trim_file, min_le
         for seq in seq_1, seq_2:
             for trim_seq in trim_seqs:
                 if seq.seq.startswith(trim_seq):
-                    seq.seq = seq.seq[len(trim_seq):]
+                    seq.trim(len(trim_seq), 0)
                     break
 
         if len(seq_1) >= min_length and len(seq_2) >= min_length:
