@@ -4,7 +4,7 @@ import argparse
 from fastaq import tasks
 
 parser = argparse.ArgumentParser(
-    description = 'Trims sequences of the start of all sequences in a pair of fasta/q files, whenever there is a perfect match. Only keeps a read pair of both reads of the pair are at least a minimum length after any trimming',
+    description = 'Trims sequences off the start of all sequences in a pair of fasta/q files, whenever there is a perfect match. Only keeps a read pair if both reads of the pair are at least a minimum length after any trimming',
     usage = '%(prog)s [options] <fasta/q 1 in> <fastaq/2 in> <out 1> <out 2> <trim_seqs>')
 parser.add_argument('--min_length', type=int, help='Minimum length ot output [%(default)s]', default=50, metavar='INT')
 parser.add_argument('infile_1', help='Name of forward fasta/q file to be trimmed', metavar='fasta/q 1 in')
