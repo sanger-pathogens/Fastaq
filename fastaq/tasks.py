@@ -454,6 +454,39 @@ def search_for_seq(infile, outfile, search_string):
     utils.close(fout)
 
 
+def sequence_trim(infile_1, infile_2, outfile_1, outfile_2, to_trim_file, min_length=50):
+    trim_seqs = {}
+    file_to_dict(to_trim_file, trim_seqs)
+    trim_seqs = [x.seq for x in trim_seqs.values()]
+
+    seq_reader_1 = sequences.file_reader(infile_1)
+    seq_reader_2 = sequences.file_reader(infile_2)
+    f_out_1 = utils.open_file_write(outfile_1)
+    f_out_2 = utils.open_file_write(outfile_2)
+
+    for seq_1 in seq_reader_1:
+        try:
+            seq_2 = next(seq_reader_2)
+        except:
+            utils.close(f_out)
+            raise Error('Error getting mate for sequence', seq_1.id, ' ... cannot continue')
+
+        for seq in seq_1, seq_2:
+            for trim_seq in trim_seqs:
+                if seq.seq.startswith(trim_seq):
+                    seq.seq = seq.seq[len(trim_seq):]
+                    break
+
+        if len(seq_1) >= min_length and len(seq_2) >= min_length:
+            print(seq_1, file=f_out_1)
+            print(seq_2, file=f_out_2)
+
+
+    utils.close(f_out_1)
+    utils.close(f_out_2)
+
+
+
 def translate(infile, outfile, frame=0):
     seq_reader = sequences.file_reader(infile)
     fout = utils.open_file_write(outfile)
