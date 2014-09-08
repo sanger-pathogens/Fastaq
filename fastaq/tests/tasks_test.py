@@ -265,6 +265,23 @@ class TestSearchForSeq(unittest.TestCase):
         os.unlink(tmp)
 
 
+class TestSequenceTrim(unittest.TestCase):
+    def test_sequence_trim(self):
+        '''Test sequence_trim'''
+        tmp1 = 'tmp.trimmed_1.fa'
+        tmp2 = 'tmp.trimmed_2.fa'
+        in1 = os.path.join(data_dir, 'tasks_test_sequence_trim_1.fa')
+        in2 = os.path.join(data_dir, 'tasks_test_sequence_trim_2.fa')
+        to_trim = os.path.join(data_dir, 'tasks_test_sequences_to_trim.fa')
+        expected1 = os.path.join(data_dir, 'tasks_test_sequence_trim_1.trimmed.fa')
+        expected2 = os.path.join(data_dir, 'tasks_test_sequence_trim_2.trimmed.fa')
+        tasks.sequence_trim(in1, in2, tmp1, tmp2, to_trim, min_length=10)
+        self.assertTrue(filecmp.cmp(expected1, tmp1))
+        self.assertTrue(filecmp.cmp(expected2, tmp2))
+        os.unlink(tmp1)
+        os.unlink(tmp2)
+
+
 class TestTranslate(unittest.TestCase):
     def test_translate(self):
         '''Test translate works in each frame'''
