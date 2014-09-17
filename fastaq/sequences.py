@@ -1,6 +1,7 @@
 import re
 import string
 import random
+import itertools
 
 from fastaq import utils, intervals
 
@@ -80,6 +81,20 @@ codon2aa = {
 'TAG': '*',
 'TGA': '*'}
 
+
+redundant_nts = {
+    'R': ('A', 'G'),
+    'Y': ('C', 'T'),
+    'S': ('C', 'G'),
+    'W': ('A', 'T'),
+    'K': ('G', 'T'),
+    'M': ('A', 'C'),
+    'B': ('C', 'G', 'T'),
+    'D': ('A', 'G', 'T'),
+    'H': ('A', 'C', 'T'),
+    'V': ('A', 'C', 'G'),
+    'N': ('A', 'C', 'G', 'T')
+}
 
 def file_reader(fname, read_quals=False):
     '''Iterates over a FASTA or FASTQ file, yielding the next sequence in the file until there are no more sequences'''
@@ -237,6 +252,18 @@ class Fasta:
             return {'prefix': a[0], 'dir': dir, 'suffix':a[1]}
         except:
             raise Error('Error in split_capillary_id() on ID', self.id)
+
+    def expand_nucleotides(self):
+        '''Assumes sequence is nucleotides. Returns list of all combinations of redundant nucleotides. e.g. R is A or G, so CRT would have combinations CAT and CGT'''
+        s = list(self.seq)
+        for i in range(len(s)):
+            if s[i] in redundant_nts:
+                s[i] = ''.join(redundant_nts[s[i]])
+
+        seqs = []
+        for x in itertools.product(*s):
+            seqs.append(Fasta(self.id + '.' + str(len(seqs) + 1), ''.join(x)))
+        return seqs
 
     def strip_after_first_whitespace(self):
         '''Removes everything in the name after the first whitespace character'''
@@ -566,6 +593,8 @@ class Fastq(Fasta):
         quals = [ord(x) - 33 for x in self.qual]
         return (Fasta(self.id, self.seq), quals)
 
+    def expand_nucleotides(self):
+        return [Fastq(x.id, x.seq, self.qual) for x in super().expand_nucleotides()]
 
     def trim_Ns(self):
         '''Removes any leading or trailing N or n characters from the sequence'''

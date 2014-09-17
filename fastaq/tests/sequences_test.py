@@ -337,6 +337,32 @@ class TestFasta(unittest.TestCase):
         print(fa.translate(frame=1))
         self.assertEqual(sequences.Fasta('ID', 'SRG*KATPA*Q*RLL*RATGRRGSPYNHFIATPA*KDVLSTPA*QFILVYNHDLVLCSRGLIV'), fa.translate(frame=2))
 
+    def test_expand_nucleotides(self):
+        '''Test expand_nucleotides'''
+        tests = [
+            (sequences.Fasta('1', 'A'), [sequences.Fasta('1.1', 'A')]),
+            (sequences.Fasta('2', 'C'), [sequences.Fasta('2.1', 'C')]),
+            (sequences.Fasta('3', 'G'), [sequences.Fasta('3.1', 'G')]),
+            (sequences.Fasta('4', 'T'), [sequences.Fasta('4.1', 'T')]),
+            (sequences.Fasta('6', 'R'), [sequences.Fasta('6.1', 'A'), sequences.Fasta('6.2', 'G')]),
+            (sequences.Fasta('7', 'Y'), [sequences.Fasta('7.1', 'C'), sequences.Fasta('7.2', 'T')]),
+            (sequences.Fasta('8', 'S'), [sequences.Fasta('8.1', 'C'), sequences.Fasta('8.2', 'G')]),
+            (sequences.Fasta('9', 'W'), [sequences.Fasta('9.1', 'A'), sequences.Fasta('9.2', 'T')]),
+            (sequences.Fasta('10', 'K'), [sequences.Fasta('10.1', 'G'), sequences.Fasta('10.2', 'T')]),
+            (sequences.Fasta('11', 'M'), [sequences.Fasta('11.1', 'A'), sequences.Fasta('11.2', 'C')]),
+            (sequences.Fasta('12', 'B'), [sequences.Fasta('12.1', 'C'), sequences.Fasta('12.2', 'G'), sequences.Fasta('12.3', 'T')]),
+            (sequences.Fasta('13', 'D'), [sequences.Fasta('13.1', 'A'), sequences.Fasta('13.2', 'G'), sequences.Fasta('13.3', 'T')]),
+            (sequences.Fasta('14', 'H'), [sequences.Fasta('14.1', 'A'), sequences.Fasta('14.2', 'C'), sequences.Fasta('14.3', 'T')]),
+            (sequences.Fasta('15', 'V'), [sequences.Fasta('15.1', 'A'), sequences.Fasta('15.2', 'C'), sequences.Fasta('15.3', 'G')]),
+            (sequences.Fasta('16', 'N'), [sequences.Fasta('16.1', 'A'), sequences.Fasta('16.2', 'C'), sequences.Fasta('16.3', 'G'), sequences.Fasta('16.4', 'T')]),
+            (sequences.Fasta('17', 'ART'), [sequences.Fasta('17.1', 'AAT'), sequences.Fasta('17.2', 'AGT')]),
+            (sequences.Fasta('18', 'ARRT'), [sequences.Fasta('18.1', 'AAAT'), sequences.Fasta('18.2', 'AAGT'), sequences.Fasta('18.3', 'AGAT'), sequences.Fasta('18.4', 'AGGT')]),
+            (sequences.Fasta('19', 'ARTR'), [sequences.Fasta('19.1', 'AATA'), sequences.Fasta('19.2', 'AATG'), sequences.Fasta('19.3', 'AGTA'), sequences.Fasta('19.4', 'AGTG')]),
+            (sequences.Fastq('20', 'ART', 'GHI'), [sequences.Fastq('20.1', 'AAT', 'GHI'), sequences.Fastq('20.2', 'AGT', 'GHI')]),
+        ]
+
+        for t in tests:
+            self.assertListEqual(t[0].expand_nucleotides(), t[1])
 
     def test_split_capillary_id(self):
         '''Tests that we get information from a sanger capillary read name OK'''

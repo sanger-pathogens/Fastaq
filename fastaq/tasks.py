@@ -122,6 +122,19 @@ def enumerate_names(infile, outfile, start_index=1, keep_illumina_suffix=False, 
         utils.close(fout_rename)
 
 
+def expand_nucleotides(infile, outfile):
+    seq_reader = sequences.file_reader(infile)
+    fout = utils.open_file_write(outfile)
+
+    for seq in seq_reader:
+        seqs = seq.expand_nucleotides()
+        if len(seqs) > 1:
+            for s in seqs:
+                print(s, file=fout)
+        else:
+            print(seq, file=fout)
+
+
 def extend_gaps(infile, outfile, trim):
     seq_reader = sequences.file_reader(infile)
     fout = utils.open_file_write(outfile)
