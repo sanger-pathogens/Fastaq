@@ -70,6 +70,22 @@ class TestEnumerateNames(unittest.TestCase):
         os.unlink(rename_out)
 
 
+class TestExpandNucleotides(unittest.TestCase):
+    def test_expand_nucleoties(self):
+        '''Test expand_nucleotides'''
+        tmp = 'tmp.expanded'
+        fq_in = os.path.join(data_dir, 'tasks_test_expend_nucleotides.in.fq')
+        fa_in = os.path.join(data_dir, 'tasks_test_expend_nucleotides.in.fa')
+        fq_expected = os.path.join(data_dir, 'tasks_test_expend_nucleotides.out.fq')
+        fa_expected = os.path.join(data_dir, 'tasks_test_expend_nucleotides.out.fa')
+        tasks.expand_nucleotides(fq_in, tmp)
+        self.assertTrue(filecmp.cmp(fq_expected, tmp, shallow=False))
+        os.unlink(tmp)
+        tasks.expand_nucleotides(fa_in, tmp)
+        self.assertTrue(filecmp.cmp(fa_expected, tmp, shallow=False))
+        os.unlink(tmp)
+
+
 class TestExtendGaps(unittest.TestCase):
     def test_extend_gaps(self):
         '''Test that gap extension works'''
