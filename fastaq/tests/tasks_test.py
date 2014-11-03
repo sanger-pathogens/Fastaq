@@ -291,7 +291,7 @@ class TestSequenceTrim(unittest.TestCase):
         to_trim = os.path.join(data_dir, 'tasks_test_sequences_to_trim.fa')
         expected1 = os.path.join(data_dir, 'tasks_test_sequence_trim_1.trimmed.fa')
         expected2 = os.path.join(data_dir, 'tasks_test_sequence_trim_2.trimmed.fa')
-        tasks.sequence_trim(in1, in2, tmp1, tmp2, to_trim, min_length=10)
+        tasks.sequence_trim(in1, in2, tmp1, tmp2, to_trim, min_length=10, check_revcomp=True)
         self.assertTrue(filecmp.cmp(expected1, tmp1))
         self.assertTrue(filecmp.cmp(expected2, tmp2))
         os.unlink(tmp1)
@@ -475,15 +475,6 @@ class TestStripIlluminaSuffix(unittest.TestCase):
         tmpfile = 'tmp.stripped.fa'
         tasks.strip_illumina_suffix(os.path.join(data_dir, 'sequences_test_strip_illumina_suffix.fq'), tmpfile)
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_strip_illumina_suffix.fq.stripped'), tmpfile))
-        os.unlink(tmpfile)
-
-
-class TestToQuasrPrimers(unittest.TestCase):
-    def test_to_quasr_primers(self):
-        '''Check that fasta file gets converted to QUASR sequence file'''
-        tmpfile = 'tmp.primers'
-        tasks.to_quasr_primers(os.path.join(data_dir, 'sequences_test_fastaq_to_quasr_primers.fa'), tmpfile)
-        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_fastaq_to_quasr_primers.expected'), tmpfile))
         os.unlink(tmpfile)
 
 
