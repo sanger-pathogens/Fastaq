@@ -467,10 +467,16 @@ def search_for_seq(infile, outfile, search_string):
     utils.close(fout)
 
 
-def sequence_trim(infile_1, infile_2, outfile_1, outfile_2, to_trim_file, min_length=50):
-    trim_seqs = {}
-    file_to_dict(to_trim_file, trim_seqs)
-    trim_seqs = [x.seq for x in trim_seqs.values()]
+def sequence_trim(infile_1, infile_2, outfile_1, outfile_2, to_trim_file, min_length=50, check_revcomp=False):
+    to_trim_seqs = {}
+    file_to_dict(to_trim_file, to_trim_seqs)
+    trim_seqs = [x.seq for x in to_trim_seqs.values()]
+    if check_revcomp:
+        for seq in to_trim_seqs.values():
+            seq.revcomp()
+        trim_seqs_revcomp = [x.seq for x in to_trim_seqs.values()]
+    else:
+        trim_seqs_revcomp = []
 
     seq_reader_1 = sequences.file_reader(infile_1)
     seq_reader_2 = sequences.file_reader(infile_2)
@@ -488,6 +494,11 @@ def sequence_trim(infile_1, infile_2, outfile_1, outfile_2, to_trim_file, min_le
             for trim_seq in trim_seqs:
                 if seq.seq.startswith(trim_seq):
                     seq.trim(len(trim_seq),0)
+                    break
+
+            for trim_seq in trim_seqs_revcomp:
+                if seq.seq.endswith(trim_seq):
+                    seq.trim(0,len(trim_seq))
                     break
 
         if len(seq_1) >= min_length and len(seq_2) >= min_length:

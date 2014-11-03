@@ -291,7 +291,7 @@ class TestSequenceTrim(unittest.TestCase):
         to_trim = os.path.join(data_dir, 'tasks_test_sequences_to_trim.fa')
         expected1 = os.path.join(data_dir, 'tasks_test_sequence_trim_1.trimmed.fa')
         expected2 = os.path.join(data_dir, 'tasks_test_sequence_trim_2.trimmed.fa')
-        tasks.sequence_trim(in1, in2, tmp1, tmp2, to_trim, min_length=10)
+        tasks.sequence_trim(in1, in2, tmp1, tmp2, to_trim, min_length=10, check_revcomp=True)
         self.assertTrue(filecmp.cmp(expected1, tmp1))
         self.assertTrue(filecmp.cmp(expected2, tmp2))
         os.unlink(tmp1)
