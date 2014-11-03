@@ -13,7 +13,7 @@ setup(
     packages = find_packages(),
     author='Martin Hunt',
     author_email='mh12@sanger.ac.uk',
-    url='https://github.com/martinghunt/Fastaq',
+    url='https://github.com/sanger-pathogens/Fastaq',
     scripts=glob.glob('scripts/*'),
     test_suite='nose.collector',
     install_requires=['nose >= 1.3'],
