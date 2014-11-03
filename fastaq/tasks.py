@@ -679,18 +679,6 @@ def to_fasta(infile, outfile, line_length=60, strip_after_first_whitespace=False
     sequences.Fasta.line_length = original_line_length
 
 
-def to_quasr_primers(infile, outfile):
-    seq_reader = sequences.file_reader(infile)
-    f_out = utils.open_file_write(outfile)
-
-    for seq in seq_reader:
-        seq2 = copy.copy(seq)
-        seq2.revcomp()
-        print(seq.seq, seq2.seq, sep='\t', file=f_out)
-
-    utils.close(f_out)
-
-
 def to_fasta_union(infile, outfile, seqname='union'):
     seq_reader = sequences.file_reader(infile)
     new_seq = []

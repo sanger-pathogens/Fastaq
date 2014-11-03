@@ -478,15 +478,6 @@ class TestStripIlluminaSuffix(unittest.TestCase):
         os.unlink(tmpfile)
 
 
-class TestToQuasrPrimers(unittest.TestCase):
-    def test_to_quasr_primers(self):
-        '''Check that fasta file gets converted to QUASR sequence file'''
-        tmpfile = 'tmp.primers'
-        tasks.to_quasr_primers(os.path.join(data_dir, 'sequences_test_fastaq_to_quasr_primers.fa'), tmpfile)
-        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_fastaq_to_quasr_primers.expected'), tmpfile))
-        os.unlink(tmpfile)
-
-
 class TestToFasta(unittest.TestCase):
     def test_to_fasta(self):
         '''Test to_fasta'''
