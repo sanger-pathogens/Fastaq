@@ -2,6 +2,16 @@ from fastaq import sequences, utils
 
 class Error (Exception): pass
 
+def file_reader(fname):
+    f = utils.open_file_read(fname)
+    c = Caf()
+
+    while c.get_next_from_file(f):
+        yield c
+
+    utils.close(f)
+
+
 class Caf:
     def __init__(self):
         self.id = None

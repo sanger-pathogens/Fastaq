@@ -11,6 +11,21 @@ data_dir = os.path.join(modules_dir, 'tests', 'data')
 
 class Error (Exception): pass
 
+class TestCafToFastq(unittest.TestCase):
+    def test_caf_to_fastq_default(self):
+        '''Test caf_to_fastq with no filtering'''
+        tmpfile = 'tmp.fq'
+        tasks.caf_to_fastq(os.path.join(data_dir, 'caf_test.caf'), tmpfile)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'caf_test.to_fastq.no_trim.min_length_0.fq'), tmpfile, shallow=False))
+        os.unlink(tmpfile)
+
+    def test_caf_to_fastq_trim_and_min_length(self):
+        '''Test caf_to_fastq with trimming and min_length'''
+        tmpfile = 'tmp.fq'
+        tasks.caf_to_fastq(os.path.join(data_dir, 'caf_test.caf'), tmpfile, trim=True, min_length=6)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'caf_test.to_fastq.trim.min_length_6.fq'), tmpfile, shallow=False))
+        os.unlink(tmpfile)
+
 
 class TestCapillaryToPairs(unittest.TestCase):
     def test_capillary_to_pairs(self):
