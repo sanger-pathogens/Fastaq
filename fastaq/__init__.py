@@ -1,2 +1,2 @@
-__all__ = ['utils', 'sequences', 'tasks', 'intervals']
+__all__ = ['caf', 'utils', 'sequences', 'tasks', 'intervals']
 from fastaq import *
