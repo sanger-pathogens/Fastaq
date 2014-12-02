@@ -1,0 +1,48 @@
+
+DNA : read1.p1k
+NACG
+TAN
+
+BaseQuality : read1.p1k
+4 24 42 43 40 30 8
+
+Sequence : read1.p1k
+Is_read
+SCF_File read1.p1kSCF
+Template read1
+Insert_size 2000 4000
+Ligation_no 12345
+Primer Universal_primer
+Strand Forward
+Dye Dye_terminator
+Clone clone1
+Seq_vec SVEC 1 15 puc19
+Sequencing_vector "puc19"
+Clipping QUAL 2 6
+ProcessStatus PASS
+Asped 2006-7-5
+Unpadded
+Align_to_SCF 1 1272 1 1272
+
+DNA : read2.p1k
+CG
+ACGTT
+
+BaseQuality : read2.p1k
+9 9 40 41 42 42 4
+
+Sequence : read2.p1k
+Is_read
+SCF_File read2.p1kSCF
+Template read2
+Insert_size 2000 4000
+Ligation_no 23456
+Primer Universal_primer
+Strand Forward
+Dye Dye_terminator
+Clone clone2
+Seq_vec SVEC 1 32 puc19
+Sequencing_vector "puc19"
+ProcessStatus PASS
+Unpadded
+Align_to_SCF 1 1347 1 1347
