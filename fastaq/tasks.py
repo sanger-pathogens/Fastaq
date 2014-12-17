@@ -106,7 +106,7 @@ def deinterleave(infile, outfile_1, outfile_2, fasta_out=False):
     utils.close(f_2)
 
 
-def enumerate_names(infile, outfile, start_index=1, keep_illumina_suffix=False, rename_file=None):
+def enumerate_names(infile, outfile, start_index=1, keep_illumina_suffix=False, rename_file=None, suffix=None):
     seq_reader = sequences.file_reader(infile)
     fout_seqs = utils.open_file_write(outfile)
     counter = start_index
@@ -132,6 +132,9 @@ def enumerate_names(infile, outfile, start_index=1, keep_illumina_suffix=False, 
 
         if rename_file is not None:
             print(old_id, seq.id, sep='\t', file=fout_rename)
+
+        if suffix is not None:
+            seq.id += suffix
 
         print(seq, file=fout_seqs)
         counter += 1

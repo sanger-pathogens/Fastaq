@@ -81,6 +81,9 @@ class TestEnumerateNames(unittest.TestCase):
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_enumerate_names.fa.out.start.2'), outfile))
         tasks.enumerate_names(os.path.join(data_dir, 'sequences_test_enumerate_names.fa'), outfile, keep_illumina_suffix=True)
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_enumerate_names.fa.out.keep_suffix'), outfile))
+
+        tasks.enumerate_names(os.path.join(data_dir, 'sequences_test_enumerate_names.fa'), outfile, suffix='.SUFFIX')
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_enumerate_names.fa.out.add_suffix'), outfile, shallow=False))
         os.unlink(outfile)
         os.unlink(rename_out)
 
