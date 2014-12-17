@@ -533,6 +533,17 @@ def sequence_trim(infile_1, infile_2, outfile_1, outfile_2, to_trim_file, min_le
     utils.close(f_out_2)
 
 
+def sort_by_size(infile, outfile, smallest_first=False):
+    '''Sorts input sequence file by biggest sequence first, writes sorted output file. Set smallest_first=True to have smallest first'''
+    seqs = {}
+    file_to_dict(infile, seqs)
+    seqs = list(seqs.values())
+    seqs.sort(key=lambda x: len(x), reverse=not smallest_first)
+    fout = utils.open_file_write(outfile)
+    for seq in seqs:
+        print(seq, file=fout)
+    utils.close(fout)
+
 
 def translate(infile, outfile, frame=0):
     seq_reader = sequences.file_reader(infile)
