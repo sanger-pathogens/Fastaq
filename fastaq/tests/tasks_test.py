@@ -487,6 +487,18 @@ class TestReplaceBases(unittest.TestCase):
         os.unlink(tmpfile)
 
 
+class TestSortBySize(unittest.TestCase):
+    def test_sort_by_size(self):
+        '''Test sort_by_size'''
+        infile = os.path.join(data_dir, 'tasks_test_sort_by_size.in.fa')
+        tmpfile = 'tmp.sorted.fa'
+        tasks.sort_by_size(infile, tmpfile)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'tasks_test_sort_by_size.out.fa'), tmpfile, shallow=False))
+        tasks.sort_by_size(infile, tmpfile, smallest_first=True)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'tasks_test_sort_by_size.out.rev.fa'), tmpfile, shallow=False))
+        os.unlink(tmpfile)
+
+
 class TestStripIlluminaSuffix(unittest.TestCase):
     def test_strip_illumina_suffix(self):
         '''Check illumina suffixes stripped correctly off read names'''
