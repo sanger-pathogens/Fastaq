@@ -1,0 +1,33 @@
+#!/usr/bin/env python3
+
+import argparse
+import sys
+
+tasks = {
+    'to_fasta': 'Converts a variety of input formats to FASTA format',
+    'caf_to_fastq': 'Converts a CAF file to FASTQ format',
+}
+
+
+def print_usage_and_exit():
+    print('fastaq <command> [options]', file=sys.stderr)
+    print('\nAvailable commands:\n', file=sys.stderr)
+    max_task_length = max([len(x) for x in list(tasks.keys())])
+    for task in tasks:
+        print('{{0: <{}}}'.format(max_task_length).format(task), tasks[task], sep='  ', file=sys.stderr)
+    sys.exit(1)
+
+
+if len(sys.argv) == 1 or sys.argv[1] in ['-h', '-help', '--help']:
+    print_usage_and_exit()
+
+task = sys.argv.pop(1)
+
+if task not in tasks:
+    print('Task "' + task + '" not recognised. Cannot continue.\n', file=sys.stderr)
+    print_usage_and_exit()
+
+
+exec('import fastaq.runners.' + task)
+exec('fastaq.runners.' + task + '.run("' + tasks[task] + '")')
+
