@@ -6,6 +6,7 @@ import sys
 tasks = {
     'to_fasta': 'Converts a variety of input formats to FASTA format',
     'caf_to_fastq': 'Converts a CAF file to FASTQ format',
+    'capillary_to_pairs': 'Converts file of capillary reads to interleaved paired file',
 }
 
 
