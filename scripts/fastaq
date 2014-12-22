@@ -10,6 +10,7 @@ tasks = {
     'chunker':            'Splits sequences into equal sized chunks',
     'count_sequences':    'Counts the sequences in input file',
     'deinterleave':       'Splits interleaved paired file into two separate files',
+    'enumerate_names':    'Renames sequences in a file, calling them 1,2,3... etc',
 }
 
 
