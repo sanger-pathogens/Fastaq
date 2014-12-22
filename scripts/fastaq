@@ -8,6 +8,7 @@ tasks = {
     'caf_to_fastq':       'Converts a CAF file to FASTQ format',
     'capillary_to_pairs': 'Converts file of capillary reads to interleaved paired file',
     'chunker':            'Splits sequences into equal sized chunks',
+    'count_sequences':    'Counts the sequences in input file',
 }
 
 
