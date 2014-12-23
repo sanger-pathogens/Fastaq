@@ -4,7 +4,7 @@ from fastaq import tasks
 def run(description):
     parser = argparse.ArgumentParser(
     description = 'Renames sequences in a file, calling them 1,2,3... etc',
-    usage = 'fastaq enumerate_names [options] <fasta/q in> <fasta/q out>')
+    usage = 'fastaq enumerate_names [options] <infile> <outfile>')
     parser.add_argument('--start_index', type=int, help='Starting number [%(default)s]', default=1)
     parser.add_argument('--rename_file', help='If used, will write a file of old name to new name')
     parser.add_argument('--keep_suffix', action='store_true', help='Use this to keep a /1 or /2 suffix at the end of each name')

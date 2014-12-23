@@ -6,10 +6,10 @@ from fastaq import sequences, utils
 
 def run(description):
     parser = argparse.ArgumentParser(
-        description = 'Makes perfect paired end fastq reads from a fasta/q file, with insert sizes sampled from a normal distribution. Read orientation is innies. Output is an interleaved fastq file.',
-        usage = 'fastaq to_perfect_reads [options] <fasta/q in> <out.fastq> <mean insert size> <insert std deviation> <mean coverage> <read length>')
-    parser.add_argument('infile', help='Name of input fasta/q file')
-    parser.add_argument('outfile', help='Name of output fastq file')
+        description = 'Makes perfect paired end fastq reads from a sequence file, with insert sizes sampled from a normal distribution. Read orientation is innies. Output is an interleaved FASTQ file.',
+        usage = 'fastaq to_perfect_reads [options] <infile> <outfile> <mean insert size> <insert std deviation> <mean coverage> <read length>')
+    parser.add_argument('infile', help='Name of input file')
+    parser.add_argument('outfile', help='Name of output file')
     parser.add_argument('mean_insert', type=int, help='Mean insert size of read pairs', metavar='mean insert size')
     parser.add_argument('insert_std', type=float, help='Standard devation of insert size', metavar='insert std deviation')
     parser.add_argument('coverage', type=float, help='Mean coverage of the reads', metavar='mean coverage')

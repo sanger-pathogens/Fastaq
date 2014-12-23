@@ -3,8 +3,8 @@ from fastaq import tasks
 
 def run(description):
     parser = argparse.ArgumentParser(
-        description = 'Makes a multi-fasta file of random sequences, all of the same length. Each base has equal chance of being A,C,G or T',
-        usage = 'fastaq make_random_contigs [options] <number of sequences> <length of each sequence> <fasta out>')
+        description = 'Makes a multi-FASTA file of random sequences, all of the same length. Each base has equal chance of being A,C,G or T',
+        usage = 'fastaq make_random_contigs [options] <contigs> <length> <outfile>')
     parser.add_argument('--first_number', type=int, help='If numbering the sequences, the first sequence gets this number [%(default)s]', default=1)
     parser.add_argument('--name_by_letters', action='store_true', help='Name the contigs A,B,C,... will start at A again if you get to Z')
     parser.add_argument('--prefix', help='Prefix to add to start of every sequence name', default='')

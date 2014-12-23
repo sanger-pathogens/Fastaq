@@ -3,7 +3,7 @@ from fastaq import tasks
 
 def run(description):
     parser = argparse.ArgumentParser(
-        description = 'Makes fake quality scores file from a fasta/q file',
+        description = description,
         usage = 'fastaq to_fake_qual [options] <infile> <outfile>')
     parser.add_argument('infile', help='Name of input file')
     parser.add_argument('outfile', help='Name of output file')

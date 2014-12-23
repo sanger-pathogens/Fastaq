@@ -5,8 +5,8 @@ from fastaq import sequences, utils
 
 def run(description):
     parser = argparse.ArgumentParser(
-        description = 'Takes a fasta/q file. Makes a BAM file containing perfect (unpaired) reads tiling the whole genome',
-        usage = 'fastaq to_tiling_bam [options] <fasta/q in> <read length> <read step> <read prefix> <out.bam>',
+        description = 'Takes a sequence file. Makes a BAM file containing perfect (unpaired) reads tiling the whole genome',
+        usage = 'fastaq to_tiling_bam [options] <infile> <read_length> <read_step> <read_prefix> <outfile>',
         epilog = 'Important: assumes that samtools is in your path')
     parser.add_argument('infile', help='Name of input fasta/q file')
     parser.add_argument('read_length', type=int, help='Length of reads')

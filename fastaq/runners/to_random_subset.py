@@ -5,13 +5,13 @@ from fastaq import sequences, utils
 
 def run(description):
     parser = argparse.ArgumentParser(
-        description = 'Takes a random subset of reads from a fasta/q file and optionally the corresponding read ' +
+        description = 'Takes a random subset of reads from a sequence file and optionally the corresponding read ' +
                       'from a mates file.  Ouptut is interleaved if mates file given',
-        usage = 'fastaq to_random_subset [options] <fasta/q in> <outfile> <probablilty of keeping read (pair) in [0,100]>')
-    parser.add_argument('--mate_file', help='Name of fasta/q mates file')
-    parser.add_argument('infile', help='Name of input fasta/q file')
-    parser.add_argument('outfile', help='Name of fasta/q output file')
-    parser.add_argument('probability', type=int, help='Probability of keeping any given read (pair) in [0,100]', metavar='INT')
+        usage = 'fastaq to_random_subset [options] <infile> <outfile> <percent>')
+    parser.add_argument('--mate_file', help='Name of mates file')
+    parser.add_argument('infile', help='Name of input file')
+    parser.add_argument('outfile', help='Name of output file')
+    parser.add_argument('percent', type=int, help='Per cent probability of keeping any given read (pair) in [0,100]', metavar='INT')
     options = parser.parse_args()
 
     seq_reader = sequences.file_reader(options.infile)

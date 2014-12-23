@@ -3,11 +3,11 @@ from fastaq import tasks
 
 def run(description):
     parser = argparse.ArgumentParser(
-        description = 'Simulates long reads from a fasta/q file. Can optionally make insertions into the reads, like pacbio does. If insertions made, coverage calculation is done before the insertions (so total read length may appear longer then expected).',
+        description = 'Simulates long reads from a sequence file. Can optionally make insertions into the reads, like pacbio does. If insertions made, coverage calculation is done before the insertions (so total read length may appear longer then expected).',
         usage = 'fastaq long_read_simulate [options] <infile> <outfile>')
 
-    parser.add_argument('infile', help='Name of input fasta/q file')
-    parser.add_argument('outfile', help='Name of output fasta file')
+    parser.add_argument('infile', help='Name of input file')
+    parser.add_argument('outfile', help='Name of output FASTA file')
 
     parser.add_argument('--method', help='How to sample the read positions and lengths. Choose from 1) "tiling", where reads of fixed length are taken at equal intervals from the reference. 2) "unfiform", where reads of fixed length taken at positions sampled uniformly. 3) "gamma", where reads lengths are taken from a gamma distribution, and positions sampled uniformly. [%(default)s]', default='tiling', choices=['tiling', 'uniform', 'gamma'], metavar='tiling|uniform|gamma')
     parser.add_argument('--seed', type=int, help='Seed for random number generator [default: use python\'s default]', metavar='INT')
