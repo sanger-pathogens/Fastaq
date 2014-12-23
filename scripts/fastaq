@@ -34,6 +34,7 @@ tasks = {
     'to_orfs_gff':            'Writes a GFF file of open reading frames',
     'to_perfect_reads':       'Make perfect paired reads from reference',
     'to_random_subset':       'Make a random sample of sequences (and optionally mates as well)',
+    'to_tiling_bam':          'Make a BAM file of reads uniformly spread across the input reference',
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
 }
 
