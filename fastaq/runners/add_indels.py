@@ -6,7 +6,7 @@ from fastaq import sequences, utils, intervals
 def run(description):
     parser = argparse.ArgumentParser(
         description = description,
-        usage = 'fastaq insert_or_delete_bases [options] <fasta/q in> <outfile>')
+        usage = 'fastaq add_indels [options] <fasta/q in> <outfile>')
     parser.add_argument('infile', help='Name of fasta/q file to be read')
     parser.add_argument('outfile', help='Name of output file')
     parser.add_argument('-d','--delete', action='append', help='Delete the given bases from the given sequence. Format same as samtools view: name:start-end. This option can be used multiple times (once for each region to delete). Overlapping coords will be merged before deleting', metavar='Name:start:bases')
