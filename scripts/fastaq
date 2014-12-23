@@ -40,11 +40,12 @@ tasks = {
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
     'trim_ends':              'Trim fixed number of bases of start and/or end of every sequence',
     'trim_Ns_at_end':         'Trims all Ns at the start/end of all sequences',
+    'version':                'Print version number and exit',
 }
 
 
 def print_usage_and_exit():
-    print('fastaq <command> [options]', file=sys.stderr)
+    print('Usage: fastaq <command> [options]', file=sys.stderr)
     print('\nAvailable commands:\n', file=sys.stderr)
     max_task_length = max([len(x) for x in list(tasks.keys())])
     for task in sorted(tasks):
