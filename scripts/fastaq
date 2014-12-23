@@ -33,6 +33,7 @@ tasks = {
     'to_mira_xml':            'Create an xml file from a file of reads, for use with Mira assembler',
     'to_orfs_gff':            'Writes a GFF file of open reading frames',
     'to_perfect_reads':       'Make perfect paired reads from reference',
+    'to_random_subset':       'Make a random sample of sequences (and optionally mates as well)',
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
 }
 
