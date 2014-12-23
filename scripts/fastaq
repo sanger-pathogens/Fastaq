@@ -24,6 +24,7 @@ tasks = {
     'reverse_complement':     'Reverse complement all sequences', 
     'scaffolds_to_contigs':   'Creates a file of contigs from a file of scaffolds',
     'search_for_seq':         'Find all exact matches to a string (and its reverse complement)',
+    'sequence_trim':          'Trim exact matches to a given string off the start of every sequence',
     'to_fasta':               'Converts a variety of input formats to FASTA format',
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
 }
