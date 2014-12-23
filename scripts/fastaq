@@ -27,6 +27,7 @@ tasks = {
     'sequence_trim':          'Trim exact matches to a given string off the start of every sequence',
     'split_by_base_count':    'Split multi sequence file into separate files',
     'sort_by_size':           'Sorts sequences in length order',
+    'strip_illumina_suffix':  'Strips /1 or /2 off the end of every read name in a fasta/q file',
     'to_fasta':               'Converts a variety of input formats to FASTA format',
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
 }
