@@ -23,6 +23,7 @@ tasks = {
     'replace_bases':          'Replaces all occurences of one letter with another',
     'reverse_complement':     'Reverse complement all sequences', 
     'scaffolds_to_contigs':   'Creates a file of contigs from a file of scaffolds',
+    'search_for_seq':         'Find all exact matches to a string (and its reverse complement)',
     'to_fasta':               'Converts a variety of input formats to FASTA format',
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
 }
