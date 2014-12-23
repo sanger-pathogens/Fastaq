@@ -29,6 +29,7 @@ tasks = {
     'sort_by_size':           'Sorts sequences in length order',
     'strip_illumina_suffix':  'Strips /1 or /2 off the end of every read name in a fasta/q file',
     'to_fasta':               'Converts a variety of input formats to FASTA format',
+    'to_fake_qual':           'Make fake quality scores file',
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
 }
 
