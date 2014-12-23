@@ -4,18 +4,19 @@ import argparse
 import sys
 
 tasks = {
-    'to_fasta':           'Converts a variety of input formats to FASTA format',
-    'caf_to_fastq':       'Converts a CAF file to FASTQ format',
-    'capillary_to_pairs': 'Converts file of capillary reads to interleaved paired file',
-    'chunker':            'Splits sequences into equal sized chunks',
-    'count_sequences':    'Counts the sequences in input file',
-    'deinterleave':       'Splits interleaved paired file into two separate files',
-    'enumerate_names':    'Renames sequences in a file, calling them 1,2,3... etc',
-    'expand_nucleotides': 'Makes every combination of degenerate nucleotides',
-    'fasta_to_fastq':     'Convert FASTA and .qual to FASTQ',
-    'filter':             'Filter sequences to get a subset of them',
-    'get_ids':            'Get the ID of each sequence',
-    'trim_contigs':       'Trims a set number of bases off the end of every contig',
+    'to_fasta':              'Converts a variety of input formats to FASTA format',
+    'caf_to_fastq':          'Converts a CAF file to FASTQ format',
+    'capillary_to_pairs':    'Converts file of capillary reads to interleaved paired file',
+    'chunker':               'Splits sequences into equal sized chunks',
+    'count_sequences':       'Counts the sequences in input file',
+    'deinterleave':          'Splits interleaved paired file into two separate files',
+    'enumerate_names':       'Renames sequences in a file, calling them 1,2,3... etc',
+    'expand_nucleotides':    'Makes every combination of degenerate nucleotides',
+    'fasta_to_fastq':        'Convert FASTA and .qual to FASTQ',
+    'filter':                'Filter sequences to get a subset of them',
+    'get_ids':               'Get the ID of each sequence',
+    'get_seq_flanking_gaps': 'Gets the sequences flanking gaps',
+    'trim_contigs':          'Trims a set number of bases off the end of every contig',
 }
 
 
