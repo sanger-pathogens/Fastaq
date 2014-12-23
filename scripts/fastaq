@@ -14,6 +14,7 @@ tasks = {
     'expand_nucleotides': 'Makes every combination of degenerate nucleotides',
     'fasta_to_fastq':     'Convert FASTA and .qual to FASTQ',
     'filter':             'Filter sequences to get a subset of them',
+    'get_ids':            'Get the ID of each sequence',
     'trim_contigs':       'Trims a set number of bases off the end of every contig',
 }
 
