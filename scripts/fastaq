@@ -4,7 +4,7 @@ import argparse
 import sys
 
 tasks = {
-    'to_fasta':               'Converts a variety of input formats to FASTA format',
+    'add_indels':             'Deletes or inserts bases at given position(s)',
     'caf_to_fastq':           'Converts a CAF file to FASTQ format',
     'capillary_to_pairs':     'Converts file of capillary reads to interleaved paired file',
     'chunker':                'Splits sequences into equal sized chunks',
@@ -16,7 +16,8 @@ tasks = {
     'filter':                 'Filter sequences to get a subset of them',
     'get_ids':                'Get the ID of each sequence',
     'get_seq_flanking_gaps':  'Gets the sequences flanking gaps',
-    'insert_or_delete_bases': 'Deletes or inserts bases at given position(s)',
+    'interleave':             'Interleaves two files, output is alternating between fwd/rev reads'
+    'to_fasta':               'Converts a variety of input formats to FASTA format',
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
 }
 
