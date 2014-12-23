@@ -19,6 +19,7 @@ tasks = {
     'interleave':             'Interleaves two files, output is alternating between fwd/rev reads'
     'long_read_simulate':     'Simulates long reads from reference',
     'make_random_contigs':    'Make contigs of random sequence',
+    'merge':                  'Converts multi sequence file to a single sequence',
     'to_fasta':               'Converts a variety of input formats to FASTA format',
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
 }
