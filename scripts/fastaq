@@ -21,6 +21,7 @@ tasks = {
     'make_random_contigs':    'Make contigs of random sequence',
     'merge':                  'Converts multi sequence file to a single sequence',
     'replace_bases':          'Replaces all occurences of one letter with another',
+    'reverse_complement':     'Reverse complement all sequences', 
     'to_fasta':               'Converts a variety of input formats to FASTA format',
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
 }
