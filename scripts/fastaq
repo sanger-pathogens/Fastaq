@@ -38,6 +38,7 @@ tasks = {
     'to_unique_by_id':        'Remove duplicate sequences, based on their names. Keep longest seqs',
     'translate':              'Translate all sequences in input nucleotide sequences',
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
+    'trim_Ns_at_end':         'Trims all Ns at the start/end of all sequences',
 }
 
 
