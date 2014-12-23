@@ -12,6 +12,7 @@ tasks = {
     'deinterleave':       'Splits interleaved paired file into two separate files',
     'enumerate_names':    'Renames sequences in a file, calling them 1,2,3... etc',
     'expand_nucleotides': 'Makes every combination of degenerate nucleotides',
+    'fasta_to_fastq':     'Convert FASTA and .qual to FASTQ',
     'trim_contigs':       'Trims a set number of bases off the end of every contig',
 }
 
