@@ -36,6 +36,7 @@ tasks = {
     'to_random_subset':       'Make a random sample of sequences (and optionally mates as well)',
     'to_tiling_bam':          'Make a BAM file of reads uniformly spread across the input reference',
     'to_unique_by_id':        'Remove duplicate sequences, based on their names. Keep longest seqs',
+    'translate':              'Translate all sequences in input nucleotide sequences',
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
 }
 

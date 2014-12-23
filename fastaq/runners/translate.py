@@ -1,0 +1,12 @@
+import argparse
+from fastaq import tasks
+
+def run(description):
+    parser = argparse.ArgumentParser(
+        description = 'Translates all sequences in a fasta or fastq file. Output is always fasta format',
+        usage = 'fastaq translate [options] <in.fasta/q> <out.fasta>')
+    parser.add_argument('--frame', type=int, choices=[0,1,2], help='Frame to translate [%(default)s]', default=0)
+    parser.add_argument('infile', help='Name of fasta/q file to be translated', metavar='in.fasta/q')
+    parser.add_argument('outfile', help='Name of output fasta file', metavar='out.fasta')
+    options = parser.parse_args()
+    tasks.translate(options.infile, options.outfile, frame=options.frame)
