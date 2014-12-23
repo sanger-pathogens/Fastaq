@@ -47,7 +47,7 @@ def print_usage_and_exit():
     print('fastaq <command> [options]', file=sys.stderr)
     print('\nAvailable commands:\n', file=sys.stderr)
     max_task_length = max([len(x) for x in list(tasks.keys())])
-    for task in tasks:
+    for task in sorted(tasks):
         print('{{0: <{}}}'.format(max_task_length).format(task), tasks[task], sep='  ', file=sys.stderr)
     sys.exit(1)
 
