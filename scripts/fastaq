@@ -25,6 +25,7 @@ tasks = {
     'scaffolds_to_contigs':   'Creates a file of contigs from a file of scaffolds',
     'search_for_seq':         'Find all exact matches to a string (and its reverse complement)',
     'sequence_trim':          'Trim exact matches to a given string off the start of every sequence',
+    'split_by_base_count':    'Split multi sequence file into separate files',
     'sort_by_size':           'Sorts sequences in length order',
     'to_fasta':               'Converts a variety of input formats to FASTA format',
     'trim_contigs':           'Trims a set number of bases off the end of every contig',
