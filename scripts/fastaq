@@ -46,6 +46,8 @@ tasks = {
 
 def print_usage_and_exit():
     print('Usage: fastaq <command> [options]', file=sys.stderr)
+    print('\nTo get minimal usage for a command use:\nfastaq command', file=sys.stderr)
+    print('\nTo get full help for a command use one of:\nfastaq command -h\nfastaq command --help\n', file=sys.stderr)
     print('\nAvailable commands:\n', file=sys.stderr)
     max_task_length = max([len(x) for x in list(tasks.keys())])
     for task in sorted(tasks):
