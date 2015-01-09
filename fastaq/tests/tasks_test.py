@@ -105,11 +105,11 @@ class TestExpandNucleotides(unittest.TestCase):
 
 
 class TestExtendGaps(unittest.TestCase):
-    def test_extend_gaps(self):
+    def test_trim_contigs(self):
         '''Test that gap extension works'''
         outfile = 'tmp.gap_extend.fa'
-        tasks.extend_gaps(os.path.join(data_dir, 'sequences_test_extend_gaps.fa'), outfile, trim=2)
-        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_extend_gaps.fa.out'), outfile))
+        tasks.trim_contigs(os.path.join(data_dir, 'sequences_test_trim_contigs.fa'), outfile, trim=2)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_trim_contigs.fa.out'), outfile))
         os.unlink(outfile)
 
 

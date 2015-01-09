@@ -158,7 +158,7 @@ def expand_nucleotides(infile, outfile):
             print(seq, file=fout)
 
 
-def extend_gaps(infile, outfile, trim):
+def trim_contigs(infile, outfile, trim):
     seq_reader = sequences.file_reader(infile)
     fout = utils.open_file_write(outfile)
 
