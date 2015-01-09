@@ -35,8 +35,8 @@ Key points:
  * You can use a minus sign for a filename to use stdin or stdout, so scripts can be piped together. See the example below.
 
 
-Example
--------
+Examples
+--------
 
 Reverse complement all sequences in a file:
 
