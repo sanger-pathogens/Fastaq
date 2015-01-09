@@ -250,6 +250,17 @@ class TestMakeLongReads(unittest.TestCase):
         os.unlink(tmp)
 
 
+class TestMeanLength(unittest.TestCase):
+    def test_mean_length(self):
+        '''Test mean_length'''
+        expected = [3, 2, 3, 4, 4]
+        limits = [1, 2, 3, 4, None]
+        assert len(expected) == len(limits)
+        for i in range(len(expected)):
+            mean = tasks.mean_length(os.path.join(data_dir, 'tasks_test_mean_length.fa'), limit=limits[i])
+            self.assertEqual(expected[i], mean)
+
+
 class TestMergeToOneSeq(unittest.TestCase):
     def test_merge_to_one_seq_fa(self):
         '''Test merge_to_one_seq with fasta'''
