@@ -1,7 +1,7 @@
 Fastaq
 ======
 
-Python3 script to manipulate FASTA and FASTQ files, plus API for developers
+Python3 script to manipulate FASTA and FASTQ (and other format) files, plus API for developers
 
 Installation
 ------------
@@ -14,9 +14,8 @@ Install:
 
     python3 setup.py install
 
-Notes:
- * A few scripts assume that samtools is installed and in your path. This is NOT tested in the tests, because most scripts don't need it.
- * The installation will put all scripts in your path and are named fastaq_*.
+Note: a few of the `fastaq` commands assume that `samtools` is installed and in your path. This is NOT tested in the tests, because most commands don't need it.
+
 
 Usage
 -----
@@ -28,11 +27,11 @@ Key points:
  * To list the available commands and brief descriptions, just run `fastaq`
  * Use `fastaq command -h` or `fastaq command --help` to get a longer description and the usage of that command.
  * The type of input file is automatically detected. Currently supported:
-   FASTA, FASTQ, GFF3, EMBL, GBK, Phylip.
+   `FASTA`, `FASTQ`, `GFF3`, `EMBL`, `GBK`, `Phylip`.
  * `fastaq` only manipulates sequences (and
    quality scores if present), so annotation is ignored where present in the input.
  * Input and output files can be gzipped. An input file is assumed to be gzipped if its name ends with .gz. To gzip an output file, just name it with .gz at the end.
- * You can use a minus sign for a filename to use stdin or stdout, so scripts can be piped together. See the example below.
+ * You can use a minus sign for a filename to use stdin or stdout, so commands can be piped together. See the example below.
 
 
 Examples
@@ -42,7 +41,7 @@ Reverse complement all sequences in a file:
 
     fastaq reverse_complement in.fastq out.fastq
 
-Reverse complement all sequences in a gzipped file, then translate each sequence
+Reverse complement all sequences in a gzipped file, then translate each sequence:
 
     fastaq reverse_complement in.fastq.gz - | fastaq translate - out.fasta
 
