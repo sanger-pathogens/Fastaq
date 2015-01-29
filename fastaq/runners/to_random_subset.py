@@ -27,7 +27,7 @@ def run(description):
             except StopIteration:
                 print('Error! Didn\'t get mate for read', seq.id, file=sys.stderr)
                 sys.exit(1)
-        if random.randint(0, 100) <= options.probability:
+        if random.randint(0, 100) <= options.percent:
             print(seq, file=fout)
             if options.mate_file:
                 print(mate_seq, file=fout)
