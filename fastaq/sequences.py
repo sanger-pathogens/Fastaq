@@ -3,7 +3,7 @@ import string
 import random
 import itertools
 
-from fastaq import utils, intervals
+from fastaq import utils, intervals, genetic_codes
 
 class Error (Exception): pass
 
@@ -15,72 +15,7 @@ class Error (Exception): pass
 previous_lines = {}
 
 
-codon2aa = {
-'GCA': 'A',
-'GCC': 'A',
-'GCG': 'A',
-'GCT': 'A',
-'AGA': 'R',
-'AGG': 'R',
-'CGA': 'R',
-'CGC': 'R',
-'CGG': 'R',
-'CGT': 'R',
-'AAC': 'N',
-'AAT': 'N',
-'GAC': 'D',
-'GAT': 'D',
-'TGC': 'C',
-'TGT': 'C',
-'GAA': 'E',
-'GAG': 'E',
-'CAA': 'Q',
-'CAG': 'Q',
-'GGA': 'G',
-'GGC': 'G',
-'GGG': 'G',
-'GGT': 'G',
-'CAC': 'H',
-'CAT': 'H',
-'ATA': 'I',
-'ATC': 'I',
-'ATT': 'I',
-'TTA': 'L',
-'TTG': 'L',
-'CTA': 'L',
-'CTC': 'L',
-'CTG': 'L',
-'CTT': 'L',
-'AAA': 'K',
-'AAG': 'K',
-'ATG': 'M',
-'TTC': 'F',
-'TTT': 'F',
-'CCA': 'P',
-'CCC': 'P',
-'CCG': 'P',
-'CCT': 'P',
-'AGC': 'S',
-'AGT': 'S',
-'TCA': 'S',
-'TCC': 'S',
-'TCG': 'S',
-'TCT': 'S',
-'ACA': 'T',
-'ACC': 'T',
-'ACG': 'T',
-'ACT': 'T',
-'TGG': 'W',
-'TAC': 'Y',
-'TAT': 'Y',
-'GTA': 'V',
-'GTC': 'V',
-'GTG': 'V',
-'GTT': 'V',
-'TAA': '*',
-'TAG': '*',
-'TGA': '*'}
-
+codon2aa = genetic_codes.codes[1]
 
 redundant_nts = {
     'R': ('A', 'G'),
