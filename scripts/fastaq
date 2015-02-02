@@ -65,6 +65,6 @@ if task not in tasks:
     print_usage_and_exit()
 
 
-exec('import fastaq.runners.' + task)
-exec('fastaq.runners.' + task + '.run("' + tasks[task] + '")')
+exec('import pyfastaq.runners.' + task)
+exec('pyfastaq.runners.' + task + '.run("' + tasks[task] + '")')
 
