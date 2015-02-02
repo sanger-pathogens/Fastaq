@@ -6,8 +6,8 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 setup(
-    name='Fastaq',
-    version='2.0.0',
+    name='pyfastaq',
+    version='3.0.0',
     description='Scripts to manipulate FASTA and FASTQ files, plus API for developers',
     long_description=read('README.md'),
     packages = find_packages(),
