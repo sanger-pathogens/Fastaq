@@ -14,7 +14,7 @@ Install with pip:
     pip3 install pyfastaq
 
 
-Alternatively, you can downlaod the latest release from this github repository,
+Alternatively, you can download the latest release from this github repository,
 or clone the repository. Then run the tests: 
 
     python3 setup.py test
