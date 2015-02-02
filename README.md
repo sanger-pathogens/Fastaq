@@ -6,21 +6,31 @@ Python3 script to manipulate FASTA and FASTQ (and other format) files, plus API 
 Installation
 ------------
 
-Run the tests:
+Dependencies:
+  * numpy (install with `apt-get install python3-numpy`)
+
+Install with pip:
+
+    pip3 install pyfastaq
+
+
+Alternatively, you can downlaod the latest release from this github repository,
+or clone the repository. Then run the tests: 
 
     python3 setup.py test
 
-Install:
+If the tests all pass, install:
 
     python3 setup.py install
-
-Note: a few of the `fastaq` commands assume that `samtools` is installed and in your path. This is NOT tested in the tests, because most commands don't need it.
 
 
 Usage
 -----
 
-General usage: `fastaq <command> [options]`
+The installation will put a single script called `fastaq` in your path.
+The usage is: 
+
+    fastaq <command> [options]
 
 
 Key points:
@@ -95,7 +105,7 @@ For developers
 
 Here is a template for counting the sequences in a FASTA or FASTQ file:
 
-    from fastaq import sequences
+    from pyfastaq import sequences
     seq_reader = sequences.file_reader(infile)
     count = 0
     for seq in seq_reader:
