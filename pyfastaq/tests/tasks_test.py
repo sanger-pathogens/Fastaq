@@ -444,6 +444,22 @@ class TestSplit(unittest.TestCase):
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_split_fixed_size.fa.split.skip_if_all_Ns.coords'), test_coords))
         os.unlink(test_coords)
 
+    def test_split_by_fixed_size_onefile(self):
+        infile = os.path.join(data_dir, 'sequences_test_split_fixed_size_onefile.fa')
+        tmp_out = 'tmp.sequences_test_split_fixed_size_onefile.fa'
+        expected =  os.path.join(data_dir, 'sequences_test_split_fixed_size_onefile.out.fa')
+        tasks.split_by_fixed_size_onefile(infile, tmp_out, chunk_size=3, tolerance=1)
+        self.assertTrue(filecmp.cmp(expected, tmp_out))
+        os.unlink(tmp_out)
+
+    def test_split_by_fixed_size_onefile_exclude_Ns(self):
+        infile = os.path.join(data_dir, 'sequences_test_split_fixed_size_onefile.fa')
+        tmp_out = 'tmp.sequences_test_split_fixed_size_onefile.skip_Ns.fa'
+        expected =  os.path.join(data_dir, 'sequences_test_split_fixed_size_onefile.skip_Ns.out.fa')
+        tasks.split_by_fixed_size_onefile(infile, tmp_out, chunk_size=3, tolerance=1, skip_if_all_Ns=True)
+        self.assertTrue(filecmp.cmp(expected, tmp_out))
+        os.unlink(tmp_out)
+
 class TestCountSequences(unittest.TestCase):
     def test_count_sequences(self):
         '''Check that count_sequences does as expected'''

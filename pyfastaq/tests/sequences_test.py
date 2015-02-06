@@ -62,6 +62,13 @@ class TestFasta(unittest.TestCase):
         '''len() should return the length of the sequence'''
         self.assertEqual(5, len(self.fasta))
 
+    def test_subseq(self):
+        '''Test subseq'''
+        fa = sequences.Fasta('name', 'ACGTA')
+        self.assertEqual(fa.subseq(1,4), sequences.Fasta('name', 'CGT'))
+        self.assertEqual(fa.subseq(None,4), sequences.Fasta('name', 'ACGT'))
+        self.assertEqual(fa.subseq(1,None), sequences.Fasta('name', 'CGTA'))
+
     def test_print_line_length(self):
         '''__str__ should be formatted correctly with the right number of chars per line of sequence'''
         line_lengths = [0, 3]
@@ -465,6 +472,13 @@ class TestFastq(unittest.TestCase):
         while fq.get_next_from_file(f_in):
             self.assertEqual(fq, sequences.Fastq('ID', 'ACGTA', 'IIIII'))
         utils.close(f_in)
+
+    def test_subseq(self):
+        '''Test subseq'''
+        fq = sequences.Fastq('name', 'ACGTA', 'FGHIJ')
+        self.assertEqual(fq.subseq(1,4), sequences.Fastq('name', 'CGT', 'GHI'))
+        self.assertEqual(fq.subseq(None,4), sequences.Fastq('name', 'ACGT', 'FGHI'))
+        self.assertEqual(fq.subseq(1,None), sequences.Fastq('name', 'CGTA', 'GHIJ'))
 
     def test_revcomp(self):
         '''revcomp() should correctly reverse complement a sequence'''

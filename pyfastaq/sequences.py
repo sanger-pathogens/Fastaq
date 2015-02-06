@@ -173,6 +173,10 @@ class Fasta:
     def __len__(self):
         return len(self.seq)
 
+    def subseq(self, start, end):
+        '''Returns Fasta object with the same name, of the bases from start to end, but not including end'''
+        return Fasta(self.id, self.seq[start:end])
+
     def split_capillary_id(self):
         '''Gets the prefix and suffix of an name of a capillary read, e.g. xxxxx.p1k or xxxx.q1k. Returns a tuple (prefix, suffx)'''
         try:
@@ -478,6 +482,10 @@ class Fastq(Fasta):
 
     def __eq__(self, other):
         return type(other) is type(self) and self.__dict__ == other.__dict__
+
+    def subseq(self, start, end):
+        '''Returns Fastq object with the same name, of the bases from start to end, but not including end'''
+        return Fastq(self.id, self.seq[start:end], self.qual[start:end])
 
     def get_next_from_file(self, f, read_quals=False):
         if f in previous_lines:
