@@ -10,6 +10,12 @@ def run(description):
     parser.add_argument('--regex', help='If given, only reads with a name matching the regular expression will be kept')
     parser.add_argument('--ids_file', help='If given, only reads whose ID is in th given file will be used. One ID per line of file.', metavar='FILENAME')
     parser.add_argument('-v', '--invert', action='store_true', help='Only keep sequences that do not match the filters')
+
+    mate_group = parser.add_argument_group('Mate file for read pairs options')
+    mate_group.add_argument('--mate_in', help='Name of mates input file. If used, must also provide --mate_out', metavar='FILENAME')
+    mate_group.add_argument('--mate_out', help='Name of mates output file', metavar='FILENAME')
+    mate_group.add_argument('--both_mates_pass', action='store_true', help='By default, if either mate passes filter, then both reads output. Use this flag to require that both reads of a pair pass the filter')
+
     parser.add_argument('infile', help='Name of input file to be filtered')
     parser.add_argument('outfile', help='Name of output file')
     options = parser.parse_args()
@@ -19,5 +25,8 @@ def run(description):
                  maxlength=options.max_length,
                  regex=options.regex,
                  ids_file=options.ids_file,
-                 invert=options.invert
+                 invert=options.invert,
+                 mate_in=options.mate_in,
+                 mate_out=options.mate_out,
+                 both_mates_pass=options.both_mates_pass,
     )

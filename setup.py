@@ -12,7 +12,7 @@ except ImportError:
 
 setup(
     name='pyfastaq',
-    version='3.1.1',
+    version='3.2.0',
     description='Script to manipulate FASTA and FASTQ files, plus API for developers',
     packages = find_packages(),
     author='Martin Hunt',
