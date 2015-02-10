@@ -177,6 +177,36 @@ class TestFilter(unittest.TestCase):
         os.unlink(outfile)
 
 
+    def test_paired_both_pass(self):
+        '''Test filter with paired file both pass'''
+        infile1 = os.path.join(data_dir, 'tasks_test_filter_paired_both_pass.in_1.fa')
+        infile2 = os.path.join(data_dir, 'tasks_test_filter_paired_both_pass.in_2.fa')
+        outfile1 = 'tmp.filter_both_pass_1.fa'
+        outfile2 = 'tmp.filter_both_pass_2.fa'
+        expected1 = os.path.join(data_dir, 'tasks_test_filter_paired_both_pass.out_1.fa')
+        expected2 = os.path.join(data_dir, 'tasks_test_filter_paired_both_pass.out_2.fa')
+        tasks.filter(infile1, outfile1, mate_in=infile2, mate_out=outfile2, minlength=3)
+        self.assertTrue(filecmp.cmp(outfile1, expected1, shallow=False))
+        self.assertTrue(filecmp.cmp(outfile2, expected2, shallow=False))
+        os.unlink(outfile1)
+        os.unlink(outfile2)
+
+
+    def test_paired_one_pass(self):
+        '''Test filter with paired file one pass'''
+        infile1 = os.path.join(data_dir, 'tasks_test_filter_paired_one_pass.in_1.fa')
+        infile2 = os.path.join(data_dir, 'tasks_test_filter_paired_one_pass.in_2.fa')
+        outfile1 = 'tmp.filter_one_pass_1.fa'
+        outfile2 = 'tmp.filter_one_pass_2.fa'
+        expected1 = os.path.join(data_dir, 'tasks_test_filter_paired_one_pass.out_1.fa')
+        expected2 = os.path.join(data_dir, 'tasks_test_filter_paired_one_pass.out_2.fa')
+        tasks.filter(infile1, outfile1, mate_in=infile2, mate_out=outfile2, both_mates_pass=False, minlength=3)
+        self.assertTrue(filecmp.cmp(outfile1, expected1, shallow=False))
+        self.assertTrue(filecmp.cmp(outfile2, expected2, shallow=False))
+        os.unlink(outfile1)
+        os.unlink(outfile2)
+
+
 class TestGetSeqsFlankingGaps(unittest.TestCase):
     def test_get_seqs_flanking_gaps(self):
         outfile = 'tmp.seqs_flanking_gaps'

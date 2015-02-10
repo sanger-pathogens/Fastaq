@@ -265,7 +265,19 @@ def file_to_dict(infile, d):
         d[seq.id] = copy.copy(seq)
 
 
-def filter(infile, outfile, minlength=0, maxlength=float('inf'), regex=None, ids_file=None, invert=False):
+def filter(
+      infile,
+      outfile,
+      minlength=0,
+      maxlength=float('inf'),
+      regex=None,
+      ids_file=None,
+      invert=False,
+      mate_in=None,
+      mate_out=None,
+      both_mates_pass=True,
+    ):
+
     ids_from_file = set()
     if ids_file is not None:
         f = utils.open_file_read(ids_file)
@@ -273,19 +285,44 @@ def filter(infile, outfile, minlength=0, maxlength=float('inf'), regex=None, ids
             ids_from_file.add(line.rstrip())
         utils.close(f)
 
+    if mate_in:
+        if mate_out is None:
+            raise Error('Error in filter! mate_in provided. Must also provide mate_out')
+
+        seq_reader_mate = sequences.file_reader(mate_in)
+        f_out_mate = utils.open_file_write(mate_out)
+
     seq_reader = sequences.file_reader(infile)
     f_out = utils.open_file_write(outfile)
     if regex is not None:
         r = re.compile(regex)
 
-    for seq in seq_reader:
-        hit = minlength <= len(seq) <= maxlength \
+
+    def passes(seq):
+        return minlength <= len(seq) <= maxlength \
               and (regex is None or r.search(seq.id) is not None) \
               and (ids_file is None or seq.id in ids_from_file)
 
-        if hit != invert:
+    for seq in seq_reader:
+        seq_passes = passes(seq)
+        if mate_in:
+            try:
+                seq_mate = next(seq_reader_mate)
+            except:
+                utils.close(f_out)
+                raise Error('Error getting mate for sequence', seq.id, ' ... cannot continue')
+
+            mate_passes = passes(seq_mate)
+            want_the_pair = (seq_passes and mate_passes) \
+                            or (( seq_passes or mate_passes) and not both_mates_pass)
+            if want_the_pair != invert:
+                print(seq, file=f_out)
+                print(seq_mate, file=f_out_mate)
+        elif seq_passes != invert:
             print(seq, file=f_out)
     utils.close(f_out)
+    if mate_in:
+        utils.close(f_out_mate)
 
 
 def get_ids(infile, outfile):
