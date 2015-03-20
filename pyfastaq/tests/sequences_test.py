@@ -237,14 +237,28 @@ class TestFasta(unittest.TestCase):
             (sequences.Fasta('ID', 'TTT'), False),
             (sequences.Fasta('ID', 'TTTTAA'), True),
             (sequences.Fasta('ID', 'TTTTAATAA'), False),
+            (sequences.Fasta('ID', 'TTGTAA'), True),
             (sequences.Fasta('ID', 'TTTAAC'), True),
             (sequences.Fasta('ID', 'TGA'), False),
             (sequences.Fasta('ID', 'TGAA'), False),
         ]
 
         for t in tests:
-            print(t[0].seq, t[0].is_complete_orf())
             self.assertEqual(t[0].is_complete_orf(), t[1])
+
+
+    def test_looks_like_gene(self):
+        '''Test looks_like_gene'''
+        tests = [
+            (sequences.Fasta('ID', 'TTT'), False),
+            (sequences.Fasta('ID', 'TTGTAA'), True),
+            (sequences.Fasta('ID', 'TTGTTTTAA'), True),
+            (sequences.Fasta('ID', 'TTGTAATTTTAA'), False),
+            (sequences.Fasta('ID', 'TTGTTTTGAA'), False),
+        ]
+
+        for t in tests:
+            self.assertEqual(t[0].looks_like_gene(), t[1])
 
 
     def test_is_all_Ns(self):
