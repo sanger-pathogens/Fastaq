@@ -1,4 +1,6 @@
+# see http://www.ncbi.nlm.nih.gov/Taxonomy/Utils/wprintgc.cgi
 codes = {}
+starts = {}
 
 #standard genetic code
 codes[1] = {
@@ -68,6 +70,11 @@ codes[1] = {
     'GGG': 'G',
 }
 
+starts[1] = set([
+    'TTG',
+    'CTG',
+    'ATG',
+])
 
 #mycoplasma genetic code
 codes[4] = {
@@ -137,3 +144,27 @@ codes[4] = {
     'GGG': 'G'
 } 
 
+starts[4] = set([
+    'TTA',
+    'TTG',
+    'CTG',
+    'ATT',
+    'ATC',
+    'ATA',
+    'ATG',
+    'GTG',
+])
+
+
+# Bacterial, Archaeal and Plant Plastid Code
+codes[11] = codes[1]
+
+starts[11] = set([
+    'TTG',
+    'CTG',
+    'ATT',
+    'ATC',
+    'ATA',
+    'ATG',
+    'GTG',
+])
