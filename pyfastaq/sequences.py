@@ -14,8 +14,7 @@ class Error (Exception): pass
 # of the file, for any given filehandle
 previous_lines = {}
 
-
-codon2aa = genetic_codes.codes[1]
+genetic_code = 1
 
 redundant_nts = {
     'R': ('A', 'G'),
@@ -322,6 +321,25 @@ class Fasta:
 
         return sorted(orfs, key=lambda t:t[0])
 
+
+    def is_complete_orf(self):
+        '''Returns true iff length is >= 6, is a multiple of 3, and there is exactly one stop codon in the sequence and it is at the end'''
+        if len(self) %3 != 0 or len(self) < 6:
+            return False
+
+        orfs = self.orfs()
+        complete_orf = intervals.Interval(0, len(self) - 1)
+        for orf in orfs:
+            if orf == complete_orf:
+                return True
+        return False
+
+
+    def looks_like_gene(self, translation_table=1):
+        '''Returns true iff: length >=6, length is a multiple of 3, first codon is start, last codon is a stop and has no other stop codons'''
+        return self.is_complete_orf() and len(self) >= 6 and len(self) %3 == 0 and self.seq[0:3] in genetic_codes.starts[genetic_code]
+        
+
     # Fills the object with the next sequence in the file. Returns
     # True if this was successful, False if no more sequences in the file.
     # If reading a file of quality scores, set read_quals = True
@@ -409,7 +427,7 @@ class Fasta:
 
     def translate(self, frame=0):
         '''Returns a Fasta sequence, translated into amino acids. Starts translating from 'frame', where frame expected to be 0,1 or 2'''
-        return Fasta(self.id, ''.join([codon2aa.get(self.seq[x:x+3].upper(), 'X') for x in range(frame, len(self)-1-frame, 3)]))
+        return Fasta(self.id, ''.join([genetic_codes.codes[genetic_code].get(self.seq[x:x+3].upper(), 'X') for x in range(frame, len(self)-1-frame, 3)]))
 
 
 class Embl(Fasta):
