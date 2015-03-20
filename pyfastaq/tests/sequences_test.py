@@ -231,6 +231,22 @@ class TestFasta(unittest.TestCase):
             self.assertEqual(orfs[i][1], expected[i][1])
 
 
+    def test_is_complete_orf(self):
+        '''Test is_complete_orf'''
+        tests = [
+            (sequences.Fasta('ID', 'TTT'), False),
+            (sequences.Fasta('ID', 'TTTTAA'), True),
+            (sequences.Fasta('ID', 'TTTTAATAA'), False),
+            (sequences.Fasta('ID', 'TTTAAC'), True),
+            (sequences.Fasta('ID', 'TGA'), False),
+            (sequences.Fasta('ID', 'TGAA'), False),
+        ]
+
+        for t in tests:
+            print(t[0].seq, t[0].is_complete_orf())
+            self.assertEqual(t[0].is_complete_orf(), t[1])
+
+
     def test_is_all_Ns(self):
         '''Test is_all_Ns()'''
         self.assertTrue(sequences.Fasta('ID', 'n').is_all_Ns())
