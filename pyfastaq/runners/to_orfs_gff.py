@@ -9,4 +9,4 @@ def run(description):
     parser.add_argument('infile', help='Name of input file')
     parser.add_argument('outfile', help='Name of output GFF file')
     options = parser.parse_args()
-    tasks.fastaq_to_orfs_gff(options.infile, options.gff_out, min_length=options.min_length)
+    tasks.fastaq_to_orfs_gff(options.infile, options.outfile, min_length=options.min_length)
