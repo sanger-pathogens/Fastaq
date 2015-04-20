@@ -357,6 +357,29 @@ class TestSequenceTrim(unittest.TestCase):
         os.unlink(tmp2)
 
 
+class ToFastg(unittest.TestCase):
+    def test_to_fastg_ids_set(self):
+        '''Test to_fastg when ids are a set'''
+        infile = os.path.join(data_dir, 'tasks_test_to_fastg.fasta')
+        tmpfile = 'tmp.to_fastg.fastg'
+        expected = os.path.join(data_dir, 'tasks_test_to_fastg.fastg')
+        ids = {'seq2'}
+        tasks.to_fastg(infile, tmpfile, circular=ids)
+        self.assertTrue(filecmp.cmp(expected, tmpfile, shallow=False))
+        os.unlink(tmpfile)
+
+
+    def test_to_fastg_ids_file(self):
+        '''Test to_fastg when ids in a file'''
+        infile = os.path.join(data_dir, 'tasks_test_to_fastg.fasta')
+        tmpfile = 'tmp.to_fastg.fastg'
+        expected = os.path.join(data_dir, 'tasks_test_to_fastg.fastg')
+        ids_file = os.path.join(data_dir, 'tasks_test_to_fastg.ids_to_circularise')
+        tasks.to_fastg(infile, tmpfile, circular=ids_file)
+        self.assertTrue(filecmp.cmp(expected, tmpfile, shallow=False))
+        os.unlink(tmpfile)
+
+
 class TestTranslate(unittest.TestCase):
     def test_translate(self):
         '''Test translate works in each frame'''
