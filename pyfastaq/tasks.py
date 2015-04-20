@@ -597,6 +597,35 @@ def sort_by_size(infile, outfile, smallest_first=False):
     utils.close(fout)
 
 
+def to_fastg(infile, outfile, circular=None):
+    '''Writes a FASTG file from input file. Currently only whether or not a sequence is circular is supported. Put circular=set of ids, or circular=filename to make those sequences circular in the output'''
+    if circular is None:
+        to_circularise = set()
+    elif type(circular) is not set:
+        f = utils.open_file_read(circular)
+        to_circularise = set([x.rstrip() for x in f.readlines()])
+        utils.close(f)
+    else:
+        to_circularise = circular
+
+    seq_reader = sequences.file_reader(infile)
+    fout = utils.open_file_write(outfile)
+
+    for seq in seq_reader:
+        if seq.id in to_circularise:
+            original_id = seq.id
+            seq.id = original_id + ':' + original_id + ';'
+            print(seq, file=fout)
+            seq.revcomp()
+            seq.id = original_id + "':" + original_id + "';"
+            print(seq, file=fout)
+        else:
+            seq.id += ';'
+            print(seq, file=fout)
+
+    utils.close(fout)
+
+
 def translate(infile, outfile, frame=0):
     seq_reader = sequences.file_reader(infile)
     fout = utils.open_file_write(outfile)

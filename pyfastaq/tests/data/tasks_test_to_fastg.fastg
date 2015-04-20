@@ -1,0 +1,6 @@
+>seq1;
+ACGT
+>seq2:seq2;
+ACCG
+>seq2':seq2';
+CGGT
