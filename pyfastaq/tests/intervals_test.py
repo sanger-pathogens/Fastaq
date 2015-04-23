@@ -32,6 +32,16 @@ class TestIntervals(unittest.TestCase):
         self.assertEqual(len(intervals.Interval(1,1)), 1)
         self.assertEqual(len(intervals.Interval(10,20)), 11)
 
+    def test_distance_to_point(self):
+        '''Test distance_to_point'''
+        self.assertEqual(0, intervals.Interval(42, 50).distance_to_point(42))
+        self.assertEqual(0, intervals.Interval(42, 50).distance_to_point(44))
+        self.assertEqual(0, intervals.Interval(42, 50).distance_to_point(50))
+        self.assertEqual(1, intervals.Interval(42, 50).distance_to_point(41))
+        self.assertEqual(1, intervals.Interval(42, 50).distance_to_point(51))
+        self.assertEqual(5, intervals.Interval(42, 50).distance_to_point(55))
+        self.assertEqual(5, intervals.Interval(42, 50).distance_to_point(37))
+
     def test_intersects(self):
         '''Intersection of two intervals should do the right thing'''
         a = intervals.Interval(5, 10)
