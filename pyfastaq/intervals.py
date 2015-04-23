@@ -31,6 +31,13 @@ class Interval:
     def __le__(self, i):
         return self.start < i.start or (self.start == i.start and self.end <= i.end)
 
+    def distance_to_point(self, p):
+        '''Returns the distance from the point to the interval. Zero if the point lies inside the interval.'''
+        if self.start <= p <= self.end:
+            return 0
+        else:
+            return min(abs(self.start - p), abs(self.end - p))
+
     def intersects(self, i):
         '''Returns true iff this interval intersects the interval i'''
         return self.start <= i.end and i.start <= self.end
