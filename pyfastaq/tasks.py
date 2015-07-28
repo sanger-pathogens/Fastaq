@@ -821,15 +821,20 @@ def strip_illumina_suffix(infile, outfile):
     utils.close(f_out)
 
 
-def to_fasta(infile, outfile, line_length=60, strip_after_first_whitespace=False):
+def to_fasta(infile, outfile, line_length=60, strip_after_first_whitespace=False, check_unique=False):
     seq_reader = sequences.file_reader(infile)
     f_out = utils.open_file_write(outfile)
     original_line_length = sequences.Fasta.line_length
     sequences.Fasta.line_length = line_length
+    if check_unique:
+        used_names = {} 
 
     for seq in seq_reader:
         if strip_after_first_whitespace:
             seq.strip_after_first_whitespace()
+
+        if check_unique:
+            used_names[seq.id] = used_names.get(seq.id, 0) + 1
 
         if type(seq) == sequences.Fastq:
             print(sequences.Fasta(seq.id, seq.seq), file=f_out)
@@ -838,6 +843,18 @@ def to_fasta(infile, outfile, line_length=60, strip_after_first_whitespace=False
 
     utils.close(f_out)
     sequences.Fasta.line_length = original_line_length
+
+    if check_unique:
+        all_unique = True
+
+        for name, count in used_names.items():
+            if count > 1:
+                print('Sequence name "' + name + '" not unique. Found', count, 'times', file=sys.stderr)
+                all_unique = False
+
+        if not all_unique:
+            raise Error('Not all sequence names unique. Cannot continue')
+    
 
 
 def to_fasta_union(infile, outfile, seqname='union'):
