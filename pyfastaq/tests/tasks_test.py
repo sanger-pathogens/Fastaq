@@ -567,6 +567,7 @@ class TestReplaceBases(unittest.TestCase):
         os.unlink(tmpfile)
 
 
+
 class TestSortBySize(unittest.TestCase):
     def test_sort_by_size(self):
         '''Test sort_by_size'''
@@ -615,6 +616,27 @@ class TestToFasta(unittest.TestCase):
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_strip_after_whitespace.fa.to_fasta'), tmpfile))
         os.unlink(tmpfile)
 
+    def test_to_fasta_strip_after_whitespace_non_unique(self):
+        '''Test strip_after_whitespace with non-unique names'''
+        tmpfile = 'tmp.strip_after_whitespace.fa'
+        infile = os.path.join(data_dir, 'sequences_test.to_fasta.strip_after_whitespace_non_unique.in.fa')
+        expected = os.path.join(data_dir, 'sequences_test.to_fasta.strip_after_whitespace_non_unique.out.fa')
+
+        with self.assertRaises(tasks.Error):
+            tasks.to_fasta(infile, tmpfile, strip_after_first_whitespace=True, check_unique=True)
+
+        tasks.to_fasta(infile, tmpfile, strip_after_first_whitespace=True, check_unique=False)
+        self.assertTrue(filecmp.cmp(tmpfile, expected, shallow=False))
+        os.unlink(tmpfile)
+
+    def test_to_fasta_strip_after_whitespace_unique(self):
+        '''Test strip_after_whitespace with unique names'''
+        tmpfile = 'tmp.strip_after_whitespace.fa'
+        infile = os.path.join(data_dir, 'sequences_test.to_fasta.strip_after_whitespace_unique.in.fa')
+        expected = os.path.join(data_dir, 'sequences_test.to_fasta.strip_after_whitespace_unique.out.fa')
+        tasks.to_fasta(infile, tmpfile, strip_after_first_whitespace=True, check_unique=True)
+        self.assertTrue(filecmp.cmp(tmpfile, expected, shallow=False))
+        os.unlink(tmpfile)
 
 class TestToUniqueByID(unittest.TestCase):
     def test_to_unique_by_id(self):
