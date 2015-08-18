@@ -1,18 +1,10 @@
-import os
 import glob
-import sys
 from setuptools import setup, find_packages
 
 
-try:
-    import numpy
-except ImportError:
-    print("Error! numpy for Python3 not found.\nPlease install it (e.g. apt-get install python3-numpy)", file=sys.stderr)
-    sys.exit(1)
-
 setup(
     name='pyfastaq',
-    version='3.6.0',
+    version='3.6.1',
     description='Script to manipulate FASTA and FASTQ files, plus API for developers',
     packages = find_packages(),
     author='Martin Hunt',
@@ -20,7 +12,8 @@ setup(
     url='https://github.com/sanger-pathogens/Fastaq',
     scripts=glob.glob('scripts/*'),
     test_suite='nose.collector',
-    install_requires=['nose >= 1.3'],
+    tests_require=['nose >= 1.3'],
+    install_requires=['numpy >= 1.7.1'],
     license='GPLv3',
     classifiers=[
         'Development Status :: 4 - Beta',
