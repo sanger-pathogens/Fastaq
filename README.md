@@ -6,10 +6,7 @@ Python3 script to manipulate FASTA and FASTQ (and other format) files, plus API 
 Installation
 ------------
 
-Dependencies:
-  * numpy (install with `apt-get install python3-numpy`)
-
-Install with pip:
+Install with pip3:
 
     pip3 install pyfastaq
 
