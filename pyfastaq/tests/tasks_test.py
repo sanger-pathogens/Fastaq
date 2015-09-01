@@ -589,6 +589,15 @@ class TestStripIlluminaSuffix(unittest.TestCase):
         os.unlink(tmpfile)
 
 
+class TestToBoulderio(unittest.TestCase):
+    def test_to_boulderio(self):
+        '''Test task to_boulderio'''
+        tmpfile = 'tmp.boulder'
+        tasks.to_boulderio(os.path.join(data_dir, 'tasks_test_to_boulderio.in.fa'), tmpfile)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'tasks_test_to_boulderio.out.boulder'), tmpfile, shallow=False))
+        os.unlink(tmpfile)
+
+
 class TestToFasta(unittest.TestCase):
     def test_to_fasta(self):
         '''Test to_fasta'''
