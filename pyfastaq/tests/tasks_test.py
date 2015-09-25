@@ -589,6 +589,37 @@ class TestStripIlluminaSuffix(unittest.TestCase):
         os.unlink(tmpfile)
 
 
+class TestStatsFromFai(unittest.TestCase):
+    def test_stats_from_fai_nonempty(self):
+        '''Test task stats_from_fai non-empty file'''
+        infile = os.path.join(data_dir, 'tasks_test_stats_from_fai.in.fai')
+        got = tasks.stats_from_fai(infile)
+        expected = {
+            'longest': 10,
+            'shortest': 1,
+            'N50': 4,
+            'mean': 4.2,
+            'number': 5,
+            'total_length': 21
+        }
+        self.assertEqual(expected, got)
+
+
+    def test_stats_from_fai_empty(self):
+        '''Test task stats_from_fai empty file'''
+        infile = os.path.join(data_dir, 'tasks_test_stats_from_fai.in.empty.fai')
+        got = tasks.stats_from_fai(infile)
+        expected = {
+            'longest': 0,
+            'shortest': 0,
+            'N50': 0,
+            'mean': 0,
+            'number': 0,
+            'total_length': 0
+        }
+        self.assertEqual(expected, got)
+
+
 class TestToBoulderio(unittest.TestCase):
     def test_to_boulderio(self):
         '''Test task to_boulderio'''
