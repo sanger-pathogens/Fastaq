@@ -435,6 +435,14 @@ class TestLengthsFromFai(unittest.TestCase):
             self.assertEqual(int(i), d[i])
 
 
+class TestLengthOffsetsFromFai(unittest.TestCase):
+    def test_length_offsets_from_fai(self):
+        '''Test length_offsets_from_fai'''
+        got = tasks.length_offsets_from_fai(os.path.join(data_dir, 'tasks_test_length_offsets_from_fai.fa.fai'))
+        expected = {'seq1': 0, 'seq2': 42, 'seq3': 43}
+        self.assertEqual(expected, got)
+
+
 class TestSplit(unittest.TestCase):
     def test_split_by_base_count(self):
         '''Check that fasta/q files get split by base count correctly'''

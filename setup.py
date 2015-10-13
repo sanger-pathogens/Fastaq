@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pyfastaq',
-    version='3.8.0',
+    version='3.9.0',
     description='Script to manipulate FASTA and FASTQ files, plus API for developers',
     packages = find_packages(),
     author='Martin Hunt',
