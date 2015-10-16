@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='pyfastaq',
-    version='3.9.0',
+    version='3.10.0',
     description='Script to manipulate FASTA and FASTQ files, plus API for developers',
     packages = find_packages(),
     author='Martin Hunt',
@@ -13,7 +13,6 @@ setup(
     scripts=glob.glob('scripts/*'),
     test_suite='nose.collector',
     tests_require=['nose >= 1.3'],
-    install_requires=['numpy >= 1.7.1'],
     license='GPLv3',
     classifiers=[
         'Development Status :: 4 - Beta',
