@@ -13,6 +13,7 @@ def run(description):
     parser.add_argument('read_step', type=int, help='Distance between start of each read')
     parser.add_argument('read_prefix', help='Prefix of read names')
     parser.add_argument('outfile', help='Name of output BAM file')
+    parser.add_argument('--qual_char', help='Character to use for quality score [%(default)s]', default='I')
     parser.add_argument('--read_group', help='Add the given read group ID to all reads [%(default)s]' ,default='42')
     options = parser.parse_args()
 
@@ -56,7 +57,7 @@ def run(description):
                     end  = len(seq) - 1
                     start = end - options.read_length + 1
 
-            read = sequences.Fastq(options.read_prefix + ':' + seq.id + ':' + str(start + 1) + ':' + str(end + 1), seq[start:end+1], 'I' * (end - start + 1))
+            read = sequences.Fastq(options.read_prefix + ':' + seq.id + ':' + str(start + 1) + ':' + str(end + 1), seq[start:end+1], options.qual_char * (end - start + 1))
 
             print ('\t'.join([read.id,
                              '0',

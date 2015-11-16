@@ -71,7 +71,6 @@ Available commands
 | get_ids               | Get the ID of each sequence                                          |
 | get_seq_flanking_gaps | Gets the sequences flanking gaps                                     |
 | interleave            | Interleaves two files, output is alternating between fwd/rev reads   |
-| long_read_simulate    | Simulates long reads from reference                                  |
 | make_random_contigs   | Make contigs of random sequence                                      |
 | merge                 | Converts multi sequence file to a single sequence                    |
 | replace_bases         | Replaces all occurences of one letter with another                   |
