@@ -224,6 +224,11 @@ class TestInterleave(unittest.TestCase):
                          tmp)
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_interleaved.fa'), tmp))
 
+        tasks.interleave(os.path.join(data_dir, 'sequences_test_deinterleaved_no_suffixes_1.fa'),
+                         os.path.join(data_dir, 'sequences_test_deinterleaved_no_suffixes_2.fa'),
+                         tmp, suffix1='/1', suffix2='/2')
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'sequences_test_interleaved_with_suffixes.fa'), tmp))
+
         with self.assertRaises(tasks.Error):
             tasks.interleave(os.path.join(data_dir, 'sequences_test_deinterleaved_bad_1.fa'),
                              os.path.join(data_dir, 'sequences_test_deinterleaved_bad_2.fa'),
