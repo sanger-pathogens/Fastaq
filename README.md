@@ -73,7 +73,7 @@ Available commands
 | interleave            | Interleaves two files, output is alternating between fwd/rev reads   |
 | make_random_contigs   | Make contigs of random sequence                                      |
 | merge                 | Converts multi sequence file to a single sequence                    |
-| replace_bases         | Replaces all occurences of one letter with another                   |
+| replace_bases         | Replaces all occurrences of one letter with another                  |
 | reverse_complement    | Reverse complement all sequences                                     |
 | scaffolds_to_contigs  | Creates a file of contigs from a file of scaffolds                   |
 | search_for_seq        | Find all exact matches to a string (and its reverse complement)      |

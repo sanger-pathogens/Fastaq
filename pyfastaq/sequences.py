@@ -248,7 +248,7 @@ class Fasta:
         self.seq = ''.join(new_seq)
 
     def replace_bases(self, old, new):
-        '''Replaces all occurences of 'old' with 'new' '''
+        '''Replaces all occurrences of 'old' with 'new' '''
         self.seq = self.seq.replace(old, new)
 
     def replace_interval(self, start, end, new):
@@ -399,7 +399,7 @@ class Fasta:
         return Fastq(self.id, self.seq, ''.join([chr(max(0, min(x, 93)) + 33) for x in qual_scores]))
 
     def search(self, search_string):
-        '''Finds every occurence (including overlapping ones) of the search_string, including on the reverse strand. Returns a list where each element is a tuple (position, strand) where strand is in ['-', '+']. Positions are zero-based'''
+        '''Finds every occurrence (including overlapping ones) of the search_string, including on the reverse strand. Returns a list where each element is a tuple (position, strand) where strand is in ['-', '+']. Positions are zero-based'''
         seq = self.seq.upper()
         search_string = search_string.upper()
         pos = 0
