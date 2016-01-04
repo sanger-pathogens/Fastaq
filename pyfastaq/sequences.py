@@ -288,9 +288,11 @@ class Fasta:
         return [intervals.Interval(coords[i], coords[i+1]) for i in range(0, len(coords)-1,2)]
 
 
-
-
     def orfs(self, frame=0, revcomp=False):
+        '''Returns a list of ORFs that the sequence has, starting on the given
+           frame. Each returned ORF is an interval.Interval object.
+           If revomp=True, then finds the ORFs of the reverse complement
+           of the sequence.'''
         assert frame in [0,1,2]
         if revcomp:
             self.revcomp()
@@ -314,6 +316,11 @@ class Fasta:
 
 
     def all_orfs(self, min_length=300):
+        '''Finds all open reading frames in the sequence, that are at least as
+           long as min_length. Includes ORFs on the reverse strand.
+           Returns a list of ORFs, where each element is a tuple:
+           (interval.Interval, bool)
+           where bool=True means on the reverse strand'''
         orfs = []
         for frame in [0,1,2]:
             for revcomp in [False, True]:
@@ -335,10 +342,13 @@ class Fasta:
         return False
 
 
-    def looks_like_gene(self, translation_table=1):
+    def looks_like_gene(self):
         '''Returns true iff: length >=6, length is a multiple of 3, first codon is start, last codon is a stop and has no other stop codons'''
-        return self.is_complete_orf() and len(self) >= 6 and len(self) %3 == 0 and self.seq[0:3] in genetic_codes.starts[genetic_code]
-        
+        return self.is_complete_orf() \
+          and len(self) >= 6 \
+          and len(self) %3 == 0 \
+          and self.seq[0:3].upper() in genetic_codes.starts[genetic_code]
+
 
     # Fills the object with the next sequence in the file. Returns
     # True if this was successful, False if no more sequences in the file.

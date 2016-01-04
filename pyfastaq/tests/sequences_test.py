@@ -252,6 +252,7 @@ class TestFasta(unittest.TestCase):
         tests = [
             (sequences.Fasta('ID', 'TTT'), False),
             (sequences.Fasta('ID', 'TTGTAA'), True),
+            (sequences.Fasta('ID', 'ttgTAA'), True),
             (sequences.Fasta('ID', 'TTGTTTTAA'), True),
             (sequences.Fasta('ID', 'TTGTAATTTTAA'), False),
             (sequences.Fasta('ID', 'TTGTTTTGAA'), False),
@@ -259,6 +260,11 @@ class TestFasta(unittest.TestCase):
 
         for t in tests:
             self.assertEqual(t[0].looks_like_gene(), t[1])
+
+        sequences.genetic_code = 1
+        self.assertFalse(sequences.Fasta('ID', 'ATTCAGTAA').looks_like_gene())
+        sequences.genetic_code = 11
+        self.assertTrue(sequences.Fasta('ID', 'ATTCAGTAA').looks_like_gene())
 
 
     def test_is_all_Ns(self):
