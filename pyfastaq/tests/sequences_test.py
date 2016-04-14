@@ -265,7 +265,89 @@ class TestFasta(unittest.TestCase):
         self.assertFalse(sequences.Fasta('ID', 'ATTCAGTAA').looks_like_gene())
         sequences.genetic_code = 11
         self.assertTrue(sequences.Fasta('ID', 'ATTCAGTAA').looks_like_gene())
+        sequences.genetic_code = 1
 
+
+    def test_make_into_gene_fasta(self):
+        '''Test make_into_gene fasta'''
+        print('sequences.genetic_code', sequences.genetic_code)
+        tests = [
+            (sequences.Fasta('ID', 'T'), None),
+            (sequences.Fasta('ID', 'TT'), None),
+            (sequences.Fasta('ID', 'TTT'), None),
+            (sequences.Fasta('ID', 'TTG'), None),
+            (sequences.Fasta('ID', 'TAA'), None),
+            (sequences.Fasta('ID', 'TTGAAATAA'), (sequences.Fasta('ID', 'TTGAAATAA'), '+', 0)),
+            (sequences.Fasta('ID', 'TTGAAATAT'), None),
+            (sequences.Fasta('ID', 'TTGTAA'), (sequences.Fasta('ID', 'TTGTAA'), '+', 0)),
+            (sequences.Fasta('ID', 'TTGTAAA'), (sequences.Fasta('ID', 'TTGTAA'), '+', 0)),
+            (sequences.Fasta('ID', 'TTGTAAAA'), (sequences.Fasta('ID', 'TTGTAA'), '+', 0)),
+            (sequences.Fasta('ID', 'TTGTAAAAA'), None),
+            (sequences.Fasta('ID', 'ATTGTAA'), (sequences.Fasta('ID', 'TTGTAA'), '+', 1)),
+            (sequences.Fasta('ID', 'ATTGTAAA'), (sequences.Fasta('ID', 'TTGTAA'), '+', 1)),
+            (sequences.Fasta('ID', 'ATTGTAAAA'), (sequences.Fasta('ID', 'TTGTAA'), '+', 1)),
+            (sequences.Fasta('ID', 'ATTGTAAAAA'), None),
+            (sequences.Fasta('ID', 'AATTGTAA'), (sequences.Fasta('ID', 'TTGTAA'), '+', 2)),
+            (sequences.Fasta('ID', 'AATTGTAAA'), (sequences.Fasta('ID', 'TTGTAA'), '+', 2)),
+            (sequences.Fasta('ID', 'AATTGTAAAA'), (sequences.Fasta('ID', 'TTGTAA'), '+', 2)),
+            (sequences.Fasta('ID', 'AATTGTAAAAA'), None),
+            (sequences.Fasta('ID', 'TTACAA'), (sequences.Fasta('ID', 'TTGTAA'), '-', 0)),
+            (sequences.Fasta('ID', 'ATTACAA'), (sequences.Fasta('ID', 'TTGTAA'), '-', 0)),
+            (sequences.Fasta('ID', 'AATTACAA'), (sequences.Fasta('ID', 'TTGTAA'), '-', 0)),
+            (sequences.Fasta('ID', 'AAATTACAA'), None),
+            (sequences.Fasta('ID', 'TTACAAA'), (sequences.Fasta('ID', 'TTGTAA'), '-', 1)),
+            (sequences.Fasta('ID', 'ATTACAAA'), (sequences.Fasta('ID', 'TTGTAA'), '-', 1)),
+            (sequences.Fasta('ID', 'AATTACAAA'), (sequences.Fasta('ID', 'TTGTAA'), '-', 1)),
+            (sequences.Fasta('ID', 'AAATTACAAA'), None),
+            (sequences.Fasta('ID', 'TTACAAAA'), (sequences.Fasta('ID', 'TTGTAA'), '-', 2)),
+            (sequences.Fasta('ID', 'ATTACAAAA'), (sequences.Fasta('ID', 'TTGTAA'), '-', 2)),
+            (sequences.Fasta('ID', 'AATTACAAAA'), (sequences.Fasta('ID', 'TTGTAA'), '-', 2)),
+            (sequences.Fasta('ID', 'AAATTACAAAA'), None),
+        ]
+
+        for seq, expected in tests:
+            self.assertEqual(seq.make_into_gene(), expected)
+
+
+    def test_make_into_gene_fastq(self):
+        '''Test make_into_gene fastq'''
+        print('sequences.genetic_code', sequences.genetic_code)
+        tests = [
+            (sequences.Fastq('ID', 'T', '1'), None),
+            (sequences.Fastq('ID', 'TT', '12'), None),
+            (sequences.Fastq('ID', 'TTT', '123'), None),
+            (sequences.Fastq('ID', 'TTG', '123'), None),
+            (sequences.Fastq('ID', 'TAA', '123'), None),
+            (sequences.Fastq('ID', 'TTGAAATAA', '123456789'), (sequences.Fastq('ID', 'TTGAAATAA', '123456789'), '+', 0)),
+            (sequences.Fastq('ID', 'TTGAAATAT', '123456789'), None),
+            (sequences.Fastq('ID', 'TTGTAA', '123456'), (sequences.Fastq('ID', 'TTGTAA', '123456'), '+', 0)),
+            (sequences.Fastq('ID', 'TTGTAAA', '1234567'), (sequences.Fastq('ID', 'TTGTAA', '123456'), '+', 0)),
+            (sequences.Fastq('ID', 'TTGTAAAA', '12345678'), (sequences.Fastq('ID', 'TTGTAA', '123456'), '+', 0)),
+            (sequences.Fastq('ID', 'TTGTAAAAA', '123456789'), None),
+            (sequences.Fastq('ID', 'ATTGTAA', '1234567'), (sequences.Fastq('ID', 'TTGTAA', '234567'), '+', 1)),
+            (sequences.Fastq('ID', 'ATTGTAAA', '12345678'), (sequences.Fastq('ID', 'TTGTAA', '234567'), '+', 1)),
+            (sequences.Fastq('ID', 'ATTGTAAAA', '123456789'), (sequences.Fastq('ID', 'TTGTAA', '234567'), '+', 1)),
+            (sequences.Fastq('ID', 'ATTGTAAAAA', '123456789A'), None),
+            (sequences.Fastq('ID', 'AATTGTAA', '12345678'), (sequences.Fastq('ID', 'TTGTAA', '345678'), '+', 2)),
+            (sequences.Fastq('ID', 'AATTGTAAA', '123456789'), (sequences.Fastq('ID', 'TTGTAA', '345678'), '+', 2)),
+            (sequences.Fastq('ID', 'AATTGTAAAA', '123456789A'), (sequences.Fastq('ID', 'TTGTAA', '345678'), '+', 2)),
+            (sequences.Fastq('ID', 'AATTGTAAAAA', '123456789AB'), None),
+            (sequences.Fastq('ID', 'TTACAA', '123456'), (sequences.Fastq('ID', 'TTGTAA', '654321'), '-', 0)),
+            (sequences.Fastq('ID', 'ATTACAA', '1234567'), (sequences.Fastq('ID', 'TTGTAA', '765432'), '-', 0)),
+            (sequences.Fastq('ID', 'AATTACAA', '12345678'), (sequences.Fastq('ID', 'TTGTAA', '876543'), '-', 0)),
+            (sequences.Fastq('ID', 'AAATTACAA', '123456789'), None),
+            (sequences.Fastq('ID', 'TTACAAA', '1234567'), (sequences.Fastq('ID', 'TTGTAA', '654321'), '-', 1)),
+            (sequences.Fastq('ID', 'ATTACAAA', '12345678'), (sequences.Fastq('ID', 'TTGTAA', '765432'), '-', 1)),
+            (sequences.Fastq('ID', 'AATTACAAA', '123456789'), (sequences.Fastq('ID', 'TTGTAA', '876543'), '-', 1)),
+            (sequences.Fastq('ID', 'AAATTACAAA', '123456789A'), None),
+            (sequences.Fastq('ID', 'TTACAAAA', '12345678'), (sequences.Fastq('ID', 'TTGTAA', '654321'), '-', 2)),
+            (sequences.Fastq('ID', 'ATTACAAAA', '123456789'), (sequences.Fastq('ID', 'TTGTAA', '765432'), '-', 2)),
+            (sequences.Fastq('ID', 'AATTACAAAA', '123456789A'), (sequences.Fastq('ID', 'TTGTAA', '876543'), '-', 2)),
+            (sequences.Fastq('ID', 'AAATTACAAAA', '123456789AB'), None),
+        ]
+
+        for seq, expected in tests:
+            self.assertEqual(seq.make_into_gene(), expected)
 
     def test_is_all_Ns(self):
         '''Test is_all_Ns()'''
