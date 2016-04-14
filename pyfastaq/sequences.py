@@ -1,3 +1,4 @@
+import copy
 import re
 import string
 import random
@@ -350,6 +351,25 @@ class Fasta:
           and self.seq[0:3].upper() in genetic_codes.starts[genetic_code]
 
 
+    def make_into_gene(self):
+        '''Tries to make into a gene sequence. Tries all three reading frames and both strands. Returns a tuple (new sequence, strand, frame) if it was successful. Otherwise returns None.'''
+        for reverse in [True, False]:
+            for frame in range(3):
+                new_seq = copy.copy(self)
+                if reverse:
+                    new_seq.revcomp()
+                new_seq.seq = new_seq[frame:]
+                if len(new_seq) % 3:
+                    new_seq.seq = new_seq.seq[:-(len(new_seq) % 3)]
+
+                new_aa_seq = new_seq.translate()
+                if len(new_aa_seq) >= 2 and new_seq[0:3] in genetic_codes.starts[genetic_code] and new_aa_seq[-1] == '*' and '*' not in new_aa_seq[:-1]:
+                    strand = '-' if reverse else '+'
+                    return new_seq, strand, frame
+
+        return None
+
+
     # Fills the object with the next sequence in the file. Returns
     # True if this was successful, False if no more sequences in the file.
     # If reading a file of quality scores, set read_quals = True
@@ -593,6 +613,20 @@ class Fastq(Fasta):
         '''Returns a Fasta sequence, translated into amino acids. Starts translating from 'frame', where frame expected to be 0,1 or 2'''
         fa = super().translate()
         return Fastq(fa.id, fa.seq, 'I'*len(fa.seq))
+
+    def make_into_gene(self):
+        got = super().make_into_gene()
+        if got is None:
+            return None
+        seq, strand, frame = got
+        new_seq = copy.copy(self)
+
+        if strand == '-':
+            new_seq.revcomp()
+
+        new_seq.seq = new_seq.seq[frame:frame + len(seq)]
+        new_seq.qual = new_seq.qual[frame:frame + len(seq)]
+        return new_seq, strand, frame
 
 
 def _orfs_from_aa_seq(seq):
