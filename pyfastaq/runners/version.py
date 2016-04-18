@@ -1,4 +1,4 @@
-from pyfastaq import common
+import pyfastaq
 
 def run(description):
-    print(common.version)
+    print(pyfastaq.__version__)
