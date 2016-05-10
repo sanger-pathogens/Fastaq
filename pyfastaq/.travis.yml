@@ -1,0 +1,10 @@
+language: python
+cache:
+  directories:
+  - "build"
+  - "$HOME/.cache/pip"
+python:
+  - "3.4"
+sudo: false
+script:
+  - "python setup.py test"
