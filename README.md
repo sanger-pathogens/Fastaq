@@ -12,7 +12,7 @@ Install with pip3:
 
 
 Alternatively, you can download the latest release from this github repository,
-or clone the repository. Then run the tests: 
+or clone the repository. Then run the tests:
 
     python3 setup.py test
 
@@ -25,7 +25,7 @@ Usage
 -----
 
 The installation will put a single script called `fastaq` in your path.
-The usage is: 
+The usage is:
 
     fastaq <command> [options]
 
@@ -109,3 +109,9 @@ Here is a template for counting the sequences in a FASTA or FASTQ file:
     print(count)
 
 Hopefully you get the idea and there are plenty of examples in tasks.py. Detection of the input file type and whether gzipped or not is automatic. See help(sequences) for the various methods already defined in the classes Fasta and Fastq.
+
+---------------------------------
+
+Build status: [![Build Status](https://travis-ci.org/sanger-pathogens/Fastaq.svg?branch=master)](https://travis-ci.org/sanger-pathogens/Fastaq)
+
+
