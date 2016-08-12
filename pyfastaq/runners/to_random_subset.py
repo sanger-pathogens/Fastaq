@@ -11,7 +11,7 @@ def run(description):
     parser.add_argument('--mate_file', help='Name of mates file')
     parser.add_argument('infile', help='Name of input file')
     parser.add_argument('outfile', help='Name of output file')
-    parser.add_argument('percent', type=int, help='Per cent probability of keeping any given read (pair) in [0,100]', metavar='INT')
+    parser.add_argument('percent', type=float, help='Per cent probability of keeping any given read (pair) in [0,100]', metavar='FLOAT')
     options = parser.parse_args()
 
     seq_reader = sequences.file_reader(options.infile)
@@ -27,7 +27,7 @@ def run(description):
             except StopIteration:
                 print('Error! Didn\'t get mate for read', seq.id, file=sys.stderr)
                 sys.exit(1)
-        if random.randint(0, 100) <= options.percent:
+        if 100 * random.random() <= options.percent:
             print(seq, file=fout)
             if options.mate_file:
                 print(mate_seq, file=fout)
