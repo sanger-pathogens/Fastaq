@@ -6,7 +6,7 @@ from pyfastaq import sequences, utils
 def run(description):
     parser = argparse.ArgumentParser(
         description = 'Takes a random subset of reads from a sequence file and optionally the corresponding read ' +
-                      'from a mates file.  Ouptut is interleaved if mates file given',
+                      'from a mates file.  Output is interleaved if mates file given',
         usage = 'fastaq to_random_subset [options] <infile> <outfile> <percent>')
     parser.add_argument('--mate_file', help='Name of mates file')
     parser.add_argument('infile', help='Name of input file')
