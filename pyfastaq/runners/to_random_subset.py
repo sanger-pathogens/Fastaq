@@ -9,11 +9,13 @@ def run(description):
                       'from a mates file.  Ouptut is interleaved if mates file given',
         usage = 'fastaq to_random_subset [options] <infile> <outfile> <percent>')
     parser.add_argument('--mate_file', help='Name of mates file')
+    parser.add_argument('--seed', help='Seed for random number generator. If not given, python\'s default is used', metavar='INT')
     parser.add_argument('infile', help='Name of input file')
     parser.add_argument('outfile', help='Name of output file')
     parser.add_argument('percent', type=float, help='Per cent probability of keeping any given read (pair) in [0,100]', metavar='FLOAT')
     options = parser.parse_args()
 
+    random.seed(a=options.seed)
     seq_reader = sequences.file_reader(options.infile)
     fout = utils.open_file_write(options.outfile)
 
