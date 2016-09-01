@@ -58,6 +58,7 @@ Available commands
 
 | Command               | Description                                                          |
 |-----------------------|----------------------------------------------------------------------|
+| acgtn_only            | Replace every non acgtnACGTN with an N                               |
 | add_indels            | Deletes or inserts bases at given position(s)                        |
 | caf_to_fastq          | Converts a CAF file to FASTQ format                                  |
 | capillary_to_pairs    | Converts file of capillary reads to paired and unpaired files        |
