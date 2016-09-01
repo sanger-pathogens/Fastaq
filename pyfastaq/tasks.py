@@ -6,6 +6,15 @@ from pyfastaq import sequences, utils, caf
 
 class Error (Exception): pass
 
+def acgtn_only(infile, outfile):
+    '''Replace every non-acgtn (case insensitve) character with an N'''
+    f = utils.open_file_write(outfile)
+    for seq in sequences.file_reader(infile):
+        seq.replace_non_acgt()
+        print(seq, file=f)
+    utils.close(f)
+
+
 def caf_to_fastq(infile, outfile, min_length=0, trim=False):
     '''Convert a CAF file to fastq. Reads shorter than min_length are not output. If clipping information is in the CAF file (with a line Clipping QUAL ...) and trim=True, then trim the reads'''
     caf_reader = caf.file_reader(infile)
@@ -355,7 +364,7 @@ def get_seqs_flanking_gaps(infile, outfile, left, right):
 
 
 def interleave(infile_1, infile_2, outfile, suffix1=None, suffix2=None):
-    '''Makes interleaved file from two sequence files. If used, will append suffix1 onto end 
+    '''Makes interleaved file from two sequence files. If used, will append suffix1 onto end
     of every sequence name in infile_1, unless it already ends with suffix1. Similar for sufffix2.'''
     seq_reader_1 = sequences.file_reader(infile_1)
     seq_reader_2 = sequences.file_reader(infile_2)
@@ -810,7 +819,7 @@ def stats_from_fai(infile):
         stats['total_length'] = sum(lengths)
         stats['mean'] = stats['total_length'] / len(lengths)
         stats['number'] = len(lengths)
- 
+
         cumulative_length = 0
         for length in lengths:
             cumulative_length += length
@@ -819,7 +828,7 @@ def stats_from_fai(infile):
                 break
     else:
         stats = {x: 0 for x in ('longest', 'shortest', 'mean', 'N50', 'total_length', 'number')}
-           
+
     return stats
 
 
@@ -842,7 +851,7 @@ def to_fasta(infile, outfile, line_length=60, strip_after_first_whitespace=False
     original_line_length = sequences.Fasta.line_length
     sequences.Fasta.line_length = line_length
     if check_unique:
-        used_names = {} 
+        used_names = {}
 
     for seq in seq_reader:
         if strip_after_first_whitespace:
@@ -869,7 +878,7 @@ def to_fasta(infile, outfile, line_length=60, strip_after_first_whitespace=False
 
         if not all_unique:
             raise Error('Not all sequence names unique. Cannot continue')
-    
+
 
 
 def to_fasta_union(infile, outfile, seqname='union'):
