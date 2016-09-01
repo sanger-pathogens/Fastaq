@@ -9,7 +9,7 @@ def run(description):
     parser.add_argument('--name_by_letters', action='store_true', help='Name the contigs A,B,C,... will start at A again if you get to Z')
     parser.add_argument('--prefix', help='Prefix to add to start of every sequence name', default='')
     parser.add_argument('--seed', type=int, help='Seed for random number generator. Default is to use python\'s default', default=None)
-    parser.add_argument('contigs', type=int, help='Nunber of contigs to make')
+    parser.add_argument('contigs', type=int, help='Number of contigs to make')
     parser.add_argument('length', type=int, help='Length of each contig')
     parser.add_argument('outfile', help='Name of output file')
     options = parser.parse_args()
