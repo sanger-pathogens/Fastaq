@@ -396,6 +396,20 @@ class TestFasta(unittest.TestCase):
         fa.replace_bases('U', 'T')
         self.assertEqual(fa, sequences.Fasta('X', 'ATCGTTTACT'))
 
+
+    def test_replace_non_acgt(self):
+        '''test replace_non_acgt'''
+        tests = [
+            ('acgtACGTnN', 'acgtACGTnN'),
+            ('abc.g-T?aRC1T', 'aNcNgNTNaNCNT')
+        ]
+
+        for seq, expected in tests:
+            fa = sequences.Fasta('id', seq)
+            fa.replace_non_acgt()
+            self.assertEqual(expected, fa.seq)
+
+
     def test_replace_interval(self):
         '''Test replace_interval()'''
         fa = sequences.Fasta('ID', 'ACGTA')

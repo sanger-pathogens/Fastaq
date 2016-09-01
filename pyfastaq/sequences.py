@@ -252,6 +252,12 @@ class Fasta:
         '''Replaces all occurrences of 'old' with 'new' '''
         self.seq = self.seq.replace(old, new)
 
+
+    def replace_non_acgt(self):
+        '''Replace all non acgt characters with an N (case insensitive)'''
+        self.seq = re.sub(r'''[^acgtACGTnN]''', 'N', self.seq)
+
+
     def replace_interval(self, start, end, new):
         '''Replaces the sequence from start to end with the sequence "new"'''
         if start > end or start > len(self) - 1 or end > len(self) - 1:
