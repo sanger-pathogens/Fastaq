@@ -4,6 +4,7 @@ import argparse
 import sys
 
 tasks = {
+    'acgtn_only':             'Replace every non acgtnACGTN with an N',
     'add_indels':             'Deletes or inserts bases at given position(s)',
     'caf_to_fastq':           'Converts a CAF file to FASTQ format',
     'capillary_to_pairs':     'Converts file of capillary reads to paired and unpaired files',
@@ -20,7 +21,7 @@ tasks = {
     'make_random_contigs':    'Make contigs of random sequence',
     'merge':                  'Converts multi sequence file to a single sequence',
     'replace_bases':          'Replaces all occurrences of one letter with another',
-    'reverse_complement':     'Reverse complement all sequences', 
+    'reverse_complement':     'Reverse complement all sequences',
     'scaffolds_to_contigs':   'Creates a file of contigs from a file of scaffolds',
     'search_for_seq':         'Find all exact matches to a string (and its reverse complement)',
     'sequence_trim':          'Trim exact matches to a given string off the start of every sequence',

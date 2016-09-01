@@ -11,6 +11,18 @@ data_dir = os.path.join(modules_dir, 'tests', 'data')
 
 class Error (Exception): pass
 
+
+class TestACGTN_only(unittest.TestCase):
+    def test_acgtn_only(self):
+        '''Test acgtn_only'''
+        tmpfile = 'tmp.test_acgtn_only.fa'
+        infile = os.path.join(data_dir, 'test_acgtn_only.in.fa')
+        expected = os.path.join(data_dir, 'test_acgtn_only.expected.fa')
+        tasks.acgtn_only(infile, tmpfile)
+        self.assertTrue(filecmp.cmp(expected, tmpfile, shallow=False))
+        os.unlink(tmpfile)
+
+
 class TestCafToFastq(unittest.TestCase):
     def test_caf_to_fastq_default(self):
         '''Test caf_to_fastq with no filtering'''
