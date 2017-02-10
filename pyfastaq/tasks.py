@@ -556,6 +556,18 @@ def sort_by_size(infile, outfile, smallest_first=False):
     utils.close(fout)
 
 
+def sort_by_name(infile, outfile):
+    '''Sorts input sequence file by sort -d -k1,1, writes sorted output file.'''
+    seqs = {}
+    file_to_dict(infile, seqs)
+    #seqs = list(seqs.values())
+    #seqs.sort()
+    fout = utils.open_file_write(outfile)
+    for name in sorted(seqs):
+        print(seqs[name], file=fout)
+    utils.close(fout)
+
+
 def to_fastg(infile, outfile, circular=None):
     '''Writes a FASTG file in SPAdes format from input file. Currently only whether or not a sequence is circular is supported. Put circular=set of ids, or circular=filename to make those sequences circular in the output. Puts coverage=1 on all contigs'''
     if circular is None:
