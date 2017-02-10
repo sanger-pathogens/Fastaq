@@ -595,6 +595,15 @@ class TestSortBySize(unittest.TestCase):
         self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'tasks_test_sort_by_size.out.rev.fa'), tmpfile, shallow=False))
         os.unlink(tmpfile)
 
+class TestSortByName(unittest.TestCase):
+    def test_sort_by_name(self):
+        '''Test sort_by_name'''
+        infile = os.path.join(data_dir, 'tasks_test_sort_by_name.in.fa')
+        tmpfile = 'tmp.sort_by_name.fa'
+        tasks.sort_by_name(infile, tmpfile)
+        self.assertTrue(filecmp.cmp(os.path.join(data_dir, 'tasks_test_sort_by_name.out.fa'), tmpfile, shallow=False))
+        os.unlink(tmpfile)
+
 
 class TestStripIlluminaSuffix(unittest.TestCase):
     def test_strip_illumina_suffix(self):
