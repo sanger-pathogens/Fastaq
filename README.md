@@ -79,6 +79,7 @@ Available commands
 | scaffolds_to_contigs  | Creates a file of contigs from a file of scaffolds                   |
 | search_for_seq        | Find all exact matches to a string (and its reverse complement)      |
 | sequence_trim         | Trim exact matches to a given string off the start of every sequence |
+| sort_by_name          | Sorts sequences in lexographical (name) order                        |
 | sort_by_size          | Sorts sequences in length order                                      |
 | split_by_base_count   | Split multi sequence file into separate files                        |
 | strip_illumina_suffix | Strips /1 or /2 off the end of every read name                       |
