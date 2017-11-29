@@ -4,11 +4,11 @@ from setuptools import setup, find_packages
 
 setup(
     name='pyfastaq',
-    version='3.15.0',
+    version='3.14.0',
     description='Script to manipulate FASTA and FASTQ files, plus API for developers',
     packages = find_packages(),
     author='Martin Hunt',
-    author_email='mh12@sanger.ac.uk',
+    author_email='path-help@sanger.ac.uk',
     url='https://github.com/sanger-pathogens/Fastaq',
     scripts=glob.glob('scripts/*'),
     test_suite='nose.collector',

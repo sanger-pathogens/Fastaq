@@ -306,13 +306,22 @@ def filter(
         r = re.compile(regex)
 
 
-    def passes(seq):
+    def passes(seq, name_regex):
+        # remove trailing comments from FASTQ readname lines
+        matches = name_regex.match(seq.id)
+        if matches is not None:
+            clean_seq_id = matches.group(1)
+        else:
+            clean_seq_id = seq.id
+        
         return minlength <= len(seq) <= maxlength \
-              and (regex is None or r.search(seq.id) is not None) \
-              and (ids_file is None or seq.id in ids_from_file)
-
+              and (regex is None or r.search(clean_seq_id) is not None) \
+              and (ids_file is None or clean_seq_id in ids_from_file)
+        
+    name_regex = re.compile(r'^([^\s]+).*?$')
+	
     for seq in seq_reader:
-        seq_passes = passes(seq)
+        seq_passes = passes(seq, name_regex)
         if mate_in:
             try:
                 seq_mate = next(seq_reader_mate)
@@ -320,7 +329,7 @@ def filter(
                 utils.close(f_out)
                 raise Error('Error getting mate for sequence', seq.id, ' ... cannot continue')
 
-            mate_passes = passes(seq_mate)
+            mate_passes = passes(seq_mate, name_regex)
             want_the_pair = (seq_passes and mate_passes) \
                             or (( seq_passes or mate_passes) and not both_mates_pass)
             if want_the_pair != invert:

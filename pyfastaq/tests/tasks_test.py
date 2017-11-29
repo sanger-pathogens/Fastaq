@@ -179,6 +179,14 @@ class TestFilter(unittest.TestCase):
         tasks.filter(infile, outfile, ids_file=infile + '.ids')
         self.assertTrue(filecmp.cmp(infile + '.filtered', outfile))
         os.unlink(outfile)
+		
+    def test_ids_with_comments_from_file_filter(self):
+        '''Test that can extract reads from a file of read names where the read names have extra data after space'''
+        infile = os.path.join(data_dir, 'readnames_with_comments.fastq')
+        outfile = 'tmp.ids_file_filter.fastq'
+        tasks.filter(infile, outfile, ids_file=infile + '.ids')
+        self.assertTrue(filecmp.cmp(infile + '.filtered', outfile))
+        os.unlink(outfile)
 
     def test_invert_filter(self):
         '''Test that inverting filtering works'''
@@ -723,4 +731,5 @@ class TestToFastaUnion(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
 
