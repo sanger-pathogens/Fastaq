@@ -520,6 +520,19 @@ class TestFasta(unittest.TestCase):
             fa = sequences.Fasta('name', 'A')
             fa.split_capillary_id()
 
+    def test_gc_content(self):
+        """Test GC content calculation works as expected"""
+        tests = [
+            (sequences.Fasta('ID', 'cgCG'), 1.0),
+            (sequences.Fasta('ID', 'tTaA'), 0.0),
+            (sequences.Fasta('ID', 'GCAT'), 0.5),
+            (sequences.Fasta('ID', 'GCATNN'), 0.5),
+            (sequences.Fasta('ID', 'GCATNNS'), 0.6),
+            (sequences.Fasta('ID', 'GCATNNSK'), 0.5)
+        ]
+        for test, answer in tests:
+            self.assertAlmostEqual(test.gc_content(), answer)
+            self.assertAlmostEqual(test.gc_content(as_decimal=False), answer * 100)
 
 class TestEmbl(unittest.TestCase):
     def test_get_id_from_header_line(self):
