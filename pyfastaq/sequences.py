@@ -470,7 +470,7 @@ class Fasta:
             This method ignores N when calculating the length of the sequence.
             It does not, however ignore other ambiguous bases. It also only
             includes the ambiguous base S (G or C). In this sense the method is
-            conservative with it's calculation.
+            conservative with its calculation.
 
         Args:
             as_decimal (bool): Return the result as a decimal. Setting to False
@@ -484,15 +484,17 @@ class Fasta:
         """
         gc_total = 0.0
         num_bases = 0.0
+        n_tuple = tuple('nN')
+        accepted_bases = tuple('cCgGsS')
 
         # counter sums all unique characters in sequence. Case insensitive.
         for base, count in Counter(self.seq).items():
 
             # dont count N in the number of bases
-            if base not in tuple('nN'):
+            if base not in n_tuple:
                 num_bases += count
 
-                if base in tuple('cCgGsS'):  # S is a G or C
+                if base in accepted_bases:  # S is a G or C
                     gc_total += count
 
         gc_content = gc_total / num_bases
