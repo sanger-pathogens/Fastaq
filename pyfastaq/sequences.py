@@ -151,7 +151,9 @@ class Fasta:
     '''Class to store and manipulate FASTA sequences. They have two things: a name and a sequence'''
     # this defines the line length when printing sequences
     line_length = 60
-
+    # cached translation object for reverse-complementation (with ambiguous codes)
+    _revcomp_trans = str.maketrans("ATCGatcgMRWSYKVHDBNmrwsykvhdbn", 
+            "TAGCtagcKYWSRMBDHVNkywsrmbdhvn")
     def _get_id_from_header_line(self, line):
         if line.startswith('>'):
             return line.rstrip()[1:]
@@ -214,7 +216,7 @@ class Fasta:
 
     def revcomp(self):
         '''Reverse complements the sequence'''
-        self.seq = self.seq.translate(str.maketrans("ATCGatcg", "TAGCtagc"))[::-1]
+        self.seq = self.seq.translate(self._revcomp_trans)[::-1]
 
     def is_all_Ns(self, start=0, end=None):
         '''Returns true if the sequence is all Ns (upper or lower case)'''
