@@ -52,7 +52,12 @@ def run(description):
             read_start1 = int(middle_pos - ceil(0.5 * isize))
             read_start2 = read_start1 + isize - options.readlength
 
-            readname = ':'.join([ref.id, str(pair_counter), str(read_start1+1), str(read_start2+1)])
+            if ' ' in ref.id:
+                readname = ':'.join([ref.id.split(' ')[0], str(pair_counter), str(read_start1+1), str(read_start2+1)])
+                description = ' '.join(ref.id.split(' ')[1:])
+            else:
+                readname = ':'.join([ref.id, str(pair_counter), str(read_start1+1), str(read_start2+1)])
+                description = ''
 
             fragment = (middle_pos, isize)
             if fragment in used_fragments:
@@ -61,8 +66,12 @@ def run(description):
             else:
                 used_fragments[fragment] = 1
 
-            read1 = sequences.Fastq(readname + '/1', ref.seq[read_start1:read_start1 + options.readlength], 'I' * options.readlength)
-            read2 = sequences.Fastq(readname + '/2', ref.seq[read_start2:read_start2 + options.readlength], 'I' * options.readlength)
+            if description:
+                read1 = sequences.Fastq(readname + '/1' + ' ' + description, ref.seq[read_start1:read_start1 + options.readlength], 'I' * options.readlength)
+                read2 = sequences.Fastq(readname + '/2' + ' ' + description, ref.seq[read_start2:read_start2 + options.readlength], 'I' * options.readlength)
+            else:
+                read1 = sequences.Fastq(readname + '/1', ref.seq[read_start1:read_start1 + options.readlength], 'I' * options.readlength)
+                read2 = sequences.Fastq(readname + '/2', ref.seq[read_start2:read_start2 + options.readlength], 'I' * options.readlength)
 
 
             if options.no_n and ('n' in read1.seq or 'N' in read1.seq or 'n' in read2.seq or 'N' in read2.seq):
