@@ -1,34 +1,55 @@
-Fastaq
-======
+# Fastaq
+Manipulate FASTA and FASTQ files
 
+[![Build Status](https://travis-ci.org/sanger-pathogens/Fastaq.svg?branch=master)](https://travis-ci.org/sanger-pathogens/Fastaq)   
+[![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-brightgreen.svg)](https://github.com/sanger-pathogens/Fastaq/blob/master/LICENSE)   
+
+## Contents
+  * [Introduction](#introduction)
+  * [Installation](#installation)
+    * [Using pip3](#using-pip3)
+    * [From source](#from-source)
+    * [Running the tests](#running-the-tests)
+  * [Usage](#usage)
+    * [Examples](#examples)
+    * [Available commands](#available-commands)
+    * [For developers](#for-developers)
+  * [License](#license)
+  * [Feedback/Issues](#feedbackissues)
+
+## Introduction
 Python3 script to manipulate FASTA and FASTQ (and other format) files, plus API for developers
 
-Installation
-------------
+## Installation
+There are a number of ways to install Fastaq and details are provided below. If you encounter an issue when installing Fastaq please contact your local system administrator. If you encounter a bug please log it [here](https://github.com/sanger-pathogens/Fastaq/issues) or email us at path-help@sanger.ac.uk.
 
-Install with pip3:
+### Using pip3
 
-    pip3 install pyfastaq
+`pip3 install pyfastaq`
 
+### From source
 
-Alternatively, you can download the latest release from this github repository,
-or clone the repository. Then run the tests:
+Download the latest release from this github repository or clone the repository. Then run the tests:
 
-    python3 setup.py test
+`python3 setup.py test`
 
 If the tests all pass, install:
 
-    python3 setup.py install
+`python3 setup.py install`
+
+### Running the tests
+
+The test can be run from the top level directory:  
+
+`python3 setup.py install`
 
 
-Usage
------
+## Usage
 
 The installation will put a single script called `fastaq` in your path.
 The usage is:
 
-    fastaq <command> [options]
-
+`fastaq <command> [options]`
 
 Key points:
  * To list the available commands and brief descriptions, just run `fastaq`
@@ -40,21 +61,18 @@ Key points:
  * Input and output files can be gzipped. An input file is assumed to be gzipped if its name ends with .gz. To gzip an output file, just name it with .gz at the end.
  * You can use a minus sign for a filename to use stdin or stdout, so commands can be piped together. See the example below.
 
-
-Examples
---------
+### Examples
 
 Reverse complement all sequences in a file:
 
-    fastaq reverse_complement in.fastq out.fastq
+`fastaq reverse_complement in.fastq out.fastq`
 
 Reverse complement all sequences in a gzipped file, then translate each sequence:
 
-    fastaq reverse_complement in.fastq.gz - | fastaq translate - out.fasta
+`fastaq reverse_complement in.fastq.gz - | fastaq translate - out.fasta`
 
 
-Available commands
-------------------
+### Available commands
 
 | Command               | Description                                                          |
 |-----------------------|----------------------------------------------------------------------|
@@ -98,22 +116,21 @@ Available commands
 | version               | Print version number and exit                                        |
 
 
-For developers
---------------
+### For developers
 
 Here is a template for counting the sequences in a FASTA or FASTQ file:
-
-    from pyfastaq import sequences
-    seq_reader = sequences.file_reader(infile)
-    count = 0
-    for seq in seq_reader:
-        count += 1
-    print(count)
-
+```
+from pyfastaq import sequences
+seq_reader = sequences.file_reader(infile)
+count = 0
+for seq in seq_reader:
+    count += 1
+print(count)
+```
 Hopefully you get the idea and there are plenty of examples in tasks.py. Detection of the input file type and whether gzipped or not is automatic. See help(sequences) for the various methods already defined in the classes Fasta and Fastq.
 
----------------------------------
+## License
+Fastaq is free software, licensed under [GPLv3](https://github.com/sanger-pathogens/Fastaq/blob/master/LICENSE).
 
-Build status: [![Build Status](https://travis-ci.org/sanger-pathogens/Fastaq.svg?branch=master)](https://travis-ci.org/sanger-pathogens/Fastaq)
-
-
+## Feedback/Issues
+Please report any issues to the [issues page](https://github.com/sanger-pathogens/Fastaq/issues) or email path-help@sanger.ac.uk.
