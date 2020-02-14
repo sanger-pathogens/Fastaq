@@ -7,8 +7,7 @@ ARG   BUILD_DIR=/opt/fastaq
 RUN   apt-get update && \
       apt-get install --yes apt-utils && \
       apt-get --yes upgrade && \
-      apt-get install --yes apt-utils && \
-      apt-get install --yes python3 python3-pip
+      apt-get install --yes python3 python3-pip samtools
 
 RUN   apt-get install -y locales && \
       sed -i -e 's/# \(en_GB\.UTF-8 .*\)/\1/' /etc/locale.gen && \
