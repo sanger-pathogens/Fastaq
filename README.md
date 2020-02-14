@@ -23,6 +23,9 @@ Python3 script to manipulate FASTA and FASTQ (and other format) files, plus API 
 ## Installation
 There are a number of ways to install Fastaq and details are provided below. If you encounter an issue when installing Fastaq please contact your local system administrator. If you encounter a bug please log it [here](https://github.com/sanger-pathogens/Fastaq/issues) or email us at path-help@sanger.ac.uk.
 
+### Dependencies
+  * samtools
+
 ### Using pip3
 
 `pip3 install pyfastaq`
@@ -41,7 +44,7 @@ If the tests all pass, install:
 
 The test can be run from the top level directory:  
 
-`python3 setup.py install`
+`python3 setup.py test`
 
 
 ## Usage
