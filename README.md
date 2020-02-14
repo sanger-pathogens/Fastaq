@@ -25,6 +25,8 @@ There are a number of ways to install Fastaq and details are provided below. If 
 
 ### Dependencies
   * samtools
+  * gzip
+  * gunzip
 
 ### Using pip3
 
