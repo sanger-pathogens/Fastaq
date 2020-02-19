@@ -46,7 +46,7 @@ The test can be run from the top level directory:
 ### Runtime dependencies
 
 These must be available in your path at run time:
-  * samtools
+  * samtools 0.1.19
   * gzip
   * gunzip
 
