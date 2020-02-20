@@ -10,6 +10,7 @@ def run(description):
     parser.add_argument('--regex', help='If given, only reads with a name matching the regular expression will be kept')
     parser.add_argument('--ids_file', help='If given, only reads whose ID is in th given file will be used. One ID per line of file.', metavar='FILENAME')
     parser.add_argument('-v', '--invert', action='store_true', help='Only keep sequences that do not match the filters')
+    parser.add_argument('--check_comments', action='store_true', help='Search the header comments also for the given regex. Can only be specified with --regex')
 
     mate_group = parser.add_argument_group('Mate file for read pairs options')
     mate_group.add_argument('--mate_in', help='Name of mates input file. If used, must also provide --mate_out', metavar='FILENAME')
@@ -29,4 +30,5 @@ def run(description):
                  mate_in=options.mate_in,
                  mate_out=options.mate_out,
                  both_mates_pass=options.both_mates_pass,
+                 check_comments=options.check_comments,
     )
