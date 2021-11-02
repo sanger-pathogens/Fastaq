@@ -6,6 +6,11 @@ from pyfastaq import sequences, utils, caf
 
 class Error (Exception): pass
 
+
+class IncompatibleParametersError(Exception):
+    pass
+
+
 def acgtn_only(infile, outfile):
     '''Replace every non-acgtn (case insensitve) character with an N'''
     f = utils.open_file_write(outfile)
@@ -284,7 +289,12 @@ def filter(
       mate_in=None,
       mate_out=None,
       both_mates_pass=True,
+      check_comments=False
     ):
+    if check_comments and not regex:
+        raise IncompatibleParametersError(
+            "--check_comments can only be passed with --regex"
+        )
 
     ids_from_file = set()
     if ids_file is not None:
@@ -309,7 +319,7 @@ def filter(
     def passes(seq, name_regex):
         # remove trailing comments from FASTQ readname lines
         matches = name_regex.match(seq.id)
-        if matches is not None:
+        if matches is not None and not check_comments:
             clean_seq_id = matches.group(1)
         else:
             clean_seq_id = seq.id

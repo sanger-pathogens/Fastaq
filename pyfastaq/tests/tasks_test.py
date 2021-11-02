@@ -3,6 +3,7 @@
 import sys
 import filecmp
 import os
+import tempfile
 import unittest
 from pyfastaq import tasks, sequences
 
@@ -171,6 +172,25 @@ class TestFilter(unittest.TestCase):
             tasks.filter(infile, outfile, regex=regexes[i])
             self.assertTrue(filecmp.cmp(correct_files[i], outfile))
             os.unlink(outfile)
+
+    def test_regex_check_comments_filter(self):
+        '''When check_comments is true, and the regex is in the comment'''
+        infile = tempfile.NamedTemporaryFile(suffix=".fa", mode="w+")
+        infile.write(
+            ">read1 foo=bar\nAGCT\n>read2 bar=foo\nGGG\n>read3\nGGGG\n>read4 foo=ba\n"
+            "GCA\n>read5foo=bar\nGCAT"
+        )
+        infile.seek(0)
+        regex = '\sfoo=bar'
+        outfile = tempfile.NamedTemporaryFile(suffix=".fa", mode="w+")
+
+        tasks.filter(infile.name, outfile.name, regex=regex, check_comments=True)
+        with open(outfile.name) as handle:
+            actual = handle.read()
+
+        expected = ">read1 foo=bar\nAGCT\n"
+
+        self.assertEqual(actual, expected)
 
     def test_ids_from_file_filter(self):
         '''Test that can extract reads from a file of read names'''
