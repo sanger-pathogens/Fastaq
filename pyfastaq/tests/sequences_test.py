@@ -125,6 +125,12 @@ class TestFasta(unittest.TestCase):
         fa.revcomp()
         self.assertEqual(fa, sequences.Fasta('ID', 'nacgtNACGT'))
 
+    def test_revcomp_ambig(self):
+        '''revcomp() should correctly reverse complement a sequence with ambiguous bases'''
+        fa = sequences.Fasta('ID', 'ACTGMRWSYKVHDBNmrwsykvhdbn')
+        fa.revcomp()
+        self.assertEqual(fa, sequences.Fasta('ID', 'nvhdbmrswykNVHDBMRSWYKCAGT'))
+    
     def test_gaps(self):
         '''gaps() should find the gaps in a sequence correctly'''
         test_seqs = [sequences.Fasta('ID', 'ACGT'),
