@@ -34,8 +34,8 @@ def file_reader(fname, read_quals=False):
     '''Iterates over a FASTA or FASTQ file, yielding the next sequence in the file until there are no more sequences'''
     f = utils.open_file_read(fname)
     line = f.readline()
-    phylip_regex = re.compile('^\s*[0-9]+\s+[0-9]+$')
-    gbk_regex = re.compile('^LOCUS\s+\S')
+    phylip_regex = re.compile(r'^\s*[0-9]+\s+[0-9]+$')
+    gbk_regex = re.compile(r'^LOCUS\s+\S')
 
     if line.startswith('>'):
         seq = Fasta()
