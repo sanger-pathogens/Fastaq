@@ -1,0 +1,8 @@
+name: fastaq
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - python 3.12
+  - hatch
+  - pytest

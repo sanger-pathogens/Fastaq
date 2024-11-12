@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 import argparse
 import sys
 
@@ -57,16 +55,20 @@ def print_usage_and_exit():
     sys.exit(1)
 
 
-if len(sys.argv) == 1 or sys.argv[1] in ['-h', '-help', '--help']:
-    print_usage_and_exit()
+def main():
+    if len(sys.argv) == 1 or sys.argv[1] in ['-h', '-help', '--help']:
+        print_usage_and_exit()
 
-task = sys.argv.pop(1)
+    task = sys.argv.pop(1)
 
-if task not in tasks:
-    print('Task "' + task + '" not recognised. Cannot continue.\n', file=sys.stderr)
-    print_usage_and_exit()
+    if task not in tasks:
+        print('Task "' + task + '" not recognised. Cannot continue.\n', file=sys.stderr)
+        print_usage_and_exit()
 
 
-exec('import pyfastaq.runners.' + task)
-exec('pyfastaq.runners.' + task + '.run("' + tasks[task] + '")')
+    exec('import pyfastaq.runners.' + task)
+    exec('pyfastaq.runners.' + task + '.run("' + tasks[task] + '")')
 
+
+if __name__ == "__main__":
+    main()

@@ -1,11 +1,9 @@
-#!/usr/bin/env python3
-
 import os
 import unittest
+
 from pyfastaq import caf, utils, sequences
 
-modules_dir = os.path.dirname(os.path.abspath(caf.__file__))
-data_dir = os.path.join(modules_dir, 'tests', 'data')
+data_dir = "tests/data"
 
 class TestCaf(unittest.TestCase):
     def test_get_next_from_file(self):

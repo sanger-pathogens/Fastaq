@@ -1,13 +1,11 @@
-#!/usr/bin/env python3
-
-import sys
 import filecmp
 import os
+import sys
 import unittest
+
 from pyfastaq import sequences, utils, intervals, tasks
 
-modules_dir = os.path.dirname(os.path.abspath(sequences.__file__))
-data_dir = os.path.join(modules_dir, 'tests', 'data')
+data_dir = "tests/data"
 
 class Error (Exception): pass
 

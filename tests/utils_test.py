@@ -1,13 +1,11 @@
-#!/usr/bin/env python3
-
 import sys
 import os
 import filecmp
 import unittest
+
 from pyfastaq import utils
 
-modules_dir = os.path.dirname(os.path.abspath(utils.__file__))
-data_dir = os.path.join(modules_dir, 'tests', 'data')
+data_dir = "tests/data"
 
 class TestUtils(unittest.TestCase):
     def test_write_and_read(self):

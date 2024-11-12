@@ -23,25 +23,34 @@ Python3 script to manipulate FASTA and FASTQ (and other format) files, plus API 
 ## Installation
 There are a number of ways to install Fastaq and details are provided below. If you encounter an issue when installing Fastaq please contact your local system administrator. If you encounter a bug please log it [here](https://github.com/sanger-pathogens/Fastaq/issues) or email us at path-help@sanger.ac.uk.
 
-### Using pip3
+### Pip install
 
-`pip3 install pyfastaq`
+Install from PyPi
+
+```bash
+pip3 install pyfastaq
+```
+
+Or pip install the latest development version directly from this repo.
+
+```bash
+pip3 install git+https://github.com/sanger-pathogens/Fastaq.git
+```
 
 ### From source
 
-Download the latest release from this github repository or clone the repository. Then run the tests:
+If you want to edit the codebase, clone this repo and install in editable mode.
 
-`python3 setup.py test`
-
-If the tests all pass, install:
-
-`python3 setup.py install`
+```bash
+# Clone and install from this repository:
+git clone https://github.com/sanger-pathogens/Fastaq.git && cd Fastaq && pip install -e ".[tests]"
+```
 
 ### Running the tests
 
 The test can be run from the top level directory:  
 
-`python3 setup.py test`
+`pytest tests`
 
 ### Runtime dependencies
 
@@ -125,7 +134,8 @@ Reverse complement all sequences in a gzipped file, then translate each sequence
 ### For developers
 
 Here is a template for counting the sequences in a FASTA or FASTQ file:
-```
+
+```python
 from pyfastaq import sequences
 seq_reader = sequences.file_reader(infile)
 count = 0
@@ -133,6 +143,7 @@ for seq in seq_reader:
     count += 1
 print(count)
 ```
+
 Hopefully you get the idea and there are plenty of examples in tasks.py. Detection of the input file type and whether gzipped or not is automatic. See help(sequences) for the various methods already defined in the classes Fasta and Fastq.
 
 ## License

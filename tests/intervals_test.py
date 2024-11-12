@@ -1,6 +1,5 @@
-#!/usr/bin/env python3
-
 import unittest
+
 from pyfastaq import intervals
 
 class TestIntervals(unittest.TestCase):
