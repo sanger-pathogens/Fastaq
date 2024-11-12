@@ -1,0 +1,65 @@
+# Build system configuration
+[build-system]
+requires = ["hatchling", "hatch-vcs"]
+build-backend = "hatchling.build"
+
+# Project metadata
+[project]
+name = "pyfastaq"
+description = "Script to manipulate FASTA and FASTQ files, plus API for developers."
+readme="README.md"
+requires-python = ">=3.8"
+license = { text = "GPLv3" }
+authors = [
+    { name = "Martin Hunt", email = "path-help@sanger.ac.uk" },
+]
+
+# The classifiers for the project.
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Topic :: Scientific/Engineering :: Bio-Informatics",
+    "Programming Language :: Python :: 3 :: Only",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)"
+]
+
+# The dependencies required to install the package.
+dependencies = []
+
+# Dynamic versioning
+dynamic = ["version"]
+
+# Project URLs
+[project.urls]
+homepage = "https://github.com/sanger-pathogens/Fastaq"
+documentation = "https://github.com/sanger-pathogens/Fastaq"
+repository = "https://github.com/sanger-pathogens/Fastaq"
+
+# Command-line script entry point
+[project.scripts]
+fastaq="pyfastaq.app_fastaq:main"
+
+# Hatch build configuration
+[tool.hatch.build]
+source = "src"
+
+# Exclude files and directories from the build
+exclude = [
+    "environment.yml",
+]
+
+# Hatch versioning configuration
+[tool.hatch.version]
+source = "vcs"
+
+# Version control system (VCS) versioning
+[tool.hatch.version.vcs]
+tag-pattern = "v*"  # Git tags starting with 'v' will be used for versioning
+fallback-version = "0.0.0"
+
+# Version file location for VCS
+[tool.hatch.build.hooks.vcs]
+version-file = "src/pyfastaq/_version.py"
+
+# Optional dependencies for testing
+[project.optional-dependencies]
+tests = ["pytest"]
