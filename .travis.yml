@@ -1,6 +1,6 @@
 language: python
 python:
-  - "3.4"
+  - "3.8"
 sudo: false
 script:
-  - "python setup.py test"
+  - "pip install . && pytest tests"
